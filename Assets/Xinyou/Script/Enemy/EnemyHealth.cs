@@ -1,19 +1,33 @@
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour, IDamageable
+public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 {
     [SerializeField] float maxHealth = 30f;
     [SerializeField] float contactDamage = 5f;
     [SerializeField] float contactCooldown = 1f;
+    [SerializeField] int expDrop = 1;
 
     float currentHealth;
     float contactTimer;
+    ObjectPool pool;
 
     public bool IsAlive => currentHealth > 0f;
 
-    void Awake()
+    public void BindPool(ObjectPool objectPool)
+    {
+        pool = objectPool;
+    }
+
+    public void OnGetFromPool()
     {
         currentHealth = maxHealth;
+        contactTimer = 0f;
+    }
+
+    public void OnReturnToPool()
+    {
+        currentHealth = 0f;
+        contactTimer = 0f;
     }
 
     public void TakeDamage(float damage)
@@ -29,7 +43,20 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     void Die()
     {
-        Destroy(gameObject);
+        DropExperience();
+
+        if (pool != null)
+            pool.Release(gameObject);
+        else
+            Destroy(gameObject);
+    }
+
+    void DropExperience()
+    {
+        if (ExperienceManager.Instance == null)
+            return;
+
+        ExperienceManager.Instance.SpawnOrb(transform.position, expDrop);
     }
 
     void OnCollisionStay2D(Collision2D collision)

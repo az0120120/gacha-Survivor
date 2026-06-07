@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : MonoBehaviour, IPoolable
 {
     [SerializeField] float moveSpeed = 2f;
 
@@ -17,9 +17,18 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
-        var playerObject = GameObject.FindWithTag("Player");
-        if (playerObject != null)
-            player = playerObject.transform;
+        CachePlayer();
+    }
+
+    public void OnGetFromPool()
+    {
+        if (player == null)
+            CachePlayer();
+    }
+
+    public void OnReturnToPool()
+    {
+        rb.velocity = Vector2.zero;
     }
 
     void FixedUpdate()
@@ -32,5 +41,12 @@ public class EnemyAI : MonoBehaviour
             return;
 
         rb.velocity = direction.normalized * moveSpeed;
+    }
+
+    void CachePlayer()
+    {
+        var playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+            player = playerObject.transform;
     }
 }

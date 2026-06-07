@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] GameObject enemyPrefab;
+    [SerializeField] ObjectPool enemyPool;
     [SerializeField] Transform player;
     [SerializeField] float spawnInterval = 2f;
     [SerializeField] float spawnMinRadius = 8f;
@@ -10,6 +10,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] int maxEnemies = 50;
 
     float spawnTimer;
+
+    void Awake()
+    {
+        if (enemyPool == null)
+            enemyPool = GetComponent<ObjectPool>();
+    }
 
     void Start()
     {
@@ -23,10 +29,10 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (enemyPrefab == null || player == null)
+        if (enemyPool == null || player == null)
             return;
 
-        if (GetAliveEnemyCount() >= maxEnemies)
+        if (enemyPool.ActiveCount >= maxEnemies)
             return;
 
         spawnTimer -= Time.deltaTime;
@@ -37,20 +43,6 @@ public class EnemySpawner : MonoBehaviour
         SpawnEnemy();
     }
 
-    int GetAliveEnemyCount()
-    {
-        var enemies = Object.FindObjectsByType<EnemyHealth>(FindObjectsSortMode.None);
-        int count = 0;
-
-        for (int i = 0; i < enemies.Length; i++)
-        {
-            if (enemies[i].IsAlive)
-                count++;
-        }
-
-        return count;
-    }
-
     void SpawnEnemy()
     {
         float angle = Random.Range(0f, Mathf.PI * 2f);
@@ -58,6 +50,6 @@ public class EnemySpawner : MonoBehaviour
         var offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance;
         var spawnPosition = (Vector2)player.position + offset;
 
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+        enemyPool.Get(spawnPosition, Quaternion.identity);
     }
 }
