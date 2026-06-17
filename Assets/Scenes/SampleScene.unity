@@ -179,10 +179,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "\u7ECF\u9A8C"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: f683259756e701d4a894f4a73bc2f8d5, type: 2}
+  m_sharedMaterial: {fileID: -5218175184429941604, guid: f683259756e701d4a894f4a73bc2f8d5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -288,7 +288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPool: {fileID: 416152051}
   player: {fileID: 2143937440}
-  spawnInterval: 2
+  spawnInterval: 0.5
   spawnMinRadius: 8
   spawnMaxRadius: 12
   maxEnemies: 50
@@ -353,7 +353,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e680467585c06ab42bea1c110dd906d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  expText: {fileID: 0}
+  expText: {fileID: 76885688}
 --- !u!114 &439860569
 MonoBehaviour:
   m_ObjectHideFlags: 0
