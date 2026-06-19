@@ -41,10 +41,13 @@ public class DirectTargetWeapon : WeaponBase
     void DamageNearest(float range)
     {
         var target = FindNearestEnemy(range);
-        if (target == null)
+        if (target != null)
+        {
+            HitEnemy(target, transform.position);
             return;
+        }
 
-        HitEnemy(target, transform.position);
+        TryHitShopsInRadius(transform.position, range);
     }
 
     void DamageAllInRange(float range)
@@ -66,6 +69,8 @@ public class DirectTargetWeapon : WeaponBase
 
             HitEnemy(enemy, transform.position);
         }
+
+        TryHitShopsInRadius(transform.position, range);
     }
 
     void OnDrawGizmosSelected()

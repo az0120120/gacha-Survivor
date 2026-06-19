@@ -516,6 +516,8 @@ MonoBehaviour:
   orbPool: {fileID: 439860569}
   defaultOrbValue: 1
   dropScatterRadius: 0.25
+  baseExpRequired: 10
+  expGrowth: 1.25
 --- !u!4 &439860571
 Transform:
   m_ObjectHideFlags: 0
@@ -781,6 +783,10 @@ GameObject:
   - component: {fileID: 1055431313}
   - component: {fileID: 1055431312}
   - component: {fileID: 1055431317}
+  - component: {fileID: 1055431319}
+  - component: {fileID: 1055431318}
+  - component: {fileID: 1055431321}
+  - component: {fileID: 1055431320}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -801,7 +807,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waveSpawner: {fileID: 416152049}
-  shopManager: {fileID: 1055431313}
 --- !u!114 &1055431313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -814,10 +819,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f96084aed0bd53448ac4fa765926493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCatalog: []
+  shopCatalog: []
   shopUI: {fileID: 0}
   refreshCost: 5
-  offerCount: 3
 --- !u!114 &1055431314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -845,7 +849,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e79bac087e980544976a9720074c013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coinPool: {fileID: 0}
+  coinPool: {fileID: 1055431314}
   defaultCoinValue: 1
   dropScatterRadius: 0.2
 --- !u!4 &1055431316
@@ -875,6 +879,68 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ecd24f27147dfa44bd661b708026a86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1055431318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cf79720b4c89a4a801f7c9acb2a05e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelUpCatalog: []
+  levelUpUI: {fileID: 0}
+--- !u!114 &1055431319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66708d68551d26942bd6e58f7ca9100a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  spawnInterval: 90
+  spawnMinRadius: 6
+  spawnMaxRadius: 14
+--- !u!114 &1055431320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6518f419d4ee1d41b951e97a30a5c48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1055431321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f3cbc81c31dc2f45a1b5469036ce2ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeText: {fileID: 0}
+  goldText: {fileID: 0}
+  killText: {fileID: 0}
+  shopArrowRoot: {fileID: 0}
+  shopArrowImage: {fileID: 0}
+  player: {fileID: 0}
+  shopArrowScreenOffset: 120
+  screenEdgeMargin: 48
 --- !u!1 &1269217973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1313,6 +1379,7 @@ MonoBehaviour:
   baseGoldBonusPercent: 0
   baseAttackDamageBonusPercent: 0
   baseElementalDamageBonusPercent: 0
+  baseBulletPenetration: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ public class CharacterStats : MonoBehaviour
     [SerializeField] float baseGoldBonusPercent;
     [SerializeField] float baseAttackDamageBonusPercent;
     [SerializeField] float baseElementalDamageBonusPercent;
+    [SerializeField] int baseBulletPenetration = 2;
 
     int bonusAttack;
     int bonusElementalAttack;
@@ -35,6 +36,7 @@ public class CharacterStats : MonoBehaviour
     float bonusGoldBonusPercent;
     float bonusAttackDamageBonusPercent;
     float bonusElementalDamageBonusPercent;
+    int bonusBulletPenetration;
 
     public int Attack => StatMath.FloorToInt(baseAttack + bonusAttack);
     public int ElementalAttack => StatMath.FloorToInt(baseElementalAttack + bonusElementalAttack);
@@ -51,6 +53,7 @@ public class CharacterStats : MonoBehaviour
     public float GoldBonusRatio => 1f + StatMath.PercentToRatio(baseGoldBonusPercent + bonusGoldBonusPercent);
     public float AttackDamageBonus => StatMath.PercentToRatio(baseAttackDamageBonusPercent + bonusAttackDamageBonusPercent);
     public float ElementalDamageBonus => StatMath.PercentToRatio(baseElementalDamageBonusPercent + bonusElementalDamageBonusPercent);
+    public int BulletPenetration => StatMath.FloorToInt(baseBulletPenetration + bonusBulletPenetration);
 
     public void AddAttack(int amount) => bonusAttack += amount;
     public void AddElementalAttack(int amount) => bonusElementalAttack += amount;
@@ -67,6 +70,7 @@ public class CharacterStats : MonoBehaviour
     public void AddGoldBonusPercent(float amount) => bonusGoldBonusPercent += amount;
     public void AddAttackDamageBonusPercent(float amount) => bonusAttackDamageBonusPercent += amount;
     public void AddElementalDamageBonusPercent(float amount) => bonusElementalDamageBonusPercent += amount;
+    public void AddBulletPenetration(int amount) => bonusBulletPenetration += amount;
 
     public float GetEffectiveCooldown(float baseCooldown)
     {

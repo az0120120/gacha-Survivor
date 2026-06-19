@@ -8,6 +8,12 @@ public class GoldUI : MonoBehaviour
 
     void Awake()
     {
+        if (FindAnyObjectByType<GameHUD>() != null)
+        {
+            enabled = false;
+            return;
+        }
+
         if (goldText == null)
             CreateDefaultUI();
     }

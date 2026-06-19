@@ -37,7 +37,34 @@ public abstract class WeaponBase : MonoBehaviour
         if (result.FinalDamage <= 0)
             return;
 
-        enemy.TakeDamage(result.FinalDamage, knockbackSource, knockbackForce);
+        enemy.TakeDamage(result.FinalDamage, knockbackSource, knockbackForce, result.IsCritical);
+    }
+
+    protected void TryHitShop(Collider2D collider)
+    {
+        if (collider == null)
+            return;
+
+        var shop = collider.GetComponent<ShopWorldEntity>();
+        if (shop == null || !shop.IsAlive)
+            return;
+
+        shop.TakeDamage(1f);
+    }
+
+    protected void TryHitShopsInRadius(Vector2 center, float radius)
+    {
+        var filter = new ContactFilter2D
+        {
+            useTriggers = true,
+            useLayerMask = false
+        };
+
+        var buffer = new Collider2D[32];
+        int count = Physics2D.OverlapCircle(center, radius, filter, buffer);
+
+        for (int i = 0; i < count; i++)
+            TryHitShop(buffer[i]);
     }
 
     protected EnemyHealth FindNearestEnemy(float range)

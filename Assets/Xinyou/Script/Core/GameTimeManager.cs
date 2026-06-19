@@ -9,6 +9,16 @@ public class GameTimeManager : MonoBehaviour
 
     public int GameMinutes => StatMath.FloorToInt(elapsedSeconds / 60f);
     public float ElapsedSeconds => elapsedSeconds;
+    public string FormattedTime
+    {
+        get
+        {
+            int totalSeconds = StatMath.FloorToInt(elapsedSeconds);
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+            return $"{minutes:00}:{seconds:00}";
+        }
+    }
 
     void Awake()
     {

@@ -53,6 +53,8 @@ public class AreaWeapon : WeaponBase
 
             HitEnemy(enemy, origin);
         }
+
+        TryHitShopsInRadius(origin, radius);
     }
 
     float GetEffectiveRadius()

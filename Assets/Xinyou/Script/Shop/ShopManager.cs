@@ -69,7 +69,10 @@ public class ShopManager : MonoBehaviour
 
     public void OpenWorldShop(ShopSizeType shopSize, ShopWorldEntity sourceEntity)
     {
-        if (isShopOpen || LevelUpManager.Instance != null && LevelUpManager.Instance.IsOpen)
+        if (isShopOpen)
+            return;
+
+        if (LevelUpManager.Instance != null && LevelUpManager.Instance.IsOpen)
             return;
 
         currentShopSize = shopSize;

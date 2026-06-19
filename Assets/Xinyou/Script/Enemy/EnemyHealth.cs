@@ -44,10 +44,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
         TakeDamage(StatMath.FloorToInt(damage), transform.position, 0f);
     }
 
-    public void TakeDamage(int damage, Vector2 knockbackSource, float knockbackForce)
+    public void TakeDamage(int damage, Vector2 knockbackSource, float knockbackForce, bool isCritical = false)
     {
         if (!IsAlive || damage <= 0)
             return;
+
+        if (DamageNumberManager.Instance != null)
+            DamageNumberManager.Instance.Show(damage, transform.position, isCritical);
 
         currentHealth -= damage;
 
@@ -70,6 +73,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
     void Die()
     {
+        KillCounter.Instance?.RegisterKill();
         DropRewards();
 
         if (pool != null)
