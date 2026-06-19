@@ -1,15 +1,28 @@
+using System;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour
+[AddComponentMenu("GachaSurvivor/Wave Spawner")]
+public class WaveSpawner : MonoBehaviour
 {
     [SerializeField] ObjectPool enemyPool;
     [SerializeField] Transform player;
-    [SerializeField] float spawnInterval = 2f;
+    [SerializeField] int baseEnemiesPerWave = 6;
+    [SerializeField] int enemiesIncreasePerWave = 3;
+    [SerializeField] float spawnInterval = 0.6f;
     [SerializeField] float spawnMinRadius = 8f;
     [SerializeField] float spawnMaxRadius = 12f;
-    [SerializeField] int maxEnemies = 50;
 
+    int currentWave;
+    int enemiesToSpawn;
+    int enemiesSpawned;
     float spawnTimer;
+    bool waveActive;
+
+    public int CurrentWave => currentWave;
+    public bool IsWaveActive => waveActive;
+
+    public event Action<int> OnWaveStarted;
+    public event Action<int> OnWaveCompleted;
 
     void Awake()
     {
@@ -29,27 +42,54 @@ public class EnemySpawner : MonoBehaviour
 
     void Update()
     {
-        if (enemyPool == null || player == null)
+        if (!waveActive || enemyPool == null || player == null)
             return;
 
-        if (enemyPool.ActiveCount >= maxEnemies)
-            return;
+        if (enemiesSpawned < enemiesToSpawn)
+        {
+            spawnTimer -= Time.deltaTime;
+            if (spawnTimer <= 0f)
+            {
+                spawnTimer = spawnInterval;
+                SpawnEnemy();
+                enemiesSpawned++;
+            }
 
-        spawnTimer -= Time.deltaTime;
-        if (spawnTimer > 0f)
             return;
+        }
 
-        spawnTimer = spawnInterval;
-        SpawnEnemy();
+        if (enemyPool.ActiveCount <= 0)
+            CompleteWave();
+    }
+
+    public void StartNextWave()
+    {
+        currentWave++;
+        enemiesToSpawn = baseEnemiesPerWave + (currentWave - 1) * enemiesIncreasePerWave;
+        enemiesSpawned = 0;
+        spawnTimer = 0f;
+        waveActive = true;
+        OnWaveStarted?.Invoke(currentWave);
+    }
+
+    void CompleteWave()
+    {
+        waveActive = false;
+        OnWaveCompleted?.Invoke(currentWave);
     }
 
     void SpawnEnemy()
     {
-        float angle = Random.Range(0f, Mathf.PI * 2f);
-        float distance = Random.Range(spawnMinRadius, spawnMaxRadius);
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
+        float distance = UnityEngine.Random.Range(spawnMinRadius, spawnMaxRadius);
         var offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance;
         var spawnPosition = (Vector2)player.position + offset;
-
         enemyPool.Get(spawnPosition, Quaternion.identity);
     }
+}
+
+[System.Obsolete("请改用 Wave Spawner 组件。")]
+[AddComponentMenu("GachaSurvivor/Legacy Enemy Spawner")]
+public class EnemySpawner : WaveSpawner
+{
 }

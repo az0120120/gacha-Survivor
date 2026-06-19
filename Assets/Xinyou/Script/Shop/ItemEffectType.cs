@@ -1,0 +1,19 @@
+public enum ItemEffectType
+{
+    EquipWeapon,
+    WeaponRangeUp,
+    WeaponCooldownUp,
+    WeaponMajorUpgrade,
+    AttackUp,
+    ElementalAttackUp,
+    MaxHealthUp,
+    MoveSpeedUp,
+    CritRateUp,
+    CritEffectUp,
+    DefenseUp,
+    CooldownReductionUp,
+    ExpBonusUp,
+    GoldBonusUp,
+    AttackDamageBonusUp,
+    ElementalDamageBonusUp
+}

@@ -1,18 +1,19 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(CharacterStats))]
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] float moveSpeed = 5f;
-
     Rigidbody2D rb;
     SpriteRenderer spriteRenderer;
+    CharacterStats characterStats;
     Vector2 moveInput;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        characterStats = GetComponent<CharacterStats>();
 
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
@@ -32,6 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.velocity = moveInput * moveSpeed;
+        float speed = characterStats != null ? characterStats.MoveSpeed : 5f;
+        rb.velocity = moveInput * speed;
     }
 }

@@ -4,9 +4,11 @@ using UnityEngine;
 public class EnemyAI : MonoBehaviour, IPoolable
 {
     [SerializeField] float moveSpeed = 2f;
+    [SerializeField] float knockbackDecay = 10f;
 
     Transform player;
     Rigidbody2D rb;
+    Vector2 knockbackVelocity;
 
     void Awake()
     {
@@ -20,14 +22,22 @@ public class EnemyAI : MonoBehaviour, IPoolable
         CachePlayer();
     }
 
+    public void ApplyKnockback(Vector2 direction, float force)
+    {
+        knockbackVelocity += direction.normalized * force;
+    }
+
     public void OnGetFromPool()
     {
+        knockbackVelocity = Vector2.zero;
+
         if (player == null)
             CachePlayer();
     }
 
     public void OnReturnToPool()
     {
+        knockbackVelocity = Vector2.zero;
         rb.velocity = Vector2.zero;
     }
 
@@ -37,10 +47,13 @@ public class EnemyAI : MonoBehaviour, IPoolable
             return;
 
         Vector2 direction = (Vector2)player.position - rb.position;
-        if (direction.sqrMagnitude < 0.0001f)
-            return;
+        Vector2 chaseVelocity = Vector2.zero;
 
-        rb.velocity = direction.normalized * moveSpeed;
+        if (direction.sqrMagnitude >= 0.0001f)
+            chaseVelocity = direction.normalized * moveSpeed;
+
+        rb.velocity = chaseVelocity + knockbackVelocity;
+        knockbackVelocity = Vector2.Lerp(knockbackVelocity, Vector2.zero, knockbackDecay * Time.fixedDeltaTime);
     }
 
     void CachePlayer()

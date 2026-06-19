@@ -2,16 +2,24 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 {
-    [SerializeField] float maxHealth = 30f;
-    [SerializeField] float contactDamage = 5f;
     [SerializeField] float contactCooldown = 1f;
     [SerializeField] int expDrop = 1;
+    [SerializeField] int goldDrop = 1;
 
     float currentHealth;
     float contactTimer;
     ObjectPool pool;
+    EnemyStats enemyStats;
 
     public bool IsAlive => currentHealth > 0f;
+    public EnemyStats Stats => enemyStats;
+
+    void Awake()
+    {
+        enemyStats = GetComponent<EnemyStats>();
+        if (enemyStats == null)
+            enemyStats = gameObject.AddComponent<EnemyStats>();
+    }
 
     public void BindPool(ObjectPool objectPool)
     {
@@ -20,7 +28,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
     public void OnGetFromPool()
     {
-        currentHealth = maxHealth;
+        enemyStats.RefreshFromGameTime();
+        currentHealth = enemyStats.MaxHealth;
         contactTimer = 0f;
     }
 
@@ -32,10 +41,28 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
     public void TakeDamage(float damage)
     {
-        if (!IsAlive)
+        TakeDamage(StatMath.FloorToInt(damage), transform.position, 0f);
+    }
+
+    public void TakeDamage(int damage, Vector2 knockbackSource, float knockbackForce)
+    {
+        if (!IsAlive || damage <= 0)
             return;
 
         currentHealth -= damage;
+
+        if (knockbackForce > 0f)
+        {
+            var enemyAI = GetComponent<EnemyAI>();
+            if (enemyAI != null)
+            {
+                Vector2 direction = (Vector2)transform.position - knockbackSource;
+                if (direction.sqrMagnitude < 0.0001f)
+                    direction = Vector2.up;
+
+                enemyAI.ApplyKnockback(direction.normalized, knockbackForce);
+            }
+        }
 
         if (currentHealth <= 0f)
             Die();
@@ -43,12 +70,26 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
     void Die()
     {
-        DropExperience();
+        DropRewards();
 
         if (pool != null)
             pool.Release(gameObject);
         else
             Destroy(gameObject);
+    }
+
+    void DropRewards()
+    {
+        DropExperience();
+        DropGold();
+    }
+
+    void DropGold()
+    {
+        if (GoldManager.Instance == null)
+            return;
+
+        GoldManager.Instance.SpawnCoin(transform.position, goldDrop);
     }
 
     void DropExperience()
@@ -71,11 +112,22 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
         if (contactTimer > 0f)
             return;
 
-        var damageable = collision.gameObject.GetComponent<IDamageable>();
-        if (damageable == null || !damageable.IsAlive)
+        var playerStats = collision.gameObject.GetComponent<CharacterStats>();
+        if (playerStats == null)
             return;
 
-        damageable.TakeDamage(contactDamage);
+        int damage = DamageCalculator.CalculateAgainstPlayer(playerStats, enemyStats.Attack);
+        if (damage <= 0)
+        {
+            contactTimer = contactCooldown;
+            return;
+        }
+
+        var playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+        if (playerHealth == null || !playerHealth.IsAlive)
+            return;
+
+        playerHealth.TakeDamage(damage);
         contactTimer = contactCooldown;
     }
 }

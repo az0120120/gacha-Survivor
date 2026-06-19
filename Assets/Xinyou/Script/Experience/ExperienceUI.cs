@@ -32,9 +32,14 @@ public class ExperienceUI : MonoBehaviour
         if (ExperienceManager.Instance == null)
             return;
 
-        ExperienceManager.Instance.OnExperienceChanged -= Refresh;
-        ExperienceManager.Instance.OnExperienceChanged += Refresh;
-        Refresh(ExperienceManager.Instance.TotalExperience);
+        ExperienceManager.Instance.OnExpProgressChanged -= RefreshProgress;
+        ExperienceManager.Instance.OnExpProgressChanged += RefreshProgress;
+        ExperienceManager.Instance.OnLevelChanged -= RefreshLevel;
+        ExperienceManager.Instance.OnLevelChanged += RefreshLevel;
+
+        RefreshProgress(
+            ExperienceManager.Instance.CurrentExp,
+            ExperienceManager.Instance.ExpToNextLevel);
     }
 
     void UnbindExperienceManager()
@@ -42,13 +47,26 @@ public class ExperienceUI : MonoBehaviour
         if (ExperienceManager.Instance == null)
             return;
 
-        ExperienceManager.Instance.OnExperienceChanged -= Refresh;
+        ExperienceManager.Instance.OnExpProgressChanged -= RefreshProgress;
+        ExperienceManager.Instance.OnLevelChanged -= RefreshLevel;
     }
 
-    void Refresh(int totalExperience)
+    void RefreshLevel(int level)
     {
-        if (expText != null)
-            expText.text = $"经验: {totalExperience}";
+        if (ExperienceManager.Instance == null)
+            return;
+
+        RefreshProgress(
+            ExperienceManager.Instance.CurrentExp,
+            ExperienceManager.Instance.ExpToNextLevel);
+    }
+
+    void RefreshProgress(int currentExp, int expRequired)
+    {
+        if (expText == null || ExperienceManager.Instance == null)
+            return;
+
+        expText.text = $"Lv.{ExperienceManager.Instance.Level}  经验: {currentExp}/{expRequired}";
     }
 
     void CreateDefaultUI()
@@ -61,14 +79,13 @@ public class ExperienceUI : MonoBehaviour
         var scaler = canvasObject.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920f, 1080f);
-
         canvasObject.AddComponent<GraphicRaycaster>();
 
         var textObject = new GameObject("ExpText");
         textObject.transform.SetParent(canvasObject.transform, false);
 
         expText = textObject.AddComponent<TextMeshProUGUI>();
-        expText.fontSize = 32f;
+        expText.fontSize = 28f;
         expText.alignment = TextAlignmentOptions.TopRight;
         expText.color = Color.white;
         expText.raycastTarget = false;
@@ -81,8 +98,7 @@ public class ExperienceUI : MonoBehaviour
         rectTransform.anchorMax = new Vector2(1f, 1f);
         rectTransform.pivot = new Vector2(1f, 1f);
         rectTransform.anchoredPosition = new Vector2(-24f, -24f);
-        rectTransform.sizeDelta = new Vector2(320f, 60f);
-
-        expText.text = "经验: 0";
+        rectTransform.sizeDelta = new Vector2(360f, 60f);
+        expText.text = "Lv.1  经验: 0/10";
     }
 }

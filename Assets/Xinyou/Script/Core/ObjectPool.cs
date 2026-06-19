@@ -75,6 +75,14 @@ public class ObjectPool : MonoBehaviour
         if (experienceOrb != null)
             experienceOrb.BindPool(this);
 
+        var projectile = instance.GetComponent<Projectile>();
+        if (projectile != null)
+            projectile.BindPool(this);
+
+        var goldCoin = instance.GetComponent<GoldCoin>();
+        if (goldCoin != null)
+            goldCoin.BindPool(this);
+
         return instance;
     }
 
