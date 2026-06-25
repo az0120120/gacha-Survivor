@@ -5,6 +5,7 @@ public class LevelUpManager : MonoBehaviour
 {
     public static LevelUpManager Instance { get; private set; }
 
+    [SerializeField] GameItemCatalog itemCatalog;
     [SerializeField] ShopItemDefinition[] levelUpCatalog;
     [SerializeField] LevelUpUI levelUpUI;
 
@@ -25,8 +26,7 @@ public class LevelUpManager : MonoBehaviour
 
         Instance = this;
 
-        if (levelUpCatalog == null || levelUpCatalog.Length == 0)
-            levelUpCatalog = LevelUpDefaults.CreateRuntimeCatalog();
+        levelUpCatalog = ResolveLevelUpCatalog();
 
         CachePlayerReferences();
 
@@ -63,6 +63,28 @@ public class LevelUpManager : MonoBehaviour
         weaponManager = playerObject.GetComponent<WeaponManager>();
         characterStats = playerObject.GetComponent<CharacterStats>();
         playerHealth = playerObject.GetComponent<PlayerHealth>();
+    }
+
+    ShopItemDefinition[] ResolveLevelUpCatalog()
+    {
+        if (itemCatalog == null)
+        {
+            var shopManager = GetComponent<ShopManager>();
+            if (shopManager != null)
+                itemCatalog = shopManager.ItemCatalog;
+        }
+
+        if (itemCatalog != null)
+        {
+            var built = itemCatalog.BuildLevelUpCatalog();
+            if (built.Length > 0)
+                return built;
+        }
+
+        if (levelUpCatalog != null && levelUpCatalog.Length > 0)
+            return levelUpCatalog;
+
+        return LevelUpDefaults.CreateRuntimeCatalog();
     }
 
     public void QueueLevelUps(int count)

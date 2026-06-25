@@ -7,6 +7,7 @@ public class ShopManager : MonoBehaviour
 {
     public static ShopManager Instance { get; private set; }
 
+    [SerializeField] GameItemCatalog itemCatalog;
     [SerializeField] ShopItemDefinition[] shopCatalog;
     [SerializeField] ShopUI shopUI;
     [SerializeField] ShopItemIconDatabase iconDatabase;
@@ -24,6 +25,7 @@ public class ShopManager : MonoBehaviour
     public int RefreshCost => refreshCost;
     public ShopItemDefinition[] CurrentOffers => currentOffers;
     public bool IsShopOpen => isShopOpen;
+    public GameItemCatalog ItemCatalog => itemCatalog;
 
     public event Action OnShopClosed;
 
@@ -40,8 +42,7 @@ public class ShopManager : MonoBehaviour
         if (iconDatabase != null)
             ShopItemIconUtility.SetDatabase(iconDatabase);
 
-        if (shopCatalog == null || shopCatalog.Length == 0)
-            shopCatalog = ShopDefaults.CreateRuntimeCatalog();
+        shopCatalog = ResolveShopCatalog();
 
         CachePlayerReferences();
 
@@ -69,6 +70,21 @@ public class ShopManager : MonoBehaviour
         weaponManager = playerObject.GetComponent<WeaponManager>();
         characterStats = playerObject.GetComponent<CharacterStats>();
         playerHealth = playerObject.GetComponent<PlayerHealth>();
+    }
+
+    ShopItemDefinition[] ResolveShopCatalog()
+    {
+        if (itemCatalog != null)
+        {
+            var built = itemCatalog.BuildShopCatalog();
+            if (built.Length > 0)
+                return built;
+        }
+
+        if (shopCatalog != null && shopCatalog.Length > 0)
+            return shopCatalog;
+
+        return ShopDefaults.CreateRuntimeCatalog();
     }
 
     public void OpenWorldShop(ShopSizeType shopSize, ShopWorldEntity sourceEntity)
