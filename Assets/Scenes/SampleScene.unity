@@ -819,8 +819,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f96084aed0bd53448ac4fa765926493, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemCatalog: {fileID: 11400000, guid: 4c00d8009c23c5344abace6a09f3d882, type: 2}
   shopCatalog: []
   shopUI: {fileID: 0}
+  iconDatabase: {fileID: 0}
   refreshCost: 5
 --- !u!114 &1055431314
 MonoBehaviour:
@@ -891,6 +893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7cf79720b4c89a4a801f7c9acb2a05e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemCatalog: {fileID: 0}
   levelUpCatalog: []
   levelUpUI: {fileID: 0}
 --- !u!114 &1055431319
