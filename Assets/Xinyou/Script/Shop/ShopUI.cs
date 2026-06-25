@@ -8,6 +8,7 @@ public class ShopUI : MonoBehaviour
     {
         public Button button;
         public Image background;
+        public Image iconImage;
         public TextMeshProUGUI titleText;
         public TextMeshProUGUI priceText;
         public ShopItemDefinition item;
@@ -17,6 +18,7 @@ public class ShopUI : MonoBehaviour
     GameObject panelRoot;
     TextMeshProUGUI titleText;
     TextMeshProUGUI goldText;
+    Image detailIconImage;
     TextMeshProUGUI detailTitleText;
     TextMeshProUGUI detailDescriptionText;
     TextMeshProUGUI detailPriceText;
@@ -97,6 +99,7 @@ public class ShopUI : MonoBehaviour
             slot.titleText.text = slot.item.ItemName;
             slot.priceText.text = $"{slot.item.Price} 金币";
             slot.background.color = i == selectedIndex ? SelectedSlotColor : NormalSlotColor;
+            ShopItemIconUtility.ApplyIcon(slot.iconImage, slot.item);
         }
 
         RefreshDetailPanel();
@@ -146,10 +149,18 @@ public class ShopUI : MonoBehaviour
         var rightPanel = CreatePanel(panelRoot.transform, "DetailPanel", new Color(0.1f, 0.1f, 0.12f, 0.55f));
         SetupRect(rightPanel, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-40f, 0f), new Vector2(520f, 760f));
 
+        detailIconImage = ShopItemIconUtility.CreateIconImage(
+            rightPanel.transform,
+            "DetailIcon",
+            new Vector2(0.5f, 1f),
+            new Vector2(0.5f, 1f),
+            new Vector2(0f, -110f),
+            new Vector2(128f, 128f));
+
         detailTitleText = CreateText(rightPanel.transform, "DetailTitle", 34, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -24f), new Vector2(-48f, 50f));
-        detailDescriptionText = CreateText(rightPanel.transform, "DetailDescription", 24, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -90f), new Vector2(-48f, 420f));
+        detailDescriptionText = CreateText(rightPanel.transform, "DetailDescription", 24, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -250f), new Vector2(-48f, 360f));
         detailDescriptionText.enableWordWrapping = true;
-        detailPriceText = CreateText(rightPanel.transform, "DetailPrice", 28, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -540f), new Vector2(-48f, 40f));
+        detailPriceText = CreateText(rightPanel.transform, "DetailPrice", 28, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -620f), new Vector2(-48f, 40f));
 
         buyButton = CreateButton(rightPanel.transform, "BuyButton", "购买", new Vector2(0.5f, 0f), new Vector2(-130f, 40f), new Vector2(220f, 56f));
         buyButton.onClick.AddListener(HandleBuyClicked);
@@ -173,7 +184,14 @@ public class ShopUI : MonoBehaviour
         var slot = new OfferSlot();
         slot.button = CreateButton(parent, $"OfferSlot{index}", string.Empty, new Vector2(0.5f, 1f), anchoredPosition, new Vector2(300f, 180f));
         slot.background = slot.button.GetComponent<Image>();
-        slot.titleText = CreateText(slot.button.transform, "Title", 26, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(16f, -16f), new Vector2(-32f, 50f));
+        slot.iconImage = ShopItemIconUtility.CreateIconImage(
+            slot.button.transform,
+            "Icon",
+            new Vector2(0.5f, 1f),
+            new Vector2(0.5f, 1f),
+            new Vector2(0f, -52f),
+            new Vector2(72f, 72f));
+        slot.titleText = CreateText(slot.button.transform, "Title", 24, TextAlignmentOptions.Top, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -108f), new Vector2(-24f, 40f));
         slot.priceText = CreateText(slot.button.transform, "Price", 22, TextAlignmentOptions.BottomLeft, new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(16f, 16f), new Vector2(-32f, 36f));
         slot.titleText.raycastTarget = false;
         slot.priceText.raycastTarget = false;
@@ -207,6 +225,9 @@ public class ShopUI : MonoBehaviour
             if (detailPriceText != null)
                 detailPriceText.text = string.Empty;
 
+            if (detailIconImage != null)
+                detailIconImage.enabled = false;
+
             if (buyButton != null)
                 buyButton.interactable = false;
 
@@ -221,6 +242,8 @@ public class ShopUI : MonoBehaviour
 
         if (detailPriceText != null)
             detailPriceText.text = $"价格: {selectedItem.Price} 金币  |  品级: {selectedItem.ItemTier}";
+
+        ShopItemIconUtility.ApplyIcon(detailIconImage, selectedItem);
 
         if (buyButton != null)
             buyButton.interactable = shopManager != null && shopManager.CanPurchase(selectedItem);

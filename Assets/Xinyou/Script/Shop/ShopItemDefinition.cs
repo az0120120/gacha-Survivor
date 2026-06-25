@@ -16,6 +16,7 @@ public class ShopItemDefinition : ScriptableObject
     [SerializeField] ShopWeaponType weaponType;
     [SerializeField] float effectValue = 1f;
     [SerializeField] float effectValue2;
+    [SerializeField] Sprite icon;
 
     public string ItemId => itemId;
     public string ItemName => itemName;
@@ -30,6 +31,8 @@ public class ShopItemDefinition : ScriptableObject
     public ShopWeaponType WeaponType => weaponType;
     public float EffectValue => effectValue;
     public float EffectValue2 => effectValue2;
+    public Sprite Icon => icon;
+    public bool HasCustomIcon => icon != null;
 
     public bool IsWeapon => category == ShopItemCategory.Weapon;
     public bool IsShopItem => poolType == ItemPoolType.Shop;
@@ -48,7 +51,8 @@ public class ShopItemDefinition : ScriptableObject
         bool once = true,
         ShopWeaponType weapon = ShopWeaponType.Projectile,
         float value = 0f,
-        float value2 = 0f)
+        float value2 = 0f,
+        Sprite itemIcon = null)
     {
         itemId = id;
         itemName = name;
@@ -63,5 +67,11 @@ public class ShopItemDefinition : ScriptableObject
         weaponType = weapon;
         effectValue = value;
         effectValue2 = value2;
+        icon = itemIcon;
+    }
+
+    public void SetIcon(Sprite itemIcon)
+    {
+        icon = itemIcon;
     }
 }

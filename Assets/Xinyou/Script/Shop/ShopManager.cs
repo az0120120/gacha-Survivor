@@ -9,6 +9,7 @@ public class ShopManager : MonoBehaviour
 
     [SerializeField] ShopItemDefinition[] shopCatalog;
     [SerializeField] ShopUI shopUI;
+    [SerializeField] ShopItemIconDatabase iconDatabase;
     [SerializeField] int refreshCost = 5;
 
     readonly HashSet<string> purchasedOnceIds = new HashSet<string>();
@@ -35,6 +36,9 @@ public class ShopManager : MonoBehaviour
         }
 
         Instance = this;
+
+        if (iconDatabase != null)
+            ShopItemIconUtility.SetDatabase(iconDatabase);
 
         if (shopCatalog == null || shopCatalog.Length == 0)
             shopCatalog = ShopDefaults.CreateRuntimeCatalog();

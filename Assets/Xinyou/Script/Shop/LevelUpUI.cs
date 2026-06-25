@@ -8,6 +8,7 @@ public class LevelUpUI : MonoBehaviour
     {
         public Button button;
         public Image background;
+        public Image iconImage;
         public TextMeshProUGUI titleText;
         public ShopItemDefinition item;
     }
@@ -15,6 +16,7 @@ public class LevelUpUI : MonoBehaviour
     LevelUpManager levelUpManager;
     GameObject panelRoot;
     TextMeshProUGUI titleText;
+    Image detailIconImage;
     TextMeshProUGUI detailTitleText;
     TextMeshProUGUI detailDescriptionText;
     Button confirmButton;
@@ -79,6 +81,7 @@ public class LevelUpUI : MonoBehaviour
             slot.item = offers[i];
             slot.titleText.text = slot.item.ItemName;
             slot.background.color = i == selectedIndex ? SelectedSlotColor : NormalSlotColor;
+            ShopItemIconUtility.ApplyIcon(slot.iconImage, slot.item);
         }
 
         RefreshDetailPanel();
@@ -122,8 +125,16 @@ public class LevelUpUI : MonoBehaviour
         var rightPanel = CreatePanel(panelRoot.transform, "DetailPanel", new Color(0.1f, 0.1f, 0.12f, 0.55f));
         SetupRect(rightPanel, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-40f, 0f), new Vector2(520f, 760f));
 
+        detailIconImage = ShopItemIconUtility.CreateIconImage(
+            rightPanel.transform,
+            "DetailIcon",
+            new Vector2(0.5f, 1f),
+            new Vector2(0.5f, 1f),
+            new Vector2(0f, -110f),
+            new Vector2(128f, 128f));
+
         detailTitleText = CreateText(rightPanel.transform, "DetailTitle", 34, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -24f), new Vector2(-48f, 50f));
-        detailDescriptionText = CreateText(rightPanel.transform, "DetailDescription", 24, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -90f), new Vector2(-48f, 420f));
+        detailDescriptionText = CreateText(rightPanel.transform, "DetailDescription", 24, TextAlignmentOptions.TopLeft, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(24f, -250f), new Vector2(-48f, 360f));
         detailDescriptionText.enableWordWrapping = true;
 
         confirmButton = CreateButton(rightPanel.transform, "ConfirmButton", "确认选择", new Vector2(0.5f, 0f), new Vector2(0f, 40f), new Vector2(260f, 56f));
@@ -151,9 +162,16 @@ public class LevelUpUI : MonoBehaviour
         var slot = new OfferSlot();
         slot.button = CreateButton(parent, $"LevelOfferSlot{index}", string.Empty, new Vector2(0.5f, 1f), anchoredPosition, new Vector2(300f, 180f));
         slot.background = slot.button.GetComponent<Image>();
-        slot.titleText = CreateText(slot.button.transform, "Title", 28, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
-        slot.titleText.rectTransform.offsetMin = new Vector2(16f, 16f);
-        slot.titleText.rectTransform.offsetMax = new Vector2(-16f, -16f);
+        slot.iconImage = ShopItemIconUtility.CreateIconImage(
+            slot.button.transform,
+            "Icon",
+            new Vector2(0.5f, 1f),
+            new Vector2(0.5f, 1f),
+            new Vector2(0f, -52f),
+            new Vector2(72f, 72f));
+        slot.titleText = CreateText(slot.button.transform, "Title", 24, TextAlignmentOptions.Top, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -108f), new Vector2(-24f, 48f));
+        slot.titleText.rectTransform.offsetMin = new Vector2(12f, 16f);
+        slot.titleText.rectTransform.offsetMax = new Vector2(-12f, -108f);
         slot.titleText.raycastTarget = false;
         return slot;
     }
@@ -182,6 +200,9 @@ public class LevelUpUI : MonoBehaviour
             if (detailDescriptionText != null)
                 detailDescriptionText.text = "点击左侧属性强化查看详情。";
 
+            if (detailIconImage != null)
+                detailIconImage.enabled = false;
+
             if (confirmButton != null)
                 confirmButton.interactable = false;
 
@@ -193,6 +214,8 @@ public class LevelUpUI : MonoBehaviour
 
         if (detailDescriptionText != null)
             detailDescriptionText.text = selectedItem.Description;
+
+        ShopItemIconUtility.ApplyIcon(detailIconImage, selectedItem);
 
         if (confirmButton != null)
             confirmButton.interactable = true;
