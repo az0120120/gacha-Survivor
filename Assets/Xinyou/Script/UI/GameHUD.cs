@@ -9,6 +9,10 @@ public class GameHUD : MonoBehaviour
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TextMeshProUGUI goldText;
     [SerializeField] TextMeshProUGUI killText;
+    [SerializeField] TextMeshProUGUI healthText;
+    [SerializeField] Image healthBarFill;
+    [SerializeField] Color healthBarFullColor = new Color(0.35f, 0.9f, 0.45f);
+    [SerializeField] Color healthBarLowColor = new Color(0.95f, 0.3f, 0.3f);
     [SerializeField] RectTransform shopArrowRoot;
     [SerializeField] Image shopArrowImage;
     [SerializeField] Transform player;
@@ -17,6 +21,7 @@ public class GameHUD : MonoBehaviour
 
     RectTransform canvasRect;
     Camera mainCamera;
+    PlayerHealth playerHealth;
 
     void Awake()
     {
@@ -41,6 +46,7 @@ public class GameHUD : MonoBehaviour
     {
         BindGoldWallet();
         BindKillCounter();
+        BindPlayerHealth();
     }
 
     void Start()
@@ -48,14 +54,17 @@ public class GameHUD : MonoBehaviour
         CacheReferences();
         BindGoldWallet();
         BindKillCounter();
+        BindPlayerHealth();
         RefreshGold(GoldWallet.Instance != null ? GoldWallet.Instance.Gold : 0);
         RefreshKills(KillCounter.Instance != null ? KillCounter.Instance.KillCount : 0);
+        RefreshHealthFromPlayer();
     }
 
     void OnDisable()
     {
         UnbindGoldWallet();
         UnbindKillCounter();
+        UnbindPlayerHealth();
     }
 
     void Update()
@@ -75,6 +84,9 @@ public class GameHUD : MonoBehaviour
 
         if (mainCamera == null)
             mainCamera = Camera.main;
+
+        if (playerHealth == null && player != null)
+            playerHealth = player.GetComponent<PlayerHealth>();
 
         if (canvasRect == null && timeText != null)
             canvasRect = timeText.GetComponentInParent<Canvas>()?.GetComponent<RectTransform>();
@@ -135,6 +147,46 @@ public class GameHUD : MonoBehaviour
     {
         if (killText != null)
             killText.text = $"击杀: {kills}";
+    }
+
+    void BindPlayerHealth()
+    {
+        CacheReferences();
+        if (playerHealth == null)
+            return;
+
+        playerHealth.OnHealthChanged -= RefreshHealth;
+        playerHealth.OnHealthChanged += RefreshHealth;
+    }
+
+    void UnbindPlayerHealth()
+    {
+        if (playerHealth == null)
+            return;
+
+        playerHealth.OnHealthChanged -= RefreshHealth;
+    }
+
+    void RefreshHealthFromPlayer()
+    {
+        CacheReferences();
+        if (playerHealth == null)
+            return;
+
+        RefreshHealth(playerHealth.CurrentHealth, playerHealth.MaxHealth);
+    }
+
+    void RefreshHealth(int current, int max)
+    {
+        if (healthText != null)
+            healthText.text = $"生命 {current}/{max}";
+
+        if (healthBarFill == null)
+            return;
+
+        float ratio = max > 0 ? (float)current / max : 0f;
+        healthBarFill.fillAmount = ratio;
+        healthBarFill.color = Color.Lerp(healthBarLowColor, healthBarFullColor, ratio);
     }
 
     void UpdateShopArrow()
@@ -261,16 +313,67 @@ public class GameHUD : MonoBehaviour
 
         canvasRect = canvasObject.GetComponent<RectTransform>();
 
+        CreateHealthBar(canvasObject.transform);
+
         timeText = CreateLabel(canvasObject.transform, "TimeText", "00:00", 32f, Color.white,
-            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -24f), new Vector2(220f, 44f));
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -72f), new Vector2(220f, 44f));
 
         goldText = CreateLabel(canvasObject.transform, "GoldText", "金币: 0", 28f, new Color(1f, 0.85f, 0.2f),
-            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -72f), new Vector2(260f, 40f));
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -120f), new Vector2(260f, 40f));
 
         killText = CreateLabel(canvasObject.transform, "KillText", "击杀: 0", 28f, new Color(1f, 0.55f, 0.55f),
-            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -116f), new Vector2(260f, 40f));
+            new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -164f), new Vector2(260f, 40f));
 
         shopArrowRoot = CreateShopArrow(canvasObject.transform);
+    }
+
+    void CreateHealthBar(Transform parent)
+    {
+        var barRoot = new GameObject("HealthBarRoot");
+        barRoot.transform.SetParent(parent, false);
+
+        var rootRect = barRoot.AddComponent<RectTransform>();
+        rootRect.anchorMin = new Vector2(0f, 1f);
+        rootRect.anchorMax = new Vector2(0f, 1f);
+        rootRect.pivot = new Vector2(0f, 1f);
+        rootRect.anchoredPosition = new Vector2(24f, -24f);
+        rootRect.sizeDelta = new Vector2(280f, 36f);
+
+        healthText = CreateLabel(barRoot.transform, "HealthText", "生命 100/100", 24f, Color.white,
+            new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, 1f), new Vector2(0f, 0f), new Vector2(0f, 28f));
+
+        var backgroundObject = new GameObject("HealthBarBackground");
+        backgroundObject.transform.SetParent(barRoot.transform, false);
+
+        var backgroundRect = backgroundObject.AddComponent<RectTransform>();
+        backgroundRect.anchorMin = new Vector2(0f, 0f);
+        backgroundRect.anchorMax = new Vector2(1f, 0f);
+        backgroundRect.pivot = new Vector2(0.5f, 0f);
+        backgroundRect.anchoredPosition = new Vector2(0f, 0f);
+        backgroundRect.sizeDelta = new Vector2(0f, 10f);
+
+        var backgroundImage = backgroundObject.AddComponent<Image>();
+        backgroundImage.sprite = CreateSolidSprite();
+        backgroundImage.color = new Color(0.12f, 0.12f, 0.12f, 0.9f);
+        backgroundImage.raycastTarget = false;
+
+        var fillObject = new GameObject("HealthBarFill");
+        fillObject.transform.SetParent(backgroundObject.transform, false);
+
+        var fillRect = fillObject.AddComponent<RectTransform>();
+        fillRect.anchorMin = Vector2.zero;
+        fillRect.anchorMax = Vector2.one;
+        fillRect.offsetMin = Vector2.zero;
+        fillRect.offsetMax = Vector2.zero;
+
+        healthBarFill = fillObject.AddComponent<Image>();
+        healthBarFill.sprite = CreateSolidSprite();
+        healthBarFill.color = healthBarFullColor;
+        healthBarFill.type = Image.Type.Filled;
+        healthBarFill.fillMethod = Image.FillMethod.Horizontal;
+        healthBarFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+        healthBarFill.fillAmount = 1f;
+        healthBarFill.raycastTarget = false;
     }
 
     TextMeshProUGUI CreateLabel(
@@ -322,6 +425,14 @@ public class GameHUD : MonoBehaviour
 
         arrowObject.SetActive(false);
         return rectTransform;
+    }
+
+    static Sprite CreateSolidSprite()
+    {
+        var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+        texture.SetPixel(0, 0, Color.white);
+        texture.Apply();
+        return Sprite.Create(texture, new Rect(0f, 0f, 1f, 1f), new Vector2(0.5f, 0.5f), 1f);
     }
 
     static Sprite CreateArrowSprite()

@@ -1,17 +1,41 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterStats))]
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
+    [SerializeField] float invincibilityDuration = 0.1f;
+
     CharacterStats characterStats;
     int currentHealth;
+    float invincibilityTimer;
 
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth => characterStats != null ? characterStats.MaxHealth : 100;
     public bool IsAlive => currentHealth > 0;
+    public bool IsInvincible => invincibilityTimer > 0f;
+
+    public event Action<int, int> OnHealthChanged;
 
     void Awake()
     {
         characterStats = GetComponent<CharacterStats>();
-        currentHealth = characterStats != null ? characterStats.MaxHealth : 100;
+        currentHealth = MaxHealth;
+    }
+
+    void Start()
+    {
+        NotifyHealthChanged();
+    }
+
+    void Update()
+    {
+        if (invincibilityTimer <= 0f)
+            return;
+
+        invincibilityTimer -= Time.deltaTime;
+        if (invincibilityTimer < 0f)
+            invincibilityTimer = 0f;
     }
 
     public void AddMaxHealthBonus(int amount)
@@ -21,6 +45,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         characterStats.AddMaxHealth(amount);
         currentHealth += amount;
+        NotifyHealthChanged();
     }
 
     public void TakeDamage(float damage)
@@ -30,13 +55,20 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        if (!IsAlive || damage <= 0)
+        if (!IsAlive || damage <= 0 || IsInvincible)
             return;
 
         currentHealth -= damage;
+        invincibilityTimer = invincibilityDuration;
+        NotifyHealthChanged();
 
         if (currentHealth <= 0)
             Die();
+    }
+
+    void NotifyHealthChanged()
+    {
+        OnHealthChanged?.Invoke(currentHealth, MaxHealth);
     }
 
     void Die()
