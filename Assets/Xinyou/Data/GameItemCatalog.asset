@@ -17,7 +17,7 @@ MonoBehaviour:
     displayName: "\u706B\u6C99\u9E70"
     description: "\u6BCF 0.75 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C6 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
       3\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: ffb0ab2285cdd2348901b49a3347daa7, type: 3}
     kind: 0
     statType: 0
     price: 48
@@ -29,7 +29,7 @@ MonoBehaviour:
     displayName: "\u71C3\u70E7\u74F6"
     description: "\u6BCF 3 \u79D2\u6295\u63B7\uFF0C\u843D\u70B9\u5F62\u6210\u6301\u7EED
       5 \u79D2\u7684\u533A\u57DF\u4F24\u5BB3\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
     kind: 0
     statType: 0
     price: 50
@@ -40,7 +40,7 @@ MonoBehaviour:
   - id: weapon_kunai
     displayName: "\u82E6\u65E0"
     description: "\u6BCF\u79D2\u9501\u5B9A\u5355\u4F53\u9020\u6210 6 \u500D\u77AC\u53D1\u4F24\u5BB3\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: d0b4e47f0d385624ca11268d16952dc4, type: 3}
     kind: 0
     statType: 0
     price: 46
@@ -51,7 +51,7 @@ MonoBehaviour:
   - id: weapon_claw
     displayName: "\u867E\u94B3"
     description: "\u6247\u5F62\u8FD1\u6218\uFF0C\u6BCF\u79D2 4 \u500D\u4F24\u5BB3\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 339af6d73137eb8479dddfda5960e9c5, type: 3}
     kind: 0
     statType: 0
     price: 44
@@ -63,7 +63,7 @@ MonoBehaviour:
     displayName: AK
     description: "\u6BCF 0.25 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C7 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
       3\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: d5e5376aaf26403409a8d6cac0b49ea8, type: 3}
     kind: 0
     statType: 0
     price: 52
@@ -74,7 +74,7 @@ MonoBehaviour:
   - id: w_range_desert_eagle
     displayName: "\u706B\u6C99\u9E70\u5EF6\u4F38"
     description: "\u706B\u6C99\u9E70\u653B\u51FB\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: ffb0ab2285cdd2348901b49a3347daa7, type: 3}
     kind: 1
     statType: 0
     price: 38
@@ -85,7 +85,7 @@ MonoBehaviour:
   - id: w_cd_desert_eagle
     displayName: "\u706B\u6C99\u9E70\u901F\u5C04"
     description: "\u706B\u6C99\u9E70\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: ffb0ab2285cdd2348901b49a3347daa7, type: 3}
     kind: 2
     statType: 0
     price: 40
@@ -96,7 +96,7 @@ MonoBehaviour:
   - id: w_range_molotov
     displayName: "\u71C3\u70E7\u5EF6\u4F38"
     description: "\u71C3\u70E7\u74F6\u6295\u63B7\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
     kind: 1
     statType: 0
     price: 40
@@ -107,7 +107,7 @@ MonoBehaviour:
   - id: w_cd_molotov
     displayName: "\u71C3\u70E7\u52A0\u901F"
     description: "\u71C3\u70E7\u74F6\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
     kind: 2
     statType: 0
     price: 42
@@ -118,7 +118,7 @@ MonoBehaviour:
   - id: w_range_kunai
     displayName: "\u82E6\u65E0\u5EF6\u4F38"
     description: "\u82E6\u65E0\u7D22\u654C\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: d0b4e47f0d385624ca11268d16952dc4, type: 3}
     kind: 1
     statType: 0
     price: 38
@@ -129,7 +129,7 @@ MonoBehaviour:
   - id: w_cd_kunai
     displayName: "\u82E6\u65E0\u52A0\u901F"
     description: "\u82E6\u65E0\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: d0b4e47f0d385624ca11268d16952dc4, type: 3}
     kind: 2
     statType: 0
     price: 40
@@ -140,7 +140,7 @@ MonoBehaviour:
   - id: w_range_claw
     displayName: "\u867E\u94B3\u5EF6\u4F38"
     description: "\u867E\u94B3\u653B\u51FB\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 339af6d73137eb8479dddfda5960e9c5, type: 3}
     kind: 1
     statType: 0
     price: 35
@@ -151,7 +151,7 @@ MonoBehaviour:
   - id: w_cd_claw
     displayName: "\u867E\u94B3\u52A0\u901F"
     description: "\u867E\u94B3\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: 339af6d73137eb8479dddfda5960e9c5, type: 3}
     kind: 2
     statType: 0
     price: 37
@@ -162,7 +162,7 @@ MonoBehaviour:
   - id: w_range_ak
     displayName: "AK \u5EF6\u4F38"
     description: "AK \u653B\u51FB\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: d5e5376aaf26403409a8d6cac0b49ea8, type: 3}
     kind: 1
     statType: 0
     price: 42
@@ -173,7 +173,7 @@ MonoBehaviour:
   - id: w_cd_ak
     displayName: "AK \u901F\u5C04"
     description: "AK \u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
+    icon: {fileID: 21300000, guid: d5e5376aaf26403409a8d6cac0b49ea8, type: 3}
     kind: 2
     statType: 0
     price: 44
@@ -184,7 +184,7 @@ MonoBehaviour:
   - id: lv_attack
     displayName: "\u5F3A\u653B"
     description: "\u653B\u51FB\u529B +15\u3002\n\n\n\u5F80\u91CC\u8C6A\uFF01\u5F80\u91CC\u8C6A\uFF01"
-    icon: {fileID: 21300000, guid: e3221b921d13d53478f4be0d579ad51a, type: 3}
+    icon: {fileID: 21300000, guid: 569aa30e2f8db26408cbbdef4f8906f6, type: 3}
     kind: 4
     statType: 0
     price: 0
@@ -195,7 +195,7 @@ MonoBehaviour:
   - id: lv_element
     displayName: "\u5143\u7D20\u4E4B\u529B"
     description: "\u5143\u7D20\u653B\u51FB\u529B +5\u3002\n\n\n\u8C6A\u5916\u6709\u8C6A\u3002"
-    icon: {fileID: 21300000, guid: e3221b921d13d53478f4be0d579ad51a, type: 3}
+    icon: {fileID: 21300000, guid: 569aa30e2f8db26408cbbdef4f8906f6, type: 3}
     kind: 4
     statType: 1
     price: 0

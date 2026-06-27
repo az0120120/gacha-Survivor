@@ -151,4 +151,14 @@ public class LevelUpManager : MonoBehaviour
         GameSpeedController.Instance?.RefreshTimeScale();
         TryOpenNext();
     }
+
+    public void ForceClose()
+    {
+        if (!IsOpen)
+            return;
+
+        IsOpen = false;
+        levelUpUI?.Hide();
+        GameSpeedController.Instance?.RefreshTimeScale();
+    }
 }

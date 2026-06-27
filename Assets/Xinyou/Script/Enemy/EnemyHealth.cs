@@ -34,6 +34,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
         contactTimer = 0f;
     }
 
+    public void RefreshHealthFromStats()
+    {
+        ApplyDropSettingsFromStats();
+        currentHealth = enemyStats.MaxHealth;
+    }
+
     void ApplyDropSettingsFromStats()
     {
         if (enemyStats == null)
@@ -84,11 +90,20 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
     void Die()
     {
+        var boss = GetComponent<BossEnemy>();
+        if (boss != null && boss.IsConfigured)
+            VictoryManager.Instance?.RegisterBossDefeated(boss);
+
         KillCounter.Instance?.RegisterKill();
         DropRewards();
 
         if (pool != null)
+        {
+            if (boss != null && boss.IsConfigured)
+                FindFirstObjectByType<BossSpawner>()?.NotifyBossReleased(gameObject);
+
             pool.Release(gameObject);
+        }
         else
             Destroy(gameObject);
     }

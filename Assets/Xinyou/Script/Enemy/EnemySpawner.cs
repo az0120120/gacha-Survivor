@@ -27,6 +27,7 @@ public class WaveSpawner : MonoBehaviour
 
     public int CurrentWave => currentWave;
     public bool IsWaveActive => waveActive;
+    public EnemyCatalog EnemyCatalog => enemyCatalog;
 
     public event Action<int> OnWaveStarted;
     public event Action<int> OnWaveCompleted;
@@ -72,6 +73,11 @@ public class WaveSpawner : MonoBehaviour
 
         if (enemyPool.ActiveCount <= 0)
             CompleteWave();
+    }
+
+    public void StopWaves()
+    {
+        waveActive = false;
     }
 
     public void StartNextWave()

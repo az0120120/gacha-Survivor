@@ -50,6 +50,34 @@ public class EnemyStats : MonoBehaviour
         expDrop = EnemyStatScaler.GetExpDropFromGold(goldDrop);
     }
 
+    public void ApplyBossDefinition(BossDefinition bossDefinition, EnemyCatalog catalog)
+    {
+        if (bossDefinition == null)
+            return;
+
+        archetype = bossDefinition.behaviorArchetype;
+        definition = catalog != null ? catalog.GetDefinition(bossDefinition.behaviorArchetype) : null;
+        RefreshFromGameTime();
+
+        maxHealth = StatMath.FloorToInt(maxHealth * bossDefinition.healthMultiplier);
+        attack += bossDefinition.bonusAttack;
+        defense += bossDefinition.bonusDefense;
+        expDrop = bossDefinition.expDrop;
+        goldDrop = bossDefinition.goldDrop;
+
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null)
+            return;
+
+        if (bossDefinition.sprite != null)
+            spriteRenderer.sprite = bossDefinition.sprite;
+        else if (definition != null && definition.sprite != null)
+            spriteRenderer.sprite = definition.sprite;
+
+        spriteRenderer.color = bossDefinition.tintColor;
+        transform.localScale = bossDefinition.localScale;
+    }
+
     public void ApplyArchetypeVisual()
     {
         var spriteRenderer = GetComponent<SpriteRenderer>();

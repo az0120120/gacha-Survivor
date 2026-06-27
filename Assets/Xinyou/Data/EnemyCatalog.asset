@@ -43,7 +43,7 @@ MonoBehaviour:
     harasserRecoverDuration: 0.75
   - archetype: 1
     displayName: "\u8FDC\u7A0B\u5C04\u51FB"
-    sprite: {fileID: 21300000, guid: cfed6e6607f2bf94288e25c818a4f976, type: 3}
+    sprite: {fileID: 21300000, guid: 5e1d11161b3431d4bbbd5c665723a312, type: 3}
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.2, y: 0.2, z: 0.2}
     baseMaxHealth: 40
