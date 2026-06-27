@@ -908,6 +908,7 @@ GameObject:
   - component: {fileID: 1055431320}
   - component: {fileID: 1055431322}
   - component: {fileID: 1055431323}
+  - component: {fileID: 1055431324}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -1107,6 +1108,21 @@ MonoBehaviour:
   hitVolume: 0.65
   bossHitVolume: 0.75
   globalMinInterval: 0.03
+--- !u!114 &1055431324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e6d5c4b3a2918071625344a5b6c7d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitClip: {fileID: 8300000, guid: d9bf2dd0f95acfb41a50d7b83821185d, type: 3}
+  hitVolume: 0.75
+  globalMinInterval: 0.08
 --- !u!1 &1269217973
 GameObject:
   m_ObjectHideFlags: 0

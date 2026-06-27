@@ -52,6 +52,9 @@ public class GameHUD : MonoBehaviour
         if (FindAnyObjectByType<EnemyHitSfxManager>() == null)
             gameObject.AddComponent<EnemyHitSfxManager>();
 
+        if (FindAnyObjectByType<PlayerHitSfxManager>() == null)
+            gameObject.AddComponent<PlayerHitSfxManager>();
+
         EnsureBossHealthBar();
     }
 

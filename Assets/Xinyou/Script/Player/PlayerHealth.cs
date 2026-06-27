@@ -60,6 +60,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
         currentHealth -= damage;
         invincibilityTimer = invincibilityDuration;
+        PlayerHitSfxManager.Instance?.PlayHit(transform.position);
         NotifyHealthChanged();
 
         if (currentHealth <= 0)
