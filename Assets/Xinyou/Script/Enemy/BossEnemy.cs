@@ -148,6 +148,13 @@ public class BossBehavior : MonoBehaviour, IPoolable
         if (!isActive || definition == null || player == null)
             return;
 
+        if (MapPropStatusEffects.AreEnemiesFrozen)
+        {
+            rb.velocity = knockbackVelocity;
+            knockbackVelocity = Vector2.Lerp(knockbackVelocity, Vector2.zero, 10f * Time.fixedDeltaTime);
+            return;
+        }
+
         Vector2 velocity = ComputeVelocity();
         rb.velocity = velocity + knockbackVelocity;
         knockbackVelocity = Vector2.Lerp(knockbackVelocity, Vector2.zero, 10f * Time.fixedDeltaTime);

@@ -48,6 +48,24 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         NotifyHealthChanged();
     }
 
+    public void Heal(int amount)
+    {
+        if (amount <= 0 || !IsAlive)
+            return;
+
+        currentHealth = Mathf.Min(currentHealth + amount, MaxHealth);
+        NotifyHealthChanged();
+    }
+
+    public void HealPercent(float percent)
+    {
+        if (percent <= 0f || !IsAlive)
+            return;
+
+        int amount = StatMath.FloorToInt(MaxHealth * percent);
+        Heal(Mathf.Max(1, amount));
+    }
+
     public void TakeDamage(float damage)
     {
         TakeDamage(StatMath.FloorToInt(damage));

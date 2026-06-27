@@ -95,7 +95,18 @@ public class RotatingSlashEffect : MonoBehaviour
                 continue;
 
             hitEnemiesThisSwing.Add(enemy);
-            enemy.TakeDamage(currentDamage);
+            int finalDamage = StatMath.FloorToInt(currentDamage * MapPropStatusEffects.OutgoingDamageMultiplier);
+            enemy.TakeDamage(finalDamage);
+            continue;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            var mapProp = overlapBuffer[i].GetComponent<MapDestructibleProp>();
+            if (mapProp == null || !mapProp.IsActive)
+                continue;
+
+            mapProp.TakeDamage(1f);
         }
     }
 

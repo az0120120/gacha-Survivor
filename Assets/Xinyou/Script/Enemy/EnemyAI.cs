@@ -107,6 +107,13 @@ public class EnemyAI : MonoBehaviour, IPoolable
         if (player == null)
             return;
 
+        if (MapPropStatusEffects.AreEnemiesFrozen)
+        {
+            rb.velocity = knockbackVelocity;
+            knockbackVelocity = Vector2.Lerp(knockbackVelocity, Vector2.zero, knockbackDecay * Time.fixedDeltaTime);
+            return;
+        }
+
         Vector2 chaseVelocity = enemyStats != null
             ? ComputeBehaviorVelocity()
             : Vector2.zero;

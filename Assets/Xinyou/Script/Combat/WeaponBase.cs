@@ -52,6 +52,18 @@ public abstract class WeaponBase : MonoBehaviour
         shop.TakeDamage(1f);
     }
 
+    protected void TryHitMapProp(Collider2D collider)
+    {
+        if (collider == null)
+            return;
+
+        var mapProp = collider.GetComponent<MapDestructibleProp>();
+        if (mapProp == null || !mapProp.IsActive)
+            return;
+
+        mapProp.TakeDamage(1f);
+    }
+
     protected void TryHitShopsInRadius(Vector2 center, float radius)
     {
         var filter = new ContactFilter2D
@@ -64,7 +76,10 @@ public abstract class WeaponBase : MonoBehaviour
         int count = Physics2D.OverlapCircle(center, radius, filter, buffer);
 
         for (int i = 0; i < count; i++)
+        {
             TryHitShop(buffer[i]);
+            TryHitMapProp(buffer[i]);
+        }
     }
 
     protected EnemyHealth FindNearestEnemy(float range)

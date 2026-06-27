@@ -279,6 +279,13 @@ public class ClawSwingMotion : MonoBehaviour
             return;
         }
 
+        var mapProp = other.GetComponent<MapDestructibleProp>();
+        if (mapProp != null && mapProp.IsActive)
+        {
+            mapProp.TakeDamage(1f);
+            return;
+        }
+
         var shop = other.GetComponent<ShopWorldEntity>();
         if (shop != null && shop.IsAlive)
         {

@@ -333,6 +333,10 @@ public class MolotovFireZone : MonoBehaviour
             var shop = overlapBuffer[i].GetComponent<ShopWorldEntity>();
             if (shop != null && shop.IsAlive)
                 shop.TakeDamage(1f);
+
+            var mapProp = overlapBuffer[i].GetComponent<MapDestructibleProp>();
+            if (mapProp != null && mapProp.IsActive)
+                mapProp.TakeDamage(1f);
         }
     }
 

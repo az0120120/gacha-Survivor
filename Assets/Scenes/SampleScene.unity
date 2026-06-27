@@ -909,6 +909,7 @@ GameObject:
   - component: {fileID: 1055431322}
   - component: {fileID: 1055431323}
   - component: {fileID: 1055431324}
+  - component: {fileID: 1055431325}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -1123,6 +1124,52 @@ MonoBehaviour:
   hitClip: {fileID: 8300000, guid: d9bf2dd0f95acfb41a50d7b83821185d, type: 3}
   hitVolume: 0.75
   globalMinInterval: 0.08
+--- !u!114 &1055431325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5f6a7b8c9d0488990abcdef1234567c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridStep: 15
+  cellSpawnChance: 0.35
+  randomizePositionInCell: 1
+  useCameraViewArea: 1
+  cameraAreaPadding: 1
+  areaSize: {x: 8, y: 8}
+  areaCenterOffset: {x: 0, y: 0}
+  playerSpawnClearRadius: 1.2
+  spawnCenter: {fileID: 0}
+  destructibleSprite: {fileID: 21300000, guid: 5d4753d4e3d2b8746a2d7a2d4de58fff, type: 3}
+  destructibleColliderRadius: 0.08
+  destructibleSortingOrder: 2
+  breakClip: {fileID: 8300000, guid: ddbfb31ae73a9d944a175308783dce89, type: 3}
+  breakVolume: 0.7
+  breakSoundMinInterval: 0.03
+  pickupColliderRadius: 0.12
+  pickupSortingOrder: 6
+  dropEntries:
+  - type: 0
+    sprite: {fileID: 21300000, guid: 248124b28dfa31c4a9ded4fce74a6845, type: 3}
+    spriteScale: 0.3
+    weight: 70
+  - type: 1
+    sprite: {fileID: 21300000, guid: 80e9433483fe509498ce043d7938a079, type: 3}
+    spriteScale: 0.3
+    weight: 15
+  - type: 2
+    sprite: {fileID: 21300000, guid: f6f266f9910a1ab4e89be8f310f53f6d, type: 3}
+    spriteScale: 0.3
+    weight: 5
+  - type: 3
+    sprite: {fileID: 21300000, guid: 6ad545a8526f3f44c87ff2301c996ac6, type: 3}
+    spriteScale: 0.3
+    weight: 10
 --- !u!1 &1269217973
 GameObject:
   m_ObjectHideFlags: 0
