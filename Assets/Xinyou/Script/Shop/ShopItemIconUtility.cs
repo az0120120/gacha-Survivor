@@ -117,9 +117,12 @@ public static class ShopItemIconUtility
             case ItemEffectType.ElementalAttackUp:
             case ItemEffectType.ElementalDamageBonusUp:
                 return new Color(0.55f, 0.45f, 0.95f);
+            case ItemEffectType.ArmorPenetrationUp:
+                return new Color(0.85f, 0.55f, 0.25f);
             case ItemEffectType.MaxHealthUp:
                 return new Color(0.95f, 0.35f, 0.4f);
             case ItemEffectType.MoveSpeedUp:
+            case ItemEffectType.MoveSpeedPercentUp:
                 return new Color(0.4f, 0.9f, 0.85f);
             case ItemEffectType.CritRateUp:
             case ItemEffectType.CritEffectUp:

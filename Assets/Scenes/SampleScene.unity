@@ -823,7 +823,9 @@ MonoBehaviour:
   shopCatalog: []
   shopUI: {fileID: 0}
   iconDatabase: {fileID: 0}
-  refreshCost: 5
+  baseRefreshCost: 35
+  priceIncreasePerPurchase: 1.5
+  refreshCostIncreasePerRefresh: 1.5
 --- !u!114 &1055431314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -939,6 +941,10 @@ MonoBehaviour:
   timeText: {fileID: 0}
   goldText: {fileID: 0}
   killText: {fileID: 0}
+  healthText: {fileID: 0}
+  healthBarFill: {fileID: 0}
+  healthBarFullColor: {r: 0.35, g: 0.9, b: 0.45, a: 1}
+  healthBarLowColor: {r: 0.95, g: 0.3, b: 0.3, a: 1}
   shopArrowRoot: {fileID: 0}
   shopArrowImage: {fileID: 0}
   player: {fileID: 0}
@@ -1169,6 +1175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa6bab68f84d80b45be9b9ddea097d03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  invincibilityDuration: 0.1
 --- !u!114 &2143937443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1367,16 +1374,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87ef04695a270654b96a4a0f2c30a618, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseAttack: 10
-  baseElementalAttack: 0
+  baseAttack: 30
+  baseElementalAttack: 10
   baseArmorPenetration: 0
   baseCritRatePercent: 5
   baseCritEffectPercent: 150
-  baseMaxHealth: 100
+  baseMaxHealth: 25
   baseDefense: 0
   baseDodgeRatePercent: 0
   baseGoldPickupRangePercent: 0
   baseMoveSpeed: 5
+  baseMoveSpeedPercent: 0
   baseCooldownReductionPercent: 0
   baseExpBonusPercent: 0
   baseGoldBonusPercent: 0

@@ -4,16 +4,17 @@ using UnityEngine;
 public class CharacterStats : MonoBehaviour
 {
     [Header("Base Stats")]
-    [SerializeField] int baseAttack = 10;
-    [SerializeField] int baseElementalAttack;
+    [SerializeField] int baseAttack = 30;
+    [SerializeField] int baseElementalAttack = 10;
     [SerializeField] int baseArmorPenetration;
-    [SerializeField] float baseCritRatePercent = 5f;
+    [SerializeField] float baseCritRatePercent;
     [SerializeField] float baseCritEffectPercent = 150f;
-    [SerializeField] int baseMaxHealth = 100;
+    [SerializeField] int baseMaxHealth = 25;
     [SerializeField] int baseDefense;
     [SerializeField] float baseDodgeRatePercent;
     [SerializeField] float baseGoldPickupRangePercent;
-    [SerializeField] float baseMoveSpeed = 5f;
+    [SerializeField] float baseMoveSpeed = 125f;
+    [SerializeField] float baseMoveSpeedPercent;
     [SerializeField] float baseCooldownReductionPercent;
     [SerializeField] float baseExpBonusPercent;
     [SerializeField] float baseGoldBonusPercent;
@@ -31,6 +32,7 @@ public class CharacterStats : MonoBehaviour
     float bonusDodgeRatePercent;
     float bonusGoldPickupRangePercent;
     float bonusMoveSpeed;
+    float bonusMoveSpeedPercent;
     float bonusCooldownReductionPercent;
     float bonusExpBonusPercent;
     float bonusGoldBonusPercent;
@@ -47,7 +49,9 @@ public class CharacterStats : MonoBehaviour
     public int Defense => StatMath.FloorToInt(baseDefense + bonusDefense);
     public float DodgeRate => StatMath.ClampRatio(StatMath.PercentToRatio(baseDodgeRatePercent + bonusDodgeRatePercent));
     public float GoldPickupRangeRatio => 1f + StatMath.PercentToRatio(baseGoldPickupRangePercent + bonusGoldPickupRangePercent);
-    public float MoveSpeed => baseMoveSpeed + bonusMoveSpeed;
+    public float MoveSpeed =>
+        (baseMoveSpeed + bonusMoveSpeed)
+        * (1f + StatMath.PercentToRatio(baseMoveSpeedPercent + bonusMoveSpeedPercent));
     public float CooldownReduction => StatMath.ClampRatio(StatMath.PercentToRatio(baseCooldownReductionPercent + bonusCooldownReductionPercent));
     public float ExpBonusRatio => 1f + StatMath.PercentToRatio(baseExpBonusPercent + bonusExpBonusPercent);
     public float GoldBonusRatio => 1f + StatMath.PercentToRatio(baseGoldBonusPercent + bonusGoldBonusPercent);
@@ -65,6 +69,7 @@ public class CharacterStats : MonoBehaviour
     public void AddDodgeRatePercent(float amount) => bonusDodgeRatePercent += amount;
     public void AddGoldPickupRangePercent(float amount) => bonusGoldPickupRangePercent += amount;
     public void AddMoveSpeed(float amount) => bonusMoveSpeed += amount;
+    public void AddMoveSpeedPercent(float amount) => bonusMoveSpeedPercent += amount;
     public void AddCooldownReductionPercent(float amount) => bonusCooldownReductionPercent += amount;
     public void AddExpBonusPercent(float amount) => bonusExpBonusPercent += amount;
     public void AddGoldBonusPercent(float amount) => bonusGoldBonusPercent += amount;

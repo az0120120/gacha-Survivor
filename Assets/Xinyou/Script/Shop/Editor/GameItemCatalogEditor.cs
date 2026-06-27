@@ -39,9 +39,7 @@ public class GameItemCatalogEditor : Editor
         if (GUILayout.Button("仅升级道具", GUILayout.Height(28f)))
         {
             Undo.RecordObject(catalog, "Fill Level Up Items");
-            var all = GameItemCatalog.CreateDefaultEntries();
-            all.RemoveAll(entry => entry.kind != GameItemKind.LevelUpStat);
-            catalog.SetEntries(all);
+            catalog.SetEntries(GameItemCatalog.CreateDefaultLevelUpEntries());
             EditorUtility.SetDirty(catalog);
         }
         EditorGUILayout.EndHorizontal();
