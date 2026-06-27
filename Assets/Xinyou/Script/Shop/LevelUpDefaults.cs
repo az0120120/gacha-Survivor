@@ -26,7 +26,7 @@ public static class LevelUpDefaults
         float value)
     {
         var item = ScriptableObject.CreateInstance<ShopItemDefinition>();
-        item.ConfigureRuntime(id, name, desc, ItemPoolType.LevelUp, ShopItemCategory.StatUpgrade, effectType, tier, 0, ShopSizeType.Small, false, ShopWeaponType.Projectile, value);
+        item.ConfigureRuntime(id, name, desc, ItemPoolType.LevelUp, ShopItemCategory.StatUpgrade, effectType, tier, 0, ShopSizeType.Small, false, ShopWeaponType.DesertEagle, value);
         return item;
     }
 }

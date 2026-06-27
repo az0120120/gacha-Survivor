@@ -50,7 +50,7 @@ public enum LevelUpStatType
 [System.Serializable]
 public class GameItemEntry
 {
-    [Tooltip("唯一 ID，建议英文，如 weapon_projectile")]
+    [Tooltip("唯一 ID，建议英文，如 weapon_desert_eagle")]
     public string id = "new_item";
 
     public string displayName = "新道具";
@@ -72,7 +72,7 @@ public class GameItemEntry
     public int tier = 1;
 
     [Tooltip("关联武器（武器/武器强化时填写）")]
-    public ShopWeaponType weapon = ShopWeaponType.Projectile;
+    public ShopWeaponType weapon = ShopWeaponType.DesertEagle;
 
     [Tooltip("强化数值：范围%、冷却%、属性加成等")]
     public float effectValue = 10f;
@@ -244,10 +244,6 @@ public class GameItemCatalog : ScriptableObject
     {
         return new List<GameItemEntry>
         {
-            Entry("weapon_projectile", "魔弹杖", "装备后每 0.5 秒发射子弹，造成 4 倍伤害。", GameItemKind.ShopWeapon, 50, 2, ShopWeaponType.Projectile),
-            Entry("weapon_area", "旋转法阵", "装备后以自身为中心持续造成区域伤害。", GameItemKind.ShopWeapon, 48, 3, ShopWeaponType.Area),
-            Entry("weapon_direct", "虚空指", "装备后锁定最近敌人，每秒造成 6 倍瞬发伤害。", GameItemKind.ShopWeapon, 45, 3, ShopWeaponType.DirectTarget),
-
             Entry("weapon_desert_eagle", "火沙鹰", "每 0.75 秒发射子弹，6 倍伤害，穿透 3。", GameItemKind.ShopWeapon, 48, 2, ShopWeaponType.DesertEagle),
             Entry("weapon_molotov", "燃烧瓶", "每 3 秒投掷，落点形成持续 5 秒的区域伤害。", GameItemKind.ShopWeapon, 50, 2, ShopWeaponType.Molotov),
             Entry("weapon_kunai", "苦无", "每秒锁定单体造成 6 倍瞬发伤害。", GameItemKind.ShopWeapon, 46, 2, ShopWeaponType.Kunai),
@@ -264,17 +260,6 @@ public class GameItemCatalog : ScriptableObject
             Minor("w_cd_claw", "虾钳加速", "虾钳冷却缩减 +10%。", ShopWeaponType.Claw, GameItemKind.ShopWeaponCooldownUp, 37, 1, 10f),
             Minor("w_range_ak", "AK 延伸", "AK 攻击范围 +20%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponRangeUp, 42, 3, 20f),
             Minor("w_cd_ak", "AK 速射", "AK 冷却缩减 +10%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponCooldownUp, 44, 3, 10f),
-
-            Minor("w_range_projectile", "延伸弹匣", "魔弹杖攻击范围 +20%。", ShopWeaponType.Projectile, GameItemKind.ShopWeaponRangeUp, 35, 1, 20f),
-            Minor("w_cd_projectile", "速射核心", "魔弹杖冷却缩减 +10%。", ShopWeaponType.Projectile, GameItemKind.ShopWeaponCooldownUp, 37, 1, 10f),
-            Minor("w_range_area", "法阵扩张", "旋转法阵范围 +25%。", ShopWeaponType.Area, GameItemKind.ShopWeaponRangeUp, 40, 2, 25f),
-            Minor("w_cd_area", "法阵加速", "旋转法阵冷却缩减 +10%。", ShopWeaponType.Area, GameItemKind.ShopWeaponCooldownUp, 42, 2, 10f),
-            Minor("w_range_direct", "虚空延伸", "虚空指索敌范围 +20%。", ShopWeaponType.DirectTarget, GameItemKind.ShopWeaponRangeUp, 45, 2, 20f),
-            Minor("w_cd_direct", "虚空加速", "虚空指冷却缩减 +10%。", ShopWeaponType.DirectTarget, GameItemKind.ShopWeaponCooldownUp, 47, 2, 10f),
-
-            Entry("w_major_projectile", "三重散射", "魔弹杖改为三向散射攻击。", GameItemKind.ShopWeaponMajorUpgrade, 48, 1, ShopWeaponType.Projectile),
-            Entry("w_major_area", "双环法阵", "旋转法阵频率提升，伤害范围扩大。", GameItemKind.ShopWeaponMajorUpgrade, 50, 2, ShopWeaponType.Area),
-            Entry("w_major_direct", "连锁虚空", "虚空指改为范围连锁打击。", GameItemKind.ShopWeaponMajorUpgrade, 50, 3, ShopWeaponType.DirectTarget),
 
             Stat("lv_attack", "强攻", "攻击力 +15。", LevelUpStatType.Attack, 1, 15f),
             Stat("lv_element", "元素之力", "元素攻击力 +5。", LevelUpStatType.ElementalAttack, 1, 5f),

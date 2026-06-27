@@ -12,13 +12,9 @@ public class WeaponUpgradeData
 public class WeaponManager : MonoBehaviour
 {
     [SerializeField] CharacterStats characterStats;
-    [Header("Legacy Projectile Pool")]
-    [SerializeField] ObjectPool projectilePool;
-
-    [Header("Gun Projectile Pools")]
     [SerializeField] ObjectPool desertEagleProjectilePool;
     [SerializeField] ObjectPool akProjectilePool;
-    [SerializeField] ShopWeaponType[] startingWeapons = { ShopWeaponType.Projectile };
+    [SerializeField] ShopWeaponType[] startingWeapons;
 
     readonly HashSet<ShopWeaponType> equippedWeapons = new HashSet<ShopWeaponType>();
     readonly Dictionary<ShopWeaponType, WeaponUpgradeData> upgradeData = new Dictionary<ShopWeaponType, WeaponUpgradeData>();
@@ -65,22 +61,13 @@ public class WeaponManager : MonoBehaviour
     public float GetRangeMultiplier(ShopWeaponType weaponType)
     {
         var data = GetUpgradeData(weaponType);
-        float multiplier = 1f + data.RangeBonusPercent * 0.01f;
-
-        if (data.MajorUpgradeLevel > 0 && weaponType == ShopWeaponType.Area)
-            multiplier *= 1.3f;
-
-        return multiplier;
+        return 1f + data.RangeBonusPercent * 0.01f;
     }
 
     public float GetWeaponCooldownMultiplier(ShopWeaponType weaponType)
     {
         var data = GetUpgradeData(weaponType);
         float reduction = Mathf.Clamp01(data.CooldownReductionPercent * 0.01f);
-
-        if (data.MajorUpgradeLevel > 0 && weaponType == ShopWeaponType.Area)
-            reduction = Mathf.Clamp01(reduction + 0.15f);
-
         return 1f - reduction;
     }
 
@@ -123,12 +110,6 @@ public class WeaponManager : MonoBehaviour
     {
         switch (weaponType)
         {
-            case ShopWeaponType.Projectile:
-                return ConfigureProjectilePool(GetOrAddComponent<ProjectileWeapon>());
-            case ShopWeaponType.Area:
-                return GetOrAddComponent<AreaWeapon>();
-            case ShopWeaponType.DirectTarget:
-                return GetOrAddComponent<DirectTargetWeapon>();
             case ShopWeaponType.DesertEagle:
                 return AssignProjectilePool(GetOrAddComponent<DesertEagleWeapon>(), desertEagleProjectilePool);
             case ShopWeaponType.Ak:
@@ -152,31 +133,8 @@ public class WeaponManager : MonoBehaviour
 
     WeaponBase AssignProjectilePool(WeaponBase weapon, ObjectPool dedicatedPool)
     {
-        if (weapon == null)
-            return null;
-
-        if (weapon is ProjectileWeapon legacyProjectile)
-        {
-            if (projectilePool != null)
-                legacyProjectile.SetProjectilePool(projectilePool);
-            return weapon;
-        }
-
         if (weapon is StatProjectileWeapon statProjectile)
             statProjectile.AssignProjectilePoolIfEmpty(dedicatedPool);
-
-        return weapon;
-    }
-
-    WeaponBase ConfigureProjectilePool(WeaponBase weapon)
-    {
-        if (projectilePool == null || weapon == null)
-            return weapon;
-
-        if (weapon is ProjectileWeapon legacyProjectile)
-            legacyProjectile.SetProjectilePool(projectilePool);
-        else if (weapon is StatProjectileWeapon statProjectile)
-            statProjectile.AssignProjectilePoolIfEmpty(projectilePool);
 
         return weapon;
     }

@@ -94,12 +94,6 @@ public static class ShopItemIconUtility
         {
             switch (item.WeaponType)
             {
-                case ShopWeaponType.Projectile:
-                    return new Color(0.45f, 0.7f, 1f);
-                case ShopWeaponType.Area:
-                    return new Color(0.55f, 0.85f, 0.45f);
-                case ShopWeaponType.DirectTarget:
-                    return new Color(0.85f, 0.45f, 1f);
                 case ShopWeaponType.DesertEagle:
                     return new Color(1f, 0.55f, 0.25f);
                 case ShopWeaponType.Molotov:

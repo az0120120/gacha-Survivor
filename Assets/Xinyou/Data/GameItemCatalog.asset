@@ -13,41 +13,6 @@ MonoBehaviour:
   m_Name: GameItemCatalog
   m_EditorClassIdentifier: 
   entries:
-  - id: weapon_projectile
-    displayName: "\u9B54\u5F39\u6756"
-    description: "\u88C5\u5907\u540E\u6BCF 0.5 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C\u9020\u6210
-      4 \u500D\u4F24\u5BB3\u3002"
-    icon: {fileID: 0}
-    kind: 0
-    statType: 0
-    price: 50
-    tier: 2
-    weapon: 0
-    effectValue: 1
-    purchaseOnce: 1
-  - id: weapon_area
-    displayName: "\u65CB\u8F6C\u6CD5\u9635"
-    description: "\u88C5\u5907\u540E\u4EE5\u81EA\u8EAB\u4E3A\u4E2D\u5FC3\u6301\u7EED\u9020\u6210\u533A\u57DF\u4F24\u5BB3\u3002"
-    icon: {fileID: 0}
-    kind: 0
-    statType: 0
-    price: 48
-    tier: 3
-    weapon: 1
-    effectValue: 1
-    purchaseOnce: 1
-  - id: weapon_direct
-    displayName: "\u865A\u7A7A\u6307"
-    description: "\u88C5\u5907\u540E\u9501\u5B9A\u6700\u8FD1\u654C\u4EBA\uFF0C\u6BCF\u79D2\u9020\u6210
-      6 \u500D\u77AC\u53D1\u4F24\u5BB3\u3002"
-    icon: {fileID: 0}
-    kind: 0
-    statType: 0
-    price: 45
-    tier: 3
-    weapon: 2
-    effectValue: 1
-    purchaseOnce: 1
   - id: weapon_desert_eagle
     displayName: "\u706B\u6C99\u9E70"
     description: "\u6BCF 0.75 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C6 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
@@ -57,7 +22,7 @@ MonoBehaviour:
     statType: 0
     price: 48
     tier: 2
-    weapon: 3
+    weapon: 0
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_molotov
@@ -69,7 +34,7 @@ MonoBehaviour:
     statType: 0
     price: 50
     tier: 2
-    weapon: 4
+    weapon: 1
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_kunai
@@ -80,7 +45,7 @@ MonoBehaviour:
     statType: 0
     price: 46
     tier: 2
-    weapon: 5
+    weapon: 2
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_claw
@@ -91,7 +56,7 @@ MonoBehaviour:
     statType: 0
     price: 44
     tier: 1
-    weapon: 6
+    weapon: 3
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_ak
@@ -103,7 +68,7 @@ MonoBehaviour:
     statType: 0
     price: 52
     tier: 3
-    weapon: 7
+    weapon: 4
     effectValue: 1
     purchaseOnce: 1
   - id: w_range_desert_eagle
@@ -114,7 +79,7 @@ MonoBehaviour:
     statType: 0
     price: 38
     tier: 2
-    weapon: 3
+    weapon: 0
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_desert_eagle
@@ -125,7 +90,7 @@ MonoBehaviour:
     statType: 0
     price: 40
     tier: 2
-    weapon: 3
+    weapon: 0
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_molotov
@@ -136,7 +101,7 @@ MonoBehaviour:
     statType: 0
     price: 40
     tier: 2
-    weapon: 4
+    weapon: 1
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_molotov
@@ -147,7 +112,7 @@ MonoBehaviour:
     statType: 0
     price: 42
     tier: 2
-    weapon: 4
+    weapon: 1
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_kunai
@@ -158,7 +123,7 @@ MonoBehaviour:
     statType: 0
     price: 38
     tier: 2
-    weapon: 5
+    weapon: 2
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_kunai
@@ -169,7 +134,7 @@ MonoBehaviour:
     statType: 0
     price: 40
     tier: 2
-    weapon: 5
+    weapon: 2
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_claw
@@ -180,7 +145,7 @@ MonoBehaviour:
     statType: 0
     price: 35
     tier: 1
-    weapon: 6
+    weapon: 3
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_claw
@@ -191,7 +156,7 @@ MonoBehaviour:
     statType: 0
     price: 37
     tier: 1
-    weapon: 6
+    weapon: 3
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_ak
@@ -202,7 +167,7 @@ MonoBehaviour:
     statType: 0
     price: 42
     tier: 3
-    weapon: 7
+    weapon: 4
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_ak
@@ -213,107 +178,8 @@ MonoBehaviour:
     statType: 0
     price: 44
     tier: 3
-    weapon: 7
+    weapon: 4
     effectValue: 10
-    purchaseOnce: 0
-  - id: w_range_projectile
-    displayName: "\u5EF6\u4F38\u5F39\u5323"
-    description: "\u9B54\u5F39\u6756\u653B\u51FB\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
-    kind: 1
-    statType: 0
-    price: 35
-    tier: 1
-    weapon: 0
-    effectValue: 20
-    purchaseOnce: 0
-  - id: w_cd_projectile
-    displayName: "\u901F\u5C04\u6838\u5FC3"
-    description: "\u9B54\u5F39\u6756\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
-    kind: 2
-    statType: 0
-    price: 37
-    tier: 1
-    weapon: 0
-    effectValue: 10
-    purchaseOnce: 0
-  - id: w_range_area
-    displayName: "\u6CD5\u9635\u6269\u5F20"
-    description: "\u65CB\u8F6C\u6CD5\u9635\u8303\u56F4 +25%\u3002"
-    icon: {fileID: 0}
-    kind: 1
-    statType: 0
-    price: 40
-    tier: 2
-    weapon: 1
-    effectValue: 25
-    purchaseOnce: 0
-  - id: w_cd_area
-    displayName: "\u6CD5\u9635\u52A0\u901F"
-    description: "\u65CB\u8F6C\u6CD5\u9635\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
-    kind: 2
-    statType: 0
-    price: 42
-    tier: 2
-    weapon: 1
-    effectValue: 10
-    purchaseOnce: 0
-  - id: w_range_direct
-    displayName: "\u865A\u7A7A\u5EF6\u4F38"
-    description: "\u865A\u7A7A\u6307\u7D22\u654C\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
-    kind: 1
-    statType: 0
-    price: 45
-    tier: 2
-    weapon: 2
-    effectValue: 20
-    purchaseOnce: 0
-  - id: w_cd_direct
-    displayName: "\u865A\u7A7A\u52A0\u901F"
-    description: "\u865A\u7A7A\u6307\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
-    kind: 2
-    statType: 0
-    price: 47
-    tier: 2
-    weapon: 2
-    effectValue: 10
-    purchaseOnce: 0
-  - id: w_major_projectile
-    displayName: "\u4E09\u91CD\u6563\u5C04"
-    description: "\u9B54\u5F39\u6756\u6539\u4E3A\u4E09\u5411\u6563\u5C04\u653B\u51FB\u3002"
-    icon: {fileID: 0}
-    kind: 3
-    statType: 0
-    price: 48
-    tier: 1
-    weapon: 0
-    effectValue: 1
-    purchaseOnce: 0
-  - id: w_major_area
-    displayName: "\u53CC\u73AF\u6CD5\u9635"
-    description: "\u65CB\u8F6C\u6CD5\u9635\u9891\u7387\u63D0\u5347\uFF0C\u4F24\u5BB3\u8303\u56F4\u6269\u5927\u3002"
-    icon: {fileID: 0}
-    kind: 3
-    statType: 0
-    price: 50
-    tier: 2
-    weapon: 1
-    effectValue: 1
-    purchaseOnce: 0
-  - id: w_major_direct
-    displayName: "\u8FDE\u9501\u865A\u7A7A"
-    description: "\u865A\u7A7A\u6307\u6539\u4E3A\u8303\u56F4\u8FDE\u9501\u6253\u51FB\u3002"
-    icon: {fileID: 0}
-    kind: 3
-    statType: 0
-    price: 50
-    tier: 3
-    weapon: 2
-    effectValue: 1
     purchaseOnce: 0
   - id: lv_attack
     displayName: "\u5F3A\u653B"
