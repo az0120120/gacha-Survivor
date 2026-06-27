@@ -12,7 +12,13 @@ public class WeaponUpgradeData
 public class WeaponManager : MonoBehaviour
 {
     [SerializeField] CharacterStats characterStats;
+    [Header("Legacy Projectile Pool")]
     [SerializeField] ObjectPool projectilePool;
+
+    [Header("Gun Projectile Pools")]
+    [SerializeField] ObjectPool glockProjectilePool;
+    [SerializeField] ObjectPool desertEagleProjectilePool;
+    [SerializeField] ObjectPool akProjectilePool;
     [SerializeField] ShopWeaponType[] startingWeapons = { ShopWeaponType.Projectile };
 
     readonly HashSet<ShopWeaponType> equippedWeapons = new HashSet<ShopWeaponType>();
@@ -22,10 +28,6 @@ public class WeaponManager : MonoBehaviour
     {
         if (characterStats == null)
             characterStats = GetComponent<CharacterStats>();
-
-        upgradeData[ShopWeaponType.Projectile] = new WeaponUpgradeData();
-        upgradeData[ShopWeaponType.Area] = new WeaponUpgradeData();
-        upgradeData[ShopWeaponType.DirectTarget] = new WeaponUpgradeData();
 
         DisableAllWeapons();
 
@@ -123,42 +125,71 @@ public class WeaponManager : MonoBehaviour
         switch (weaponType)
         {
             case ShopWeaponType.Projectile:
-            {
-                var weapon = GetComponent<ProjectileWeapon>();
-                if (weapon == null)
-                    weapon = gameObject.AddComponent<ProjectileWeapon>();
-
-                if (projectilePool != null)
-                    weapon.SetProjectilePool(projectilePool);
-
-                return weapon;
-            }
+                return ConfigureProjectilePool(GetOrAddComponent<ProjectileWeapon>());
             case ShopWeaponType.Area:
-            {
-                var weapon = GetComponent<AreaWeapon>();
-                return weapon != null ? weapon : gameObject.AddComponent<AreaWeapon>();
-            }
+                return GetOrAddComponent<AreaWeapon>();
             case ShopWeaponType.DirectTarget:
-            {
-                var weapon = GetComponent<DirectTargetWeapon>();
-                return weapon != null ? weapon : gameObject.AddComponent<DirectTargetWeapon>();
-            }
+                return GetOrAddComponent<DirectTargetWeapon>();
+            case ShopWeaponType.Glock:
+                return AssignProjectilePool(GetOrAddComponent<GlockWeapon>(), glockProjectilePool);
+            case ShopWeaponType.DesertEagle:
+                return AssignProjectilePool(GetOrAddComponent<DesertEagleWeapon>(), desertEagleProjectilePool);
+            case ShopWeaponType.Ak:
+                return AssignProjectilePool(GetOrAddComponent<AkWeapon>(), akProjectilePool);
+            case ShopWeaponType.Molotov:
+                return GetOrAddComponent<MolotovWeapon>();
+            case ShopWeaponType.Kunai:
+                return GetOrAddComponent<KunaiWeapon>();
+            case ShopWeaponType.Claw:
+                return GetOrAddComponent<ClawWeapon>();
             default:
                 return null;
         }
     }
 
-    void DisableAllWeapons()
+    T GetOrAddComponent<T>() where T : Component
     {
-        SetWeaponEnabled(GetComponent<ProjectileWeapon>(), false);
-        SetWeaponEnabled(GetComponent<AreaWeapon>(), false);
-        SetWeaponEnabled(GetComponent<DirectTargetWeapon>(), false);
-        equippedWeapons.Clear();
+        var component = GetComponent<T>();
+        return component != null ? component : gameObject.AddComponent<T>();
     }
 
-    static void SetWeaponEnabled(WeaponBase weapon, bool enabled)
+    WeaponBase AssignProjectilePool(WeaponBase weapon, ObjectPool dedicatedPool)
     {
-        if (weapon != null)
-            weapon.enabled = enabled;
+        if (weapon == null)
+            return null;
+
+        if (weapon is ProjectileWeapon legacyProjectile)
+        {
+            if (projectilePool != null)
+                legacyProjectile.SetProjectilePool(projectilePool);
+            return weapon;
+        }
+
+        if (weapon is StatProjectileWeapon statProjectile)
+            statProjectile.AssignProjectilePoolIfEmpty(dedicatedPool);
+
+        return weapon;
+    }
+
+    WeaponBase ConfigureProjectilePool(WeaponBase weapon)
+    {
+        if (projectilePool == null || weapon == null)
+            return weapon;
+
+        if (weapon is ProjectileWeapon legacyProjectile)
+            legacyProjectile.SetProjectilePool(projectilePool);
+        else if (weapon is StatProjectileWeapon statProjectile)
+            statProjectile.AssignProjectilePoolIfEmpty(projectilePool);
+
+        return weapon;
+    }
+
+    void DisableAllWeapons()
+    {
+        var weapons = GetComponents<WeaponBase>();
+        for (int i = 0; i < weapons.Length; i++)
+            weapons[i].enabled = false;
+
+        equippedWeapons.Clear();
     }
 }

@@ -20,7 +20,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 0
     statType: 0
-    price: 75
+    price: 50
     tier: 2
     weapon: 0
     effectValue: 1
@@ -31,7 +31,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 0
     statType: 0
-    price: 80
+    price: 48
     tier: 3
     weapon: 1
     effectValue: 1
@@ -43,11 +43,213 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 0
     statType: 0
-    price: 90
+    price: 45
     tier: 3
     weapon: 2
     effectValue: 1
     purchaseOnce: 1
+  - id: weapon_glock
+    displayName: "\u683C\u6D1B\u514B"
+    description: "\u6BCF 0.5 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C4 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
+      2\u3002"
+    icon: {fileID: 0}
+    kind: 0
+    statType: 0
+    price: 45
+    tier: 1
+    weapon: 3
+    effectValue: 1
+    purchaseOnce: 1
+  - id: weapon_desert_eagle
+    displayName: "\u706B\u6C99\u9E70"
+    description: "\u6BCF 0.75 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C6 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
+      3\u3002"
+    icon: {fileID: 0}
+    kind: 0
+    statType: 0
+    price: 48
+    tier: 2
+    weapon: 4
+    effectValue: 1
+    purchaseOnce: 1
+  - id: weapon_molotov
+    displayName: "\u71C3\u70E7\u74F6"
+    description: "\u6BCF 3 \u79D2\u6295\u63B7\uFF0C\u843D\u70B9\u5F62\u6210\u6301\u7EED
+      5 \u79D2\u7684\u533A\u57DF\u4F24\u5BB3\u3002"
+    icon: {fileID: 0}
+    kind: 0
+    statType: 0
+    price: 50
+    tier: 2
+    weapon: 5
+    effectValue: 1
+    purchaseOnce: 1
+  - id: weapon_kunai
+    displayName: "\u82E6\u65E0"
+    description: "\u6BCF\u79D2\u9501\u5B9A\u5355\u4F53\u9020\u6210 6 \u500D\u77AC\u53D1\u4F24\u5BB3\u3002"
+    icon: {fileID: 0}
+    kind: 0
+    statType: 0
+    price: 46
+    tier: 2
+    weapon: 6
+    effectValue: 1
+    purchaseOnce: 1
+  - id: weapon_claw
+    displayName: "\u867E\u94B3"
+    description: "\u6247\u5F62\u8FD1\u6218\uFF0C\u6BCF\u79D2 4 \u500D\u4F24\u5BB3\u3002"
+    icon: {fileID: 0}
+    kind: 0
+    statType: 0
+    price: 44
+    tier: 1
+    weapon: 7
+    effectValue: 1
+    purchaseOnce: 1
+  - id: weapon_ak
+    displayName: AK
+    description: "\u6BCF 0.25 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C7 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
+      3\u3002"
+    icon: {fileID: 0}
+    kind: 0
+    statType: 0
+    price: 52
+    tier: 3
+    weapon: 8
+    effectValue: 1
+    purchaseOnce: 1
+  - id: w_range_glock
+    displayName: "\u683C\u6D1B\u514B\u5EF6\u4F38"
+    description: "\u683C\u6D1B\u514B\u653B\u51FB\u8303\u56F4 +20%\u3002"
+    icon: {fileID: 0}
+    kind: 1
+    statType: 0
+    price: 35
+    tier: 1
+    weapon: 3
+    effectValue: 20
+    purchaseOnce: 0
+  - id: w_cd_glock
+    displayName: "\u683C\u6D1B\u514B\u901F\u5C04"
+    description: "\u683C\u6D1B\u514B\u51B7\u5374\u7F29\u51CF +10%\u3002"
+    icon: {fileID: 0}
+    kind: 2
+    statType: 0
+    price: 37
+    tier: 1
+    weapon: 3
+    effectValue: 10
+    purchaseOnce: 0
+  - id: w_range_desert_eagle
+    displayName: "\u706B\u6C99\u9E70\u5EF6\u4F38"
+    description: "\u706B\u6C99\u9E70\u653B\u51FB\u8303\u56F4 +20%\u3002"
+    icon: {fileID: 0}
+    kind: 1
+    statType: 0
+    price: 38
+    tier: 2
+    weapon: 4
+    effectValue: 20
+    purchaseOnce: 0
+  - id: w_cd_desert_eagle
+    displayName: "\u706B\u6C99\u9E70\u901F\u5C04"
+    description: "\u706B\u6C99\u9E70\u51B7\u5374\u7F29\u51CF +10%\u3002"
+    icon: {fileID: 0}
+    kind: 2
+    statType: 0
+    price: 40
+    tier: 2
+    weapon: 4
+    effectValue: 10
+    purchaseOnce: 0
+  - id: w_range_molotov
+    displayName: "\u71C3\u70E7\u5EF6\u4F38"
+    description: "\u71C3\u70E7\u74F6\u6295\u63B7\u8303\u56F4 +20%\u3002"
+    icon: {fileID: 0}
+    kind: 1
+    statType: 0
+    price: 40
+    tier: 2
+    weapon: 5
+    effectValue: 20
+    purchaseOnce: 0
+  - id: w_cd_molotov
+    displayName: "\u71C3\u70E7\u52A0\u901F"
+    description: "\u71C3\u70E7\u74F6\u51B7\u5374\u7F29\u51CF +10%\u3002"
+    icon: {fileID: 0}
+    kind: 2
+    statType: 0
+    price: 42
+    tier: 2
+    weapon: 5
+    effectValue: 10
+    purchaseOnce: 0
+  - id: w_range_kunai
+    displayName: "\u82E6\u65E0\u5EF6\u4F38"
+    description: "\u82E6\u65E0\u7D22\u654C\u8303\u56F4 +20%\u3002"
+    icon: {fileID: 0}
+    kind: 1
+    statType: 0
+    price: 38
+    tier: 2
+    weapon: 6
+    effectValue: 20
+    purchaseOnce: 0
+  - id: w_cd_kunai
+    displayName: "\u82E6\u65E0\u52A0\u901F"
+    description: "\u82E6\u65E0\u51B7\u5374\u7F29\u51CF +10%\u3002"
+    icon: {fileID: 0}
+    kind: 2
+    statType: 0
+    price: 40
+    tier: 2
+    weapon: 6
+    effectValue: 10
+    purchaseOnce: 0
+  - id: w_range_claw
+    displayName: "\u867E\u94B3\u5EF6\u4F38"
+    description: "\u867E\u94B3\u653B\u51FB\u8303\u56F4 +20%\u3002"
+    icon: {fileID: 0}
+    kind: 1
+    statType: 0
+    price: 35
+    tier: 1
+    weapon: 7
+    effectValue: 20
+    purchaseOnce: 0
+  - id: w_cd_claw
+    displayName: "\u867E\u94B3\u52A0\u901F"
+    description: "\u867E\u94B3\u51B7\u5374\u7F29\u51CF +10%\u3002"
+    icon: {fileID: 0}
+    kind: 2
+    statType: 0
+    price: 37
+    tier: 1
+    weapon: 7
+    effectValue: 10
+    purchaseOnce: 0
+  - id: w_range_ak
+    displayName: "AK \u5EF6\u4F38"
+    description: "AK \u653B\u51FB\u8303\u56F4 +20%\u3002"
+    icon: {fileID: 0}
+    kind: 1
+    statType: 0
+    price: 42
+    tier: 3
+    weapon: 8
+    effectValue: 20
+    purchaseOnce: 0
+  - id: w_cd_ak
+    displayName: "AK \u901F\u5C04"
+    description: "AK \u51B7\u5374\u7F29\u51CF +10%\u3002"
+    icon: {fileID: 0}
+    kind: 2
+    statType: 0
+    price: 44
+    tier: 3
+    weapon: 8
+    effectValue: 10
+    purchaseOnce: 0
   - id: w_range_projectile
     displayName: "\u5EF6\u4F38\u5F39\u5323"
     description: "\u9B54\u5F39\u6756\u653B\u51FB\u8303\u56F4 +20%\u3002"
@@ -65,7 +267,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 2
     statType: 0
-    price: 35
+    price: 37
     tier: 1
     weapon: 0
     effectValue: 10
@@ -87,7 +289,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 2
     statType: 0
-    price: 40
+    price: 42
     tier: 2
     weapon: 1
     effectValue: 10
@@ -109,7 +311,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 2
     statType: 0
-    price: 45
+    price: 47
     tier: 2
     weapon: 2
     effectValue: 10
@@ -120,7 +322,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 3
     statType: 0
-    price: 120
+    price: 48
     tier: 1
     weapon: 0
     effectValue: 1
@@ -131,7 +333,7 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 3
     statType: 0
-    price: 130
+    price: 50
     tier: 2
     weapon: 1
     effectValue: 1
@@ -142,83 +344,72 @@ MonoBehaviour:
     icon: {fileID: 0}
     kind: 3
     statType: 0
-    price: 140
+    price: 50
     tier: 3
     weapon: 2
     effectValue: 1
     purchaseOnce: 0
   - id: lv_attack
-    displayName: "\u529B\u91CF\u63D0\u5347"
-    description: "\u653B\u51FB\u529B +3\u3002"
+    displayName: "\u5F3A\u653B"
+    description: "\u653B\u51FB\u529B +15\u3002"
     icon: {fileID: 0}
     kind: 4
     statType: 0
-    price: 0
-    tier: 1
-    weapon: 0
-    effectValue: 3
-    purchaseOnce: 0
-  - id: lv_attack2
-    displayName: "\u5F3A\u529B\u6253\u51FB"
-    description: "\u653B\u51FB\u529B +6\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 0
-    price: 0
-    tier: 3
-    weapon: 0
-    effectValue: 6
-    purchaseOnce: 0
-  - id: lv_element
-    displayName: "\u5143\u7D20\u4EB2\u548C"
-    description: "\u5143\u7D20\u653B\u51FB\u529B +4\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 1
-    price: 0
-    tier: 2
-    weapon: 0
-    effectValue: 4
-    purchaseOnce: 0
-  - id: lv_health
-    displayName: "\u751F\u547D\u5F3A\u5316"
-    description: "\u6700\u5927\u751F\u547D +15\uFF0C\u5E76\u7ACB\u5373\u6062\u590D\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 2
     price: 0
     tier: 1
     weapon: 0
     effectValue: 15
     purchaseOnce: 0
-  - id: lv_health2
-    displayName: "\u575A\u97E7\u4F53\u9B44"
-    description: "\u6700\u5927\u751F\u547D +30\uFF0C\u5E76\u7ACB\u5373\u6062\u590D\u3002"
+  - id: lv_element
+    displayName: "\u5143\u7D20\u4E4B\u529B"
+    description: "\u5143\u7D20\u653B\u51FB\u529B +5\u3002"
+    icon: {fileID: 0}
+    kind: 4
+    statType: 1
+    price: 0
+    tier: 1
+    weapon: 0
+    effectValue: 5
+    purchaseOnce: 0
+  - id: lv_armor_pen
+    displayName: "\u7834\u7532"
+    description: "\u7834\u9632 +25\u3002"
     icon: {fileID: 0}
     kind: 4
     statType: 2
     price: 0
-    tier: 4
+    tier: 2
     weapon: 0
-    effectValue: 30
+    effectValue: 25
     purchaseOnce: 0
-  - id: lv_speed
-    displayName: "\u8FC5\u6377"
-    description: "\u79FB\u52A8\u901F\u5EA6 +0.5\u3002"
+  - id: lv_defense
+    displayName: "\u62A4\u7532"
+    description: "\u9632\u5FA1 +1\u3002"
+    icon: {fileID: 0}
+    kind: 4
+    statType: 8
+    price: 0
+    tier: 1
+    weapon: 0
+    effectValue: 1
+    purchaseOnce: 0
+  - id: lv_health
+    displayName: "\u751F\u547D"
+    description: "\u6700\u5927\u751F\u547D +15\uFF0C\u5E76\u7ACB\u5373\u6062\u590D\u3002"
     icon: {fileID: 0}
     kind: 4
     statType: 3
     price: 0
     tier: 1
     weapon: 0
-    effectValue: 0.5
+    effectValue: 15
     purchaseOnce: 0
   - id: lv_crit_rate
     displayName: "\u7CBE\u51C6"
     description: "\u66B4\u51FB\u7387 +3%\u3002"
     icon: {fileID: 0}
     kind: 4
-    statType: 4
+    statType: 6
     price: 0
     tier: 2
     weapon: 0
@@ -226,78 +417,23 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_crit_effect
     displayName: "\u81F4\u547D"
-    description: "\u66B4\u51FB\u6548\u679C +15%\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 5
-    price: 0
-    tier: 3
-    weapon: 0
-    effectValue: 15
-    purchaseOnce: 0
-  - id: lv_defense
-    displayName: "\u94C1\u58C1"
-    description: "\u9632\u5FA1 +5\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 6
-    price: 0
-    tier: 2
-    weapon: 0
-    effectValue: 5
-    purchaseOnce: 0
-  - id: lv_cdr
-    displayName: "\u51B7\u5374\u7CBE\u901A"
-    description: "\u51B7\u5374\u7F29\u51CF +3%\u3002"
+    description: "\u66B4\u51FB\u6548\u679C +10%\u3002"
     icon: {fileID: 0}
     kind: 4
     statType: 7
     price: 0
     tier: 2
     weapon: 0
+    effectValue: 10
+    purchaseOnce: 0
+  - id: lv_speed_pct
+    displayName: "\u8FC5\u6377"
+    description: "\u79FB\u52A8\u901F\u5EA6 +3%\u3002"
+    icon: {fileID: 0}
+    kind: 4
+    statType: 5
+    price: 0
+    tier: 1
+    weapon: 0
     effectValue: 3
-    purchaseOnce: 0
-  - id: lv_exp
-    displayName: "\u5B66\u8005"
-    description: "\u7ECF\u9A8C\u83B7\u53D6 +10%\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 8
-    price: 0
-    tier: 2
-    weapon: 0
-    effectValue: 10
-    purchaseOnce: 0
-  - id: lv_gold
-    displayName: "\u8D2A\u5A6A"
-    description: "\u91D1\u5E01\u83B7\u53D6 +10%\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 9
-    price: 0
-    tier: 2
-    weapon: 0
-    effectValue: 10
-    purchaseOnce: 0
-  - id: lv_ad_bonus
-    displayName: "\u653B\u52BF"
-    description: "\u653B\u51FB\u589E\u4F24 +5%\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 10
-    price: 0
-    tier: 3
-    weapon: 0
-    effectValue: 5
-    purchaseOnce: 0
-  - id: lv_elem_bonus
-    displayName: "\u5143\u7D20\u589E\u5E45"
-    description: "\u5143\u7D20\u653B\u51FB\u589E\u4F24 +8%\u3002"
-    icon: {fileID: 0}
-    kind: 4
-    statType: 11
-    price: 0
-    tier: 4
-    weapon: 0
-    effectValue: 8
     purchaseOnce: 0

@@ -1,6 +1,21 @@
 public enum ShopWeaponType
 {
+    [UnityEngine.InspectorName("魔弹杖(旧)")]
     Projectile,
+    [UnityEngine.InspectorName("旋转法阵(旧)")]
     Area,
-    DirectTarget
+    [UnityEngine.InspectorName("虚空指(旧)")]
+    DirectTarget,
+    [UnityEngine.InspectorName("格洛克")]
+    Glock,
+    [UnityEngine.InspectorName("火沙鹰")]
+    DesertEagle,
+    [UnityEngine.InspectorName("燃烧瓶")]
+    Molotov,
+    [UnityEngine.InspectorName("苦无")]
+    Kunai,
+    [UnityEngine.InspectorName("虾钳")]
+    Claw,
+    [UnityEngine.InspectorName("AK")]
+    Ak
 }

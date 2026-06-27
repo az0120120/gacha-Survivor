@@ -28,8 +28,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
     public void OnGetFromPool()
     {
-        ApplyDropSettingsFromStats();
         enemyStats.RefreshFromGameTime();
+        ApplyDropSettingsFromStats();
         currentHealth = enemyStats.MaxHealth;
         contactTimer = 0f;
     }
@@ -112,7 +112,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
         if (ExperienceManager.Instance == null)
             return;
 
-        ExperienceManager.Instance.SpawnOrb(transform.position, expDrop);
+        ExperienceManager.Instance.AddExperience(expDrop);
     }
 
     void OnCollisionStay2D(Collision2D collision)

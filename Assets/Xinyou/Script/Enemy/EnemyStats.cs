@@ -8,14 +8,16 @@ public class EnemyStats : MonoBehaviour
     int maxHealth;
     int attack;
     int defense;
+    int goldDrop;
+    int expDrop;
 
     public EnemyArchetype Archetype => archetype;
     public EnemyArchetypeDefinition Definition => definition;
     public int MaxHealth => maxHealth;
     public int Attack => attack;
     public int Defense => defense;
-    public int ExpDrop => definition != null ? definition.expDrop : 3;
-    public int GoldDrop => definition != null ? definition.goldDrop : 5;
+    public int ExpDrop => expDrop;
+    public int GoldDrop => goldDrop;
     public float ContactCooldown => definition != null ? definition.contactCooldown : 1f;
 
     public void SetArchetype(EnemyArchetype newArchetype, EnemyCatalog catalog)
@@ -36,12 +38,16 @@ public class EnemyStats : MonoBehaviour
                 definition.baseMaxHealth * Mathf.Pow(definition.healthScalePerMinute, gameMinutes));
             attack = definition.baseAttack + definition.attackBonusPerMinute * gameMinutes;
             defense = definition.baseDefense + definition.defensePerMinute * gameMinutes;
-            return;
+        }
+        else
+        {
+            maxHealth = EnemyStatScaler.GetMaxHealth(archetype, gameMinutes);
+            attack = EnemyStatScaler.GetAttack(gameMinutes);
+            defense = EnemyStatScaler.GetDefense(gameMinutes);
         }
 
-        maxHealth = EnemyStatScaler.GetMaxHealth(archetype, gameMinutes);
-        attack = EnemyStatScaler.GetAttack(gameMinutes);
-        defense = EnemyStatScaler.GetDefense(gameMinutes);
+        goldDrop = EnemyStatScaler.RollGoldDrop(gameMinutes);
+        expDrop = EnemyStatScaler.GetExpDropFromGold(goldDrop);
     }
 
     public void ApplyArchetypeVisual()

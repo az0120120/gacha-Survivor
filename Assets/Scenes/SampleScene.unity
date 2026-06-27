@@ -371,12 +371,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPool: {fileID: 416152051}
+  enemyCatalog: {fileID: 11400000, guid: 3dc1396fc9d09bd459855fd0deab2ced, type: 2}
   player: {fileID: 2143937440}
   baseEnemiesPerWave: 6
   enemiesIncreasePerWave: 3
   spawnInterval: 0.5
   spawnMinRadius: 8
   spawnMaxRadius: 12
+  spawnArchetypes: 000000000100000002000000
 --- !u!4 &416152050
 Transform:
   m_ObjectHideFlags: 0
@@ -486,6 +488,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expText: {fileID: 76885688}
+  speedButton: {fileID: 0}
+  speedButtonText: {fileID: 0}
 --- !u!114 &439860569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -687,6 +691,53 @@ MonoBehaviour:
   offset: {x: 0, y: 0, z: -10}
   smoothTime: 0
   snapOnStart: 1
+--- !u!1 &613285459
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 613285461}
+  - component: {fileID: 613285460}
+  m_Layer: 0
+  m_Name: Projectile3Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &613285460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613285459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86fd8ea396b621147a1391d1a7fa4f15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8313672412551598411, guid: c7c62987fe8c36349811b74e463c9fc3, type: 3}
+  prewarmCount: 40
+  poolRoot: {fileID: 0}
+--- !u!4 &613285461
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 613285459}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.06272277, y: 1.8126186, z: -0.014035277}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,6 +815,53 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1019466281
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1019466283}
+  - component: {fileID: 1019466282}
+  m_Layer: 0
+  m_Name: Projectile2Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1019466282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019466281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86fd8ea396b621147a1391d1a7fa4f15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 6539946307377569723, guid: 4f551a60b300a0a479e4626c1b7f2909, type: 3}
+  prewarmCount: 16
+  poolRoot: {fileID: 0}
+--- !u!4 &1019466283
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019466281}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.06272277, y: 1.8126186, z: -0.014035277}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1120,6 +1218,53 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1649725442
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1649725444}
+  - component: {fileID: 1649725443}
+  m_Layer: 0
+  m_Name: Projectile1Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1649725443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649725442}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86fd8ea396b621147a1391d1a7fa4f15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 8816082696765274899, guid: d87d8d6cf04a6664fa8fd90de94d16d6, type: 3}
+  prewarmCount: 20
+  poolRoot: {fileID: 0}
+--- !u!4 &1649725444
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649725442}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.06272277, y: 1.8126186, z: -0.014035277}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2143937439
 GameObject:
   m_ObjectHideFlags: 0
@@ -1154,7 +1299,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143937439}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.00000078976143, z: -0, w: -1}
   m_LocalPosition: {x: -0.32, y: 0.72, z: 0}
   m_LocalScale: {x: 0.3437, y: 0.3284, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1162,7 +1307,7 @@ Transform:
   - {fileID: 437879535}
   - {fileID: 228800401}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -360, z: 0}
 --- !u!114 &2143937442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1188,6 +1333,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b74077ae3276c746b723d9f30be88fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  facingVisual: {fileID: 0}
+  rightFacingSprite: {fileID: 21300000, guid: 63ca9e23d14287046af0559043c27e05, type: 3}
+  leftFacingSprite: {fileID: 21300000, guid: bba2f7c959a48a64cb916f1d9f2b0c46, type: 3}
 --- !u!58 &2143937444
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1291,12 +1439,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: b2cbf8b6f41a13f4cb584545d7ffaa12, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 63ca9e23d14287046af0559043c27e05, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 6.4, y: 8}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1329,9 +1477,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94c4be0f0880fcd4cacc240f48a2d27b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterStats: {fileID: 0}
+  characterStats: {fileID: 2143937455}
   projectilePool: {fileID: 437879536}
-  startingWeapons: 00000000
+  glockProjectilePool: {fileID: 1649725443}
+  desertEagleProjectilePool: {fileID: 1019466282}
+  akProjectilePool: {fileID: 613285460}
+  startingWeapons: 03000000
 --- !u!114 &2143937453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1403,3 +1554,6 @@ SceneRoots:
   - {fileID: 1408104501}
   - {fileID: 1269217976}
   - {fileID: 1055431316}
+  - {fileID: 1649725444}
+  - {fileID: 1019466283}
+  - {fileID: 613285461}

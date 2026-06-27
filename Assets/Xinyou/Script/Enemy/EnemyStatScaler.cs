@@ -33,4 +33,23 @@ public static class EnemyStatScaler
     {
         return StatMath.FloorToInt(3f + gameMinutes);
     }
+
+    public static int RollGoldDrop(int gameMinutes)
+    {
+        if (gameMinutes <= 5)
+            return 5;
+
+        if (gameMinutes <= 10)
+            return Random.Range(5, 7);
+
+        if (gameMinutes <= 15)
+            return Random.Range(6, 8);
+
+        return Random.Range(6, 8);
+    }
+
+    public static int GetExpDropFromGold(int goldDrop)
+    {
+        return goldDrop * 3;
+    }
 }

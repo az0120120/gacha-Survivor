@@ -5,6 +5,8 @@ public class Projectile : MonoBehaviour, IPoolable
 {
     [SerializeField] float speed = 12f;
     [SerializeField] float maxLifetime = 3f;
+    [Tooltip("子弹贴图默认朝向与右方向 (+X) 的夹角。竖图填 -90，横图填 0")]
+    [SerializeField] float spriteFacingOffset;
 
     CharacterStats attackerStats;
     float attackMultiplierK;
@@ -13,7 +15,13 @@ public class Projectile : MonoBehaviour, IPoolable
     float lifetime;
     int remainingPenetrations;
     ObjectPool pool;
+    Sprite defaultSprite;
     readonly HashSet<EnemyHealth> hitEnemies = new HashSet<EnemyHealth>();
+
+    void Awake()
+    {
+        CacheDefaultSprite();
+    }
 
     public void BindPool(ObjectPool objectPool)
     {
@@ -24,18 +32,22 @@ public class Projectile : MonoBehaviour, IPoolable
         Vector2 launchDirection,
         CharacterStats stats,
         float multiplierK,
-        float projectileKnockback)
+        float projectileKnockback,
+        int pierceCount = -1,
+        Sprite spriteOverride = null)
     {
         attackerStats = stats;
         attackMultiplierK = multiplierK;
         knockbackForce = projectileKnockback;
         direction = launchDirection.sqrMagnitude > 0.0001f ? launchDirection.normalized : Vector2.right;
         lifetime = maxLifetime;
-        remainingPenetrations = stats != null ? stats.BulletPenetration : 1;
+        remainingPenetrations = pierceCount >= 0
+            ? pierceCount
+            : stats != null ? stats.BulletPenetration : 1;
         hitEnemies.Clear();
 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        ApplySprite(spriteOverride);
+        ApplyFacingRotation();
     }
 
     public void OnGetFromPool()
@@ -43,6 +55,7 @@ public class Projectile : MonoBehaviour, IPoolable
         lifetime = maxLifetime;
         hitEnemies.Clear();
         remainingPenetrations = 0;
+        direction = Vector2.zero;
     }
 
     public void OnReturnToPool()
@@ -54,10 +67,15 @@ public class Projectile : MonoBehaviour, IPoolable
         lifetime = 0f;
         remainingPenetrations = 0;
         hitEnemies.Clear();
+        transform.rotation = Quaternion.identity;
+        RestoreDefaultSprite();
     }
 
     void Update()
     {
+        if (direction.sqrMagnitude < 0.0001f)
+            return;
+
         transform.position += (Vector3)(direction * speed * Time.deltaTime);
 
         lifetime -= Time.deltaTime;
@@ -99,6 +117,39 @@ public class Projectile : MonoBehaviour, IPoolable
 
         if (remainingPenetrations <= 0)
             Release();
+    }
+
+    void ApplyFacingRotation()
+    {
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(0f, 0f, angle + spriteFacingOffset);
+    }
+
+    void ApplySprite(Sprite spriteOverride)
+    {
+        if (spriteOverride == null)
+            return;
+
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = spriteOverride;
+    }
+
+    void CacheDefaultSprite()
+    {
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+            defaultSprite = spriteRenderer.sprite;
+    }
+
+    void RestoreDefaultSprite()
+    {
+        if (defaultSprite == null)
+            return;
+
+        var spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+            spriteRenderer.sprite = defaultSprite;
     }
 
     void Release()

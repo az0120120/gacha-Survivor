@@ -100,6 +100,18 @@ public static class ShopItemIconUtility
                     return new Color(0.55f, 0.85f, 0.45f);
                 case ShopWeaponType.DirectTarget:
                     return new Color(0.85f, 0.45f, 1f);
+                case ShopWeaponType.Glock:
+                    return new Color(0.55f, 0.75f, 0.95f);
+                case ShopWeaponType.DesertEagle:
+                    return new Color(1f, 0.55f, 0.25f);
+                case ShopWeaponType.Molotov:
+                    return new Color(1f, 0.4f, 0.15f);
+                case ShopWeaponType.Kunai:
+                    return new Color(1f, 0.92f, 0.25f);
+                case ShopWeaponType.Claw:
+                    return new Color(1f, 0.5f, 0.45f);
+                case ShopWeaponType.Ak:
+                    return new Color(0.75f, 0.55f, 0.35f);
             }
         }
 
