@@ -150,6 +150,7 @@ public class ClawSwingMotion : MonoBehaviour
     Rigidbody2D rb;
     readonly HashSet<EnemyHealth> hitEnemies = new HashSet<EnemyHealth>();
     readonly HashSet<ShopWorldEntity> hitShops = new HashSet<ShopWorldEntity>();
+    readonly HashSet<EnemyProjectile> blockedProjectiles = new HashSet<EnemyProjectile>();
 
     public static float CalculateScaleForRange(Sprite sprite, float attackRange, float scaleMultiplier = 1f)
     {
@@ -188,6 +189,7 @@ public class ClawSwingMotion : MonoBehaviour
         elapsed = 0f;
         hitEnemies.Clear();
         hitShops.Clear();
+        blockedProjectiles.Clear();
 
         if (facing.sqrMagnitude < 0.0001f)
             facing = Vector2.right;
@@ -268,6 +270,14 @@ public class ClawSwingMotion : MonoBehaviour
     {
         if (owner == null)
             return;
+
+        var enemyProjectile = other.GetComponent<EnemyProjectile>();
+        if (enemyProjectile != null)
+        {
+            if (blockedProjectiles.Add(enemyProjectile))
+                enemyProjectile.Block();
+            return;
+        }
 
         var shop = other.GetComponent<ShopWorldEntity>();
         if (shop != null && shop.IsAlive)

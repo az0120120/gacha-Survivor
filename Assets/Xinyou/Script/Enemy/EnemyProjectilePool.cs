@@ -92,6 +92,11 @@ public class EnemyProjectilePool : MonoBehaviour
         collider.isTrigger = true;
         collider.radius = 0.25f;
 
+        var rb = projectileObject.AddComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.gravityScale = 0f;
+        rb.freezeRotation = true;
+
         var projectile = projectileObject.AddComponent<EnemyProjectile>();
         projectile.BindPool(this);
         return projectile;

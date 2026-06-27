@@ -91,6 +91,11 @@ public class EnemyProjectile : MonoBehaviour, IPoolable
         Release();
     }
 
+    public void Block()
+    {
+        Release();
+    }
+
     void Release()
     {
         if (pool != null)

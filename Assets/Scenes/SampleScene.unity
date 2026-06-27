@@ -1618,7 +1618,7 @@ MonoBehaviour:
   knockbackForce: 4
   weaponSprite: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
   throwSprite: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
-  fireZoneSprite: {fileID: 21300000, guid: 5d4753d4e3d2b8746a2d7a2d4de58fff, type: 3}
+  fireZoneSprite: {fileID: 21300000, guid: 0416b90487bf42d4cb5f0718c74e4e9b, type: 3}
   throwArcHeight: 2.2
   throwSpinSpeed: 540
   throwSpriteScale: 0.5
