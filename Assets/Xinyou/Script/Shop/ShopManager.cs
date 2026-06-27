@@ -11,7 +11,9 @@ public class ShopManager : MonoBehaviour
     [SerializeField] ShopItemDefinition[] shopCatalog;
     [SerializeField] ShopUI shopUI;
     [SerializeField] ShopItemIconDatabase iconDatabase;
-    [SerializeField] int refreshCost = 5;
+    [SerializeField] int baseRefreshCost = 35;
+    [SerializeField] float priceIncreasePerPurchase = 1.5f;
+    [SerializeField] float refreshCostIncreasePerRefresh = 1.5f;
 
     readonly HashSet<string> purchasedOnceIds = new HashSet<string>();
 
@@ -21,8 +23,10 @@ public class ShopManager : MonoBehaviour
     CharacterStats characterStats;
     PlayerHealth playerHealth;
     bool isShopOpen;
+    float shopPriceMultiplier = 1f;
+    float refreshPriceMultiplier = 1f;
 
-    public int RefreshCost => refreshCost;
+    public int RefreshCost => GetCurrentRefreshCost();
     public ShopItemDefinition[] CurrentOffers => currentOffers;
     public bool IsShopOpen => isShopOpen;
     public GameItemCatalog ItemCatalog => itemCatalog;
@@ -101,7 +105,30 @@ public class ShopManager : MonoBehaviour
         RollOffers(shopSize);
 
         int shopTier = GetCurrentShopTier();
-        shopUI.ShowWorldShop(shopSize, shopTier, currentOffers, refreshCost);
+        shopUI.ShowWorldShop(shopSize, shopTier, currentOffers, GetCurrentRefreshCost());
+    }
+
+    public int GetItemPrice(ShopItemDefinition item)
+    {
+        if (item == null)
+            return 0;
+
+        return StatMath.FloorToInt(item.Price * shopPriceMultiplier);
+    }
+
+    int GetCurrentRefreshCost()
+    {
+        return StatMath.FloorToInt(baseRefreshCost * refreshPriceMultiplier);
+    }
+
+    void IncreaseShopPricesAfterPurchase()
+    {
+        shopPriceMultiplier *= priceIncreasePerPurchase;
+    }
+
+    void IncreaseRefreshCostAfterRefresh()
+    {
+        refreshPriceMultiplier *= refreshCostIncreasePerRefresh;
     }
 
     public bool TryRefreshOffers()
@@ -109,14 +136,15 @@ public class ShopManager : MonoBehaviour
         if (!isShopOpen || GoldWallet.Instance == null)
             return false;
 
-        if (GoldWallet.Instance.Gold < refreshCost)
+        if (GoldWallet.Instance.Gold < GetCurrentRefreshCost())
             return false;
 
-        if (!GoldWallet.Instance.TrySpend(refreshCost))
+        if (!GoldWallet.Instance.TrySpend(GetCurrentRefreshCost()))
             return false;
 
+        IncreaseRefreshCostAfterRefresh();
         RollOffers(currentShopSize);
-        shopUI.RefreshOffers(currentOffers, refreshCost);
+        shopUI.RefreshOffers(currentOffers, GetCurrentRefreshCost());
         shopUI.SelectFirstOffer();
         return true;
     }
@@ -126,7 +154,7 @@ public class ShopManager : MonoBehaviour
         if (!isShopOpen || GoldWallet.Instance == null)
             return false;
 
-        return GoldWallet.Instance.Gold >= refreshCost;
+        return GoldWallet.Instance.Gold >= GetCurrentRefreshCost();
     }
 
     public void CloseShop()
@@ -148,13 +176,16 @@ public class ShopManager : MonoBehaviour
         if (!CanPurchase(item))
             return false;
 
-        if (!GoldWallet.Instance.TrySpend(item.Price))
+        if (!GoldWallet.Instance.TrySpend(GetItemPrice(item)))
             return false;
 
         ItemEffectApplier.Apply(item, weaponManager, characterStats, playerHealth);
 
         if (item.PurchaseOnce)
             purchasedOnceIds.Add(item.ItemId);
+
+        IncreaseShopPricesAfterPurchase();
+        shopUI.RefreshOffers(currentOffers, GetCurrentRefreshCost());
 
         return true;
     }
@@ -181,7 +212,7 @@ public class ShopManager : MonoBehaviour
         if (GoldWallet.Instance == null)
             return false;
 
-        return GoldWallet.Instance.Gold >= item.Price;
+        return GoldWallet.Instance.Gold >= GetItemPrice(item);
     }
 
     int GetCurrentShopTier()
