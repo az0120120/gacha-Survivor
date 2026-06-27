@@ -48,18 +48,6 @@ MonoBehaviour:
     weapon: 2
     effectValue: 1
     purchaseOnce: 1
-  - id: weapon_glock
-    displayName: "\u683C\u6D1B\u514B"
-    description: "\u6BCF 0.5 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C4 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
-      2\u3002"
-    icon: {fileID: 0}
-    kind: 0
-    statType: 0
-    price: 45
-    tier: 1
-    weapon: 3
-    effectValue: 1
-    purchaseOnce: 1
   - id: weapon_desert_eagle
     displayName: "\u706B\u6C99\u9E70"
     description: "\u6BCF 0.75 \u79D2\u53D1\u5C04\u5B50\u5F39\uFF0C6 \u500D\u4F24\u5BB3\uFF0C\u7A7F\u900F
@@ -69,7 +57,7 @@ MonoBehaviour:
     statType: 0
     price: 48
     tier: 2
-    weapon: 4
+    weapon: 3
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_molotov
@@ -81,7 +69,7 @@ MonoBehaviour:
     statType: 0
     price: 50
     tier: 2
-    weapon: 5
+    weapon: 4
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_kunai
@@ -92,7 +80,7 @@ MonoBehaviour:
     statType: 0
     price: 46
     tier: 2
-    weapon: 6
+    weapon: 5
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_claw
@@ -103,7 +91,7 @@ MonoBehaviour:
     statType: 0
     price: 44
     tier: 1
-    weapon: 7
+    weapon: 6
     effectValue: 1
     purchaseOnce: 1
   - id: weapon_ak
@@ -115,31 +103,9 @@ MonoBehaviour:
     statType: 0
     price: 52
     tier: 3
-    weapon: 8
+    weapon: 7
     effectValue: 1
     purchaseOnce: 1
-  - id: w_range_glock
-    displayName: "\u683C\u6D1B\u514B\u5EF6\u4F38"
-    description: "\u683C\u6D1B\u514B\u653B\u51FB\u8303\u56F4 +20%\u3002"
-    icon: {fileID: 0}
-    kind: 1
-    statType: 0
-    price: 35
-    tier: 1
-    weapon: 3
-    effectValue: 20
-    purchaseOnce: 0
-  - id: w_cd_glock
-    displayName: "\u683C\u6D1B\u514B\u901F\u5C04"
-    description: "\u683C\u6D1B\u514B\u51B7\u5374\u7F29\u51CF +10%\u3002"
-    icon: {fileID: 0}
-    kind: 2
-    statType: 0
-    price: 37
-    tier: 1
-    weapon: 3
-    effectValue: 10
-    purchaseOnce: 0
   - id: w_range_desert_eagle
     displayName: "\u706B\u6C99\u9E70\u5EF6\u4F38"
     description: "\u706B\u6C99\u9E70\u653B\u51FB\u8303\u56F4 +20%\u3002"
@@ -148,7 +114,7 @@ MonoBehaviour:
     statType: 0
     price: 38
     tier: 2
-    weapon: 4
+    weapon: 3
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_desert_eagle
@@ -159,7 +125,7 @@ MonoBehaviour:
     statType: 0
     price: 40
     tier: 2
-    weapon: 4
+    weapon: 3
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_molotov
@@ -170,7 +136,7 @@ MonoBehaviour:
     statType: 0
     price: 40
     tier: 2
-    weapon: 5
+    weapon: 4
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_molotov
@@ -181,7 +147,7 @@ MonoBehaviour:
     statType: 0
     price: 42
     tier: 2
-    weapon: 5
+    weapon: 4
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_kunai
@@ -192,7 +158,7 @@ MonoBehaviour:
     statType: 0
     price: 38
     tier: 2
-    weapon: 6
+    weapon: 5
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_kunai
@@ -203,7 +169,7 @@ MonoBehaviour:
     statType: 0
     price: 40
     tier: 2
-    weapon: 6
+    weapon: 5
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_claw
@@ -214,7 +180,7 @@ MonoBehaviour:
     statType: 0
     price: 35
     tier: 1
-    weapon: 7
+    weapon: 6
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_claw
@@ -225,7 +191,7 @@ MonoBehaviour:
     statType: 0
     price: 37
     tier: 1
-    weapon: 7
+    weapon: 6
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_ak
@@ -236,7 +202,7 @@ MonoBehaviour:
     statType: 0
     price: 42
     tier: 3
-    weapon: 8
+    weapon: 7
     effectValue: 20
     purchaseOnce: 0
   - id: w_cd_ak
@@ -247,7 +213,7 @@ MonoBehaviour:
     statType: 0
     price: 44
     tier: 3
-    weapon: 8
+    weapon: 7
     effectValue: 10
     purchaseOnce: 0
   - id: w_range_projectile

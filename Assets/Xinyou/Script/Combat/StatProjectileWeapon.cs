@@ -152,20 +152,6 @@ public abstract class StatProjectileWeapon : WeaponBase
     }
 }
 
-public class GlockWeapon : StatProjectileWeapon
-{
-    protected override ShopWeaponType WeaponIdentity => ShopWeaponType.Glock;
-
-    protected override void ConfigureDefaults()
-    {
-        damageMultiplier = 4f;
-        fireInterval = 0.5f;
-        pierceCount = 2;
-    }
-
-    protected override int GetDefaultPrewarmCount() => 24;
-}
-
 public class DesertEagleWeapon : StatProjectileWeapon
 {
     protected override ShopWeaponType WeaponIdentity => ShopWeaponType.DesertEagle;

@@ -9,7 +9,7 @@ public class ExperienceManager : MonoBehaviour
     [SerializeField] ObjectPool orbPool;
     [SerializeField] int defaultOrbValue = 1;
     [SerializeField] float dropScatterRadius = 0.25f;
-    [SerializeField] int baseExpRequired = 15;
+    [SerializeField] int baseExpRequired = 45;
     [SerializeField] float expGrowth = 1.18f;
 
     int level = 1;

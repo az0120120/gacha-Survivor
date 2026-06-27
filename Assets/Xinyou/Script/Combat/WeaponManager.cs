@@ -16,7 +16,6 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] ObjectPool projectilePool;
 
     [Header("Gun Projectile Pools")]
-    [SerializeField] ObjectPool glockProjectilePool;
     [SerializeField] ObjectPool desertEagleProjectilePool;
     [SerializeField] ObjectPool akProjectilePool;
     [SerializeField] ShopWeaponType[] startingWeapons = { ShopWeaponType.Projectile };
@@ -130,8 +129,6 @@ public class WeaponManager : MonoBehaviour
                 return GetOrAddComponent<AreaWeapon>();
             case ShopWeaponType.DirectTarget:
                 return GetOrAddComponent<DirectTargetWeapon>();
-            case ShopWeaponType.Glock:
-                return AssignProjectilePool(GetOrAddComponent<GlockWeapon>(), glockProjectilePool);
             case ShopWeaponType.DesertEagle:
                 return AssignProjectilePool(GetOrAddComponent<DesertEagleWeapon>(), desertEagleProjectilePool);
             case ShopWeaponType.Ak:

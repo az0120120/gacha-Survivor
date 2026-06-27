@@ -6,8 +6,6 @@ public enum ShopWeaponType
     Area,
     [UnityEngine.InspectorName("虚空指(旧)")]
     DirectTarget,
-    [UnityEngine.InspectorName("格洛克")]
-    Glock,
     [UnityEngine.InspectorName("火沙鹰")]
     DesertEagle,
     [UnityEngine.InspectorName("燃烧瓶")]

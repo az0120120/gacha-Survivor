@@ -520,8 +520,8 @@ MonoBehaviour:
   orbPool: {fileID: 439860569}
   defaultOrbValue: 1
   dropScatterRadius: 0.25
-  baseExpRequired: 10
-  expGrowth: 1.25
+  baseExpRequired: 45
+  expGrowth: 1.18
 --- !u!4 &439860571
 Transform:
   m_ObjectHideFlags: 0
@@ -1479,10 +1479,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterStats: {fileID: 2143937455}
   projectilePool: {fileID: 437879536}
-  glockProjectilePool: {fileID: 1649725443}
   desertEagleProjectilePool: {fileID: 1019466282}
   akProjectilePool: {fileID: 613285460}
-  startingWeapons: 03000000
+  startingWeapons: 00000000
 --- !u!114 &2143937453
 MonoBehaviour:
   m_ObjectHideFlags: 0

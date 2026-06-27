@@ -248,15 +248,12 @@ public class GameItemCatalog : ScriptableObject
             Entry("weapon_area", "旋转法阵", "装备后以自身为中心持续造成区域伤害。", GameItemKind.ShopWeapon, 48, 3, ShopWeaponType.Area),
             Entry("weapon_direct", "虚空指", "装备后锁定最近敌人，每秒造成 6 倍瞬发伤害。", GameItemKind.ShopWeapon, 45, 3, ShopWeaponType.DirectTarget),
 
-            Entry("weapon_glock", "格洛克", "每 0.5 秒发射子弹，4 倍伤害，穿透 2。", GameItemKind.ShopWeapon, 45, 1, ShopWeaponType.Glock),
             Entry("weapon_desert_eagle", "火沙鹰", "每 0.75 秒发射子弹，6 倍伤害，穿透 3。", GameItemKind.ShopWeapon, 48, 2, ShopWeaponType.DesertEagle),
             Entry("weapon_molotov", "燃烧瓶", "每 3 秒投掷，落点形成持续 5 秒的区域伤害。", GameItemKind.ShopWeapon, 50, 2, ShopWeaponType.Molotov),
             Entry("weapon_kunai", "苦无", "每秒锁定单体造成 6 倍瞬发伤害。", GameItemKind.ShopWeapon, 46, 2, ShopWeaponType.Kunai),
             Entry("weapon_claw", "虾钳", "扇形近战，每秒 4 倍伤害。", GameItemKind.ShopWeapon, 44, 1, ShopWeaponType.Claw),
             Entry("weapon_ak", "AK", "每 0.25 秒发射子弹，7 倍伤害，穿透 3。", GameItemKind.ShopWeapon, 52, 3, ShopWeaponType.Ak),
 
-            Minor("w_range_glock", "格洛克延伸", "格洛克攻击范围 +20%。", ShopWeaponType.Glock, GameItemKind.ShopWeaponRangeUp, 35, 1, 20f),
-            Minor("w_cd_glock", "格洛克速射", "格洛克冷却缩减 +10%。", ShopWeaponType.Glock, GameItemKind.ShopWeaponCooldownUp, 37, 1, 10f),
             Minor("w_range_desert_eagle", "火沙鹰延伸", "火沙鹰攻击范围 +20%。", ShopWeaponType.DesertEagle, GameItemKind.ShopWeaponRangeUp, 38, 2, 20f),
             Minor("w_cd_desert_eagle", "火沙鹰速射", "火沙鹰冷却缩减 +10%。", ShopWeaponType.DesertEagle, GameItemKind.ShopWeaponCooldownUp, 40, 2, 10f),
             Minor("w_range_molotov", "燃烧延伸", "燃烧瓶投掷范围 +20%。", ShopWeaponType.Molotov, GameItemKind.ShopWeaponRangeUp, 40, 2, 20f),
