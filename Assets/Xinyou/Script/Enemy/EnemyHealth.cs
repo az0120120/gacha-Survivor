@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 {
-    [SerializeField] float contactCooldown = 1f;
-    [SerializeField] int expDrop = 1;
-    [SerializeField] int goldDrop = 1;
+    float contactCooldown = 1f;
+    int expDrop = 1;
+    int goldDrop = 1;
 
     float currentHealth;
     float contactTimer;
@@ -28,9 +28,20 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
     public void OnGetFromPool()
     {
+        ApplyDropSettingsFromStats();
         enemyStats.RefreshFromGameTime();
         currentHealth = enemyStats.MaxHealth;
         contactTimer = 0f;
+    }
+
+    void ApplyDropSettingsFromStats()
+    {
+        if (enemyStats == null)
+            return;
+
+        contactCooldown = enemyStats.ContactCooldown;
+        expDrop = enemyStats.ExpDrop;
+        goldDrop = enemyStats.GoldDrop;
     }
 
     public void OnReturnToPool()
