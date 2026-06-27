@@ -17,6 +17,10 @@ public class ClawWeapon : WeaponBase
     [SerializeField] float attackRange = 2.8f;
     [SerializeField] float fanHalfAngle = 55f;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip attackClip;
+    [SerializeField] [Range(0f, 1f)] float attackVolume = 0.85f;
+
     float attackTimer;
 
     protected override void OnInitialized()
@@ -65,6 +69,8 @@ public class ClawWeapon : WeaponBase
         Sprite effectSprite = swingSprite != null ? swingSprite : weaponSprite;
         if (effectSprite == null)
             return;
+
+        PlayAttackSound(attackClip, attackVolume);
 
         var swingObject = new GameObject("ClawSwingHitbox");
         var renderer = swingObject.AddComponent<SpriteRenderer>();

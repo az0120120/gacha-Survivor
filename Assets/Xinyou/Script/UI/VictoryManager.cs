@@ -62,6 +62,9 @@ public class VictoryManager : MonoBehaviour
         if (isVictory)
             return;
 
+        if (DefeatManager.Instance != null && DefeatManager.Instance.IsDefeat)
+            return;
+
         isVictory = true;
         isSettlementOpen = true;
 

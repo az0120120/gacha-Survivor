@@ -6,6 +6,15 @@ public class MolotovWeapon : WeaponBase
     [SerializeField] Sprite weaponSprite;
     [SerializeField] Sprite throwSprite;
     [SerializeField] Sprite fireZoneSprite;
+    [SerializeField] float throwArcHeight = 2.2f;
+    [SerializeField] float throwSpinSpeed = 540f;
+    [SerializeField] float throwSpriteScale = 1f;
+    [SerializeField] float throwSpriteFacingOffset = -90f;
+    [SerializeField] int throwSortingOrder = 10;
+
+    [Header("Audio")]
+    [SerializeField] AudioClip impactClip;
+    [SerializeField] [Range(0f, 1f)] float impactVolume = 0.85f;
 
     [Header("Combat")]
     [SerializeField] float throwInterval = 3f;
@@ -58,24 +67,45 @@ public class MolotovWeapon : WeaponBase
 
     void LaunchThrow(Vector2 landingPoint)
     {
+        if (throwSprite == null)
+        {
+            OnMolotovLanded(landingPoint);
+            return;
+        }
+
         var throwObject = new GameObject("MolotovThrow");
         throwObject.transform.position = transform.position;
+        throwObject.transform.localScale = Vector3.one * throwSpriteScale;
 
-        if (throwSprite != null)
-        {
-            var renderer = throwObject.AddComponent<SpriteRenderer>();
-            renderer.sprite = throwSprite;
-            renderer.sortingOrder = 8;
-        }
+        var renderer = throwObject.AddComponent<SpriteRenderer>();
+        renderer.sprite = throwSprite;
+        renderer.sortingOrder = throwSortingOrder;
 
         throwObject.AddComponent<MolotovFlight>().Begin(
             transform.position,
             landingPoint,
             throwFlightTime,
+            throwArcHeight,
+            throwSpinSpeed,
+            throwSpriteFacingOffset,
             OnMolotovLanded);
     }
 
     void OnMolotovLanded(Vector2 position)
+    {
+        PlayImpactSound(position);
+        SpawnFireZone(position);
+    }
+
+    void PlayImpactSound(Vector2 position)
+    {
+        if (impactClip == null)
+            return;
+
+        AudioSource.PlayClipAtPoint(impactClip, position, impactVolume);
+    }
+
+    void SpawnFireZone(Vector2 position)
     {
         var zoneObject = new GameObject("MolotovFireZone");
         zoneObject.transform.position = position;
@@ -115,29 +145,58 @@ public class MolotovFlight : MonoBehaviour
     Vector3 start;
     Vector3 end;
     float duration;
+    float arcHeight;
+    float spinSpeed;
+    float spriteFacingOffset;
     float elapsed;
     System.Action<Vector2> onComplete;
 
-    public void Begin(Vector3 from, Vector2 to, float flightTime, System.Action<Vector2> callback)
+    public void Begin(
+        Vector3 from,
+        Vector2 to,
+        float flightTime,
+        float peakHeight,
+        float rotationSpeed,
+        float facingOffset,
+        System.Action<Vector2> callback)
     {
         start = from;
         end = to;
         duration = Mathf.Max(0.05f, flightTime);
+        arcHeight = peakHeight;
+        spinSpeed = rotationSpeed;
+        spriteFacingOffset = facingOffset;
         elapsed = 0f;
         onComplete = callback;
+
+        UpdatePose(0f);
     }
 
     void Update()
     {
         elapsed += Time.deltaTime;
         float progress = Mathf.Clamp01(elapsed / duration);
-        transform.position = Vector3.Lerp(start, end, progress);
+        UpdatePose(progress);
 
         if (progress >= 1f)
         {
             onComplete?.Invoke(end);
             Destroy(gameObject);
         }
+    }
+
+    void UpdatePose(float progress)
+    {
+        Vector3 position = Vector3.Lerp(start, end, progress);
+        position.y += arcHeight * 4f * progress * (1f - progress);
+        transform.position = position;
+
+        Vector3 flatVelocity = end - start;
+        float baseAngle = flatVelocity.sqrMagnitude > 0.0001f
+            ? Mathf.Atan2(flatVelocity.y, flatVelocity.x) * Mathf.Rad2Deg
+            : 0f;
+
+        transform.rotation = Quaternion.Euler(0f, 0f, baseAngle + spriteFacingOffset + spinSpeed * elapsed);
     }
 }
 
@@ -146,6 +205,7 @@ public class MolotovFireZone : MonoBehaviour
     readonly Collider2D[] overlapBuffer = new Collider2D[32];
 
     float radius;
+    float totalDuration;
     float remainingDuration;
     float tickTimer;
     float tickInterval;
@@ -155,6 +215,7 @@ public class MolotovFireZone : MonoBehaviour
     WeaponManager weaponManager;
     ShopWeaponType weaponType;
     SpriteRenderer zoneRenderer;
+    Color zoneBaseColor = new Color(1f, 1f, 1f, 0.85f);
 
     public void Activate(
         float zoneRadius,
@@ -168,6 +229,7 @@ public class MolotovFireZone : MonoBehaviour
         ShopWeaponType type)
     {
         radius = zoneRadius;
+        totalDuration = duration;
         remainingDuration = duration;
         tickInterval = interval;
         tickTimer = 0f;
@@ -179,6 +241,7 @@ public class MolotovFireZone : MonoBehaviour
 
         EnsureVisual(zoneSprite);
         ApplyRadiusVisual();
+        UpdateVisualAlpha();
         DamageTick();
     }
 
@@ -186,6 +249,7 @@ public class MolotovFireZone : MonoBehaviour
     {
         remainingDuration -= Time.deltaTime;
         tickTimer -= Time.deltaTime;
+        UpdateVisualAlpha();
 
         if (tickTimer <= 0f)
         {
@@ -195,6 +259,24 @@ public class MolotovFireZone : MonoBehaviour
 
         if (remainingDuration <= 0f)
             Destroy(gameObject);
+    }
+
+    void UpdateVisualAlpha()
+    {
+        if (zoneRenderer == null || totalDuration <= 0f)
+            return;
+
+        float lifeRatio = Mathf.Clamp01(remainingDuration / totalDuration);
+        float fadeIn = Mathf.Clamp01((totalDuration - remainingDuration) / 0.2f);
+        float fadeOut = lifeRatio < 0.25f ? lifeRatio / 0.25f : 1f;
+        float alpha = zoneBaseColor.a * fadeIn * fadeOut;
+
+        Color color = zoneRenderer.color;
+        color.a = alpha;
+        zoneRenderer.color = color;
+
+        float pulse = 1f + Mathf.Sin(Time.time * 8f) * 0.04f;
+        ApplyRadiusVisual(pulse);
     }
 
     void DamageTick()
@@ -261,15 +343,15 @@ public class MolotovFireZone : MonoBehaviour
             zoneRenderer = gameObject.AddComponent<SpriteRenderer>();
 
         zoneRenderer.sprite = zoneSprite;
-        zoneRenderer.color = new Color(1f, 0.45f, 0.1f, 0.55f);
-        zoneRenderer.sortingOrder = 2;
+        zoneRenderer.color = zoneBaseColor;
+        zoneRenderer.sortingOrder = 3;
     }
 
-    void ApplyRadiusVisual()
+    void ApplyRadiusVisual(float scaleMultiplier = 1f)
     {
         if (zoneRenderer == null || zoneRenderer.sprite == null)
         {
-            transform.localScale = Vector3.one * radius * 2f;
+            transform.localScale = Vector3.one * radius * 2f * scaleMultiplier;
             return;
         }
 
@@ -278,7 +360,7 @@ public class MolotovFireZone : MonoBehaviour
         if (maxAxis <= 0.0001f)
             return;
 
-        float scale = radius * 2f / maxAxis;
+        float scale = radius * 2f / maxAxis * scaleMultiplier;
         transform.localScale = Vector3.one * scale;
     }
 

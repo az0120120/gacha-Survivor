@@ -5,6 +5,7 @@ public class WeaponUpgradeData
 {
     public float RangeBonusPercent;
     public float CooldownReductionPercent;
+    public float DamageBonusPercent;
     public int MajorUpgradeLevel;
 }
 
@@ -71,6 +72,13 @@ public class WeaponManager : MonoBehaviour
         return 1f - reduction;
     }
 
+    public float GetMajorUpgradeDamageMultiplier(ShopWeaponType weaponType)
+    {
+        var data = GetUpgradeData(weaponType);
+        float majorBonus = data.MajorUpgradeLevel * 15f;
+        return 1f + (data.DamageBonusPercent + majorBonus) * 0.01f;
+    }
+
     public int GetMajorUpgradeLevel(ShopWeaponType weaponType)
     {
         return GetUpgradeData(weaponType).MajorUpgradeLevel;
@@ -86,6 +94,11 @@ public class WeaponManager : MonoBehaviour
         GetUpgradeData(weaponType).CooldownReductionPercent += percent;
     }
 
+    public void AddWeaponDamagePercent(ShopWeaponType weaponType, float percent)
+    {
+        GetUpgradeData(weaponType).DamageBonusPercent += percent;
+    }
+
     public void ApplyMajorUpgrade(ShopWeaponType weaponType, int levelDelta)
     {
         var data = GetUpgradeData(weaponType);
@@ -93,6 +106,11 @@ public class WeaponManager : MonoBehaviour
 
         if (!HasWeapon(weaponType))
             EquipWeapon(weaponType);
+    }
+
+    public WeaponUpgradeData GetWeaponUpgradeData(ShopWeaponType weaponType)
+    {
+        return GetUpgradeData(weaponType);
     }
 
     WeaponUpgradeData GetUpgradeData(ShopWeaponType weaponType)

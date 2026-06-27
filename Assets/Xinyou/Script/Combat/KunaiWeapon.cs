@@ -13,6 +13,10 @@ public class KunaiWeapon : WeaponBase
     [SerializeField] float attackInterval = 1f;
     [SerializeField] float targetRange = 6f;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip attackClip;
+    [SerializeField] [Range(0f, 1f)] float attackVolume = 0.85f;
+
     float attackTimer;
 
     protected override void OnInitialized()
@@ -50,6 +54,7 @@ public class KunaiWeapon : WeaponBase
 
         HitEnemy(target, transform.position);
         SpawnFlash(target.transform.position);
+        PlayAttackSound(attackClip, attackVolume);
     }
 
     void SpawnFlash(Vector3 position)

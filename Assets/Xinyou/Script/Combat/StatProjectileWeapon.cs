@@ -18,6 +18,10 @@ public abstract class StatProjectileWeapon : WeaponBase
     [SerializeField] protected float targetRange = 8f;
     [SerializeField] protected int pierceCount = 2;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip attackClip;
+    [SerializeField] [Range(0f, 1f)] float attackVolume = 0.85f;
+
     float fireTimer;
     SpriteRenderer weaponRenderer;
 
@@ -92,18 +96,39 @@ public abstract class StatProjectileWeapon : WeaponBase
         if (fireTimer > 0f)
             return;
 
-        float effectiveInterval = fireInterval;
-        if (weaponManager != null)
-            effectiveInterval *= weaponManager.GetWeaponCooldownMultiplier(WeaponIdentity);
-
+        float effectiveInterval = GetEffectiveFireInterval();
         fireTimer = stats.GetEffectiveCooldown(effectiveInterval);
 
-        float effectiveRange = targetRange;
-        if (weaponManager != null)
-            effectiveRange *= weaponManager.GetRangeMultiplier(WeaponIdentity);
-
+        float effectiveRange = GetEffectiveRange();
         Vector2 direction = GetAttackDirectionTowardTarget(effectiveRange);
         FireProjectile(direction);
+    }
+
+    protected float GetEffectiveFireInterval()
+    {
+        float interval = fireInterval;
+        if (weaponManager != null)
+            interval *= weaponManager.GetWeaponCooldownMultiplier(WeaponIdentity);
+
+        return interval;
+    }
+
+    protected float GetEffectiveRange()
+    {
+        float range = targetRange;
+        if (weaponManager != null)
+            range *= weaponManager.GetRangeMultiplier(WeaponIdentity);
+
+        return range;
+    }
+
+    protected float GetEffectiveDamageMultiplier()
+    {
+        float multiplier = damageMultiplier;
+        if (weaponManager != null)
+            multiplier *= weaponManager.GetMajorUpgradeDamageMultiplier(WeaponIdentity);
+
+        return multiplier;
     }
 
     void FireProjectile(Vector2 direction)
@@ -120,10 +145,12 @@ public abstract class StatProjectileWeapon : WeaponBase
         projectile.Launch(
             direction,
             stats,
-            damageMultiplier,
+            GetEffectiveDamageMultiplier(),
             knockbackForce,
             pierceCount,
             projectileSprite);
+
+        PlayAttackSound(attackClip, attackVolume);
     }
 
     void ApplyWeaponVisual()
@@ -141,34 +168,6 @@ public abstract class StatProjectileWeapon : WeaponBase
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, targetRange);
+        Gizmos.DrawWireSphere(transform.position, GetEffectiveRange());
     }
-}
-
-public class DesertEagleWeapon : StatProjectileWeapon
-{
-    protected override ShopWeaponType WeaponIdentity => ShopWeaponType.DesertEagle;
-
-    protected override void ConfigureDefaults()
-    {
-        damageMultiplier = 6f;
-        fireInterval = 0.75f;
-        pierceCount = 3;
-    }
-
-    protected override int GetDefaultPrewarmCount() => 16;
-}
-
-public class AkWeapon : StatProjectileWeapon
-{
-    protected override ShopWeaponType WeaponIdentity => ShopWeaponType.Ak;
-
-    protected override void ConfigureDefaults()
-    {
-        damageMultiplier = 7f;
-        fireInterval = 0.25f;
-        pierceCount = 3;
-    }
-
-    protected override int GetDefaultPrewarmCount() => 40;
 }

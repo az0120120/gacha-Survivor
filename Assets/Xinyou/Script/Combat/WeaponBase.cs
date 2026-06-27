@@ -119,4 +119,12 @@ public abstract class WeaponBase : MonoBehaviour
 
         return GetDefaultAttackDirection();
     }
+
+    protected void PlayAttackSound(AudioClip clip, float volume = 0.85f)
+    {
+        if (clip == null)
+            return;
+
+        AudioSource.PlayClipAtPoint(clip, transform.position, volume);
+    }
 }

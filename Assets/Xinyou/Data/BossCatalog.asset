@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bosses:
   - displayName: "\u5C0F\u867E"
-    sprite: {fileID: 21300000, guid: 86b4cef88ba059c45adc43dc4e2d5da6, type: 3}
-    tintColor: {r: 1, g: 0.55, b: 0.45, a: 1}
+    sprite: {fileID: 21300000, guid: 0213c67477c84414793a34207d11874d, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.55, y: 0.55, z: 0.55}
     behaviorType: 0
     healthMultiplier: 15
@@ -24,8 +24,8 @@ MonoBehaviour:
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: fazeniko
-    sprite: {fileID: 21300000, guid: cfed6e6607f2bf94288e25c818a4f976, type: 3}
-    tintColor: {r: 1, g: 0.75, b: 0.25, a: 1}
+    sprite: {fileID: 21300000, guid: 57f9615262fd53c45ab45e0e03fbe2a3, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.55, y: 0.55, z: 0.55}
     behaviorType: 1
     healthMultiplier: 15
@@ -34,8 +34,8 @@ MonoBehaviour:
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: s1mple
-    sprite: {fileID: 21300000, guid: 7b66a0d9ea9d44749a0a8bfd3c251f98, type: 3}
-    tintColor: {r: 0.55, g: 0.85, b: 1, a: 1}
+    sprite: {fileID: 21300000, guid: 86b4cef88ba059c45adc43dc4e2d5da6, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.5, y: 0.5, z: 0.5}
     behaviorType: 2
     healthMultiplier: 10
@@ -44,8 +44,8 @@ MonoBehaviour:
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: g2niko
-    sprite: {fileID: 21300000, guid: e995a95555e650c4e9187e580bc99bde, type: 3}
-    tintColor: {r: 0.85, g: 0.35, b: 0.35, a: 1}
+    sprite: {fileID: 21300000, guid: 9e21104a62fdddf46a4b13eec4f3ec31, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.6, y: 0.6, z: 0.6}
     behaviorType: 3
     healthMultiplier: 25
@@ -54,8 +54,8 @@ MonoBehaviour:
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: "\u730E\u9E70niko"
-    sprite: {fileID: 21300000, guid: b2cbf8b6f41a13f4cb584545d7ffaa12, type: 3}
-    tintColor: {r: 0.65, g: 0.35, b: 1, a: 1}
+    sprite: {fileID: 21300000, guid: 3b212efa83cd4fb4a98727bb3ff27896, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.7, y: 0.7, z: 0.7}
     behaviorType: 4
     healthMultiplier: 40

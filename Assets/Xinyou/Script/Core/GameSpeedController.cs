@@ -60,6 +60,9 @@ public class GameSpeedController : MonoBehaviour
         if (VictoryManager.Instance != null && VictoryManager.Instance.IsSettlementOpen)
             return true;
 
+        if (DefeatManager.Instance != null && DefeatManager.Instance.IsDefeatScreenOpen)
+            return true;
+
         return false;
     }
 }

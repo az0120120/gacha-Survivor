@@ -183,7 +183,7 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_attack
     displayName: "\u5F3A\u653B"
-    description: "\u653B\u51FB\u529B +15\u3002\n\n\n\u5F80\u91CC\u8C6A\uFF01\u5F80\u91CC\u8C6A\uFF01"
+    description: "\u653B\u51FB\u529B +15\u3002\n\n\n\u5F80\u91CC\u8C6A\uFF0C\u5F80\u91CC\u8C6A\uFF01"
     icon: {fileID: 21300000, guid: 569aa30e2f8db26408cbbdef4f8906f6, type: 3}
     kind: 4
     statType: 0
@@ -194,7 +194,7 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_element
     displayName: "\u5143\u7D20\u4E4B\u529B"
-    description: "\u5143\u7D20\u653B\u51FB\u529B +5\u3002\n\n\n\u5916\u661F\u79D1\u6280\uFF0C\u5C0F\u5B50\u3002"
+    description: "\u5143\u7D20\u653B\u51FB\u529B +5\u3002\n\n\n\u5916\u661F\u79D1\u6280\uFF0C\u5C0F\u5B50"
     icon: {fileID: 21300000, guid: 7629aee085f3de6469881ba5aab43cb6, type: 3}
     kind: 4
     statType: 1
@@ -205,8 +205,8 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_armor_pen
     displayName: "\u7834\u7532"
-    description: "\u7834\u9632 +25\u3002\n\n\n\u6551\u62A4\u8F66\u6765\u55BD\uFF01"
-    icon: {fileID: 21300000, guid: 4d5a441cd6288d9449d653282537f299, type: 3}
+    description: "\u7834\u9632 +25\u3002\n\n\n1 RUSH B\n2 Donk Go Kill"
+    icon: {fileID: 21300000, guid: 95acfa6978d4fe64abea1e98102eff81, type: 3}
     kind: 4
     statType: 2
     price: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_defense
     displayName: "\u62A4\u7532"
-    description: "\u9632\u5FA1 +1\u3002\n\n\n\u6700\u597D\u7684\u5C0F\u533A\u4E3B\u9632\u8005\u3002"
+    description: "\u9632\u5FA1 +1\u3002\n\n\n\u6700\u597D\u7684\u5C0F\u533A\u4E3B\u9632\u8005"
     icon: {fileID: 21300000, guid: 4e71ce769bd5e8c4e924012005b497ad, type: 3}
     kind: 4
     statType: 8
@@ -228,7 +228,7 @@ MonoBehaviour:
   - id: lv_health
     displayName: "\u751F\u547D"
     description: "\u6700\u5927\u751F\u547D +15\uFF0C\u5E76\u7ACB\u5373\u6062\u590D\u3002\n\n\n__
-      __ \u9009\u624B\u7684\u5230\u6765\u63D0\u9AD8\u4E86\u6574\u4E2A\u961F\u4F0D\u7684\u4E0A\u9650\u3002"
+      __\u9009\u624B\u7684\u52A0\u5165\u5927\u5E45\u63D0\u9AD8\u4E86\u961F\u4F0D\u7684\u4E0A\u9650"
     icon: {fileID: 21300000, guid: 1e09a7c7dec7d654bab7d0a99a834896, type: 3}
     kind: 4
     statType: 3
@@ -239,8 +239,8 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_crit_rate
     displayName: "\u7CBE\u51C6"
-    description: "\u66B4\u51FB\u7387 +3%\u3002\n\n\n\u4E00\u5934\u5E74\u8F7B\u7684\u9A74\u3002\u5B83\u6253\u7684\u6BD4\u4F60\u51C6\uFF0C\u76F8\u4FE1\u6211"
-    icon: {fileID: 21300000, guid: bec9c23c6727ca346bf4e4be6b1326ea, type: 3}
+    description: "\u66B4\u51FB\u7387 +3%\u3002\n\n\n\u6218\u672F\u662F\u653B\u51FB\u5BF9\u65B9\u5F31\u4FA7"
+    icon: {fileID: 21300000, guid: 4d5a441cd6288d9449d653282537f299, type: 3}
     kind: 4
     statType: 6
     price: 0
@@ -250,7 +250,7 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_crit_effect
     displayName: "\u81F4\u547D"
-    description: "\u66B4\u51FB\u6548\u679C +10%\u3002\n\n\n\u4E00\u5934\u5E74\u8F7B\u7684\u9A74\u3002\u5B83\u6253\u7684\u4E5F\u6BD4\u4F60\u72E0\u3002"
+    description: "\u66B4\u51FB\u6548\u679C +10%\u3002\n\n\n\u4E00\u5934\u666E\u901A\u7684\u9A74\u3002\u4F46\u4ED6\u6253\u7684\u6BD4\u4F60\u51C6\uFF0C\u76F8\u4FE1\u6211"
     icon: {fileID: 21300000, guid: bec9c23c6727ca346bf4e4be6b1326ea, type: 3}
     kind: 4
     statType: 7

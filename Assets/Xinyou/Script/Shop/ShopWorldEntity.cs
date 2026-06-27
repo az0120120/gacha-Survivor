@@ -59,6 +59,14 @@ public class ShopWorldEntity : MonoBehaviour, IDamageable
         var collider = GetComponent<CircleCollider2D>();
         collider.isTrigger = true;
         collider.radius = colliderRadius;
+
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            rb = gameObject.AddComponent<Rigidbody2D>();
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.gravityScale = 0f;
+        }
     }
 
     void ApplyVisual()
@@ -70,9 +78,17 @@ public class ShopWorldEntity : MonoBehaviour, IDamageable
         transform.localScale = shopSize == ShopSizeType.Large ? Vector3.one * 1.4f : Vector3.one;
     }
 
-    public void TakeDamage(float damage)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (!isActive || damage <= 0f)
+        if (!isActive || !other.CompareTag("Player"))
+            return;
+
+        TryOpenShop();
+    }
+
+    void TryOpenShop()
+    {
+        if (!isActive)
             return;
 
         isActive = false;
@@ -81,6 +97,10 @@ public class ShopWorldEntity : MonoBehaviour, IDamageable
             ShopManager.Instance.OpenWorldShop(shopSize, this);
 
         Destroy(gameObject);
+    }
+
+    public void TakeDamage(float damage)
+    {
     }
 
     static Sprite CreatePlaceholderSprite()

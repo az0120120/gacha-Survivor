@@ -73,7 +73,8 @@ public class PlayerHealth : MonoBehaviour, IDamageable
 
     void Die()
     {
-        Debug.Log("Player died");
+        currentHealth = 0;
+        NotifyHealthChanged();
 
         var movement = GetComponent<PlayerMovement>();
         if (movement != null)
@@ -82,6 +83,12 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         var autoAttack = GetComponent<SimpleAutoAttack>();
         if (autoAttack != null)
             autoAttack.enabled = false;
+
+        var weaponManager = GetComponent<WeaponManager>();
+        if (weaponManager != null)
+            weaponManager.enabled = false;
+
+        DefeatManager.Instance?.TriggerDefeat();
 
         enabled = false;
     }

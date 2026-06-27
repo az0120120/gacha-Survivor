@@ -40,7 +40,7 @@ public class VictoryUI : MonoBehaviour
         if (panelRoot != null)
             return;
 
-        EnsureEventSystem();
+        SettlementUIUtility.EnsureEventSystem();
 
         var canvasObject = new GameObject("VictoryCanvas");
         canvasObject.transform.SetParent(transform, false);
@@ -53,22 +53,26 @@ public class VictoryUI : MonoBehaviour
         scaler.referenceResolution = new Vector2(1920f, 1080f);
         canvasObject.AddComponent<GraphicRaycaster>();
 
-        panelRoot = CreatePanel(canvasObject.transform, "VictoryPanel", new Color(0f, 0f, 0f, 0.78f));
+        panelRoot = SettlementUIUtility.CreatePanel(canvasObject.transform, "VictoryPanel", new Color(0f, 0f, 0f, 0.78f));
         var panelRect = panelRoot.GetComponent<RectTransform>();
         panelRect.anchorMin = Vector2.zero;
         panelRect.anchorMax = Vector2.one;
         panelRect.offsetMin = Vector2.zero;
         panelRect.offsetMax = Vector2.zero;
 
-        var imageObject = CreatePanel(panelRoot.transform, "SettlementImage", Color.white);
+        var imageObject = SettlementUIUtility.CreatePanel(panelRoot.transform, "SettlementImage", Color.white);
         centerImage = imageObject.GetComponent<Image>();
         centerImage.preserveAspect = true;
-        SetupRect(imageObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(720f, 720f));
+        SettlementUIUtility.SetupRect(imageObject, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(720f, 720f));
 
-        var restartButton = CreateButton(panelRoot.transform, "RestartButton", "重新开始", new Vector2(0f, 0f), new Vector2(180f, 72f), new Vector2(280f, 72f));
+        var restartButton = SettlementUIUtility.CreateButton(
+            panelRoot.transform, "RestartButton", "重新开始",
+            new Vector2(0f, 0f), new Vector2(180f, 72f), new Vector2(280f, 72f));
         restartButton.onClick.AddListener(HandleRestartClicked);
 
-        var mainMenuButton = CreateButton(panelRoot.transform, "MainMenuButton", "主菜单", new Vector2(1f, 0f), new Vector2(-180f, 72f), new Vector2(280f, 72f));
+        var mainMenuButton = SettlementUIUtility.CreateButton(
+            panelRoot.transform, "MainMenuButton", "主菜单",
+            new Vector2(1f, 0f), new Vector2(-180f, 72f), new Vector2(280f, 72f));
         mainMenuButton.onClick.AddListener(HandleMainMenuClicked);
     }
 
@@ -80,72 +84,5 @@ public class VictoryUI : MonoBehaviour
     void HandleMainMenuClicked()
     {
         victoryManager?.ReturnToMainMenu();
-    }
-
-    static void EnsureEventSystem()
-    {
-        if (FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() != null)
-            return;
-
-        var eventSystemObject = new GameObject("EventSystem");
-        eventSystemObject.AddComponent<UnityEngine.EventSystems.EventSystem>();
-        eventSystemObject.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
-    }
-
-    static GameObject CreatePanel(Transform parent, string name, Color color)
-    {
-        var panelObject = new GameObject(name);
-        panelObject.transform.SetParent(parent, false);
-        var image = panelObject.AddComponent<Image>();
-        image.color = color;
-        panelObject.AddComponent<RectTransform>();
-        return panelObject;
-    }
-
-    static void SetupRect(GameObject target, Vector2 anchor, Vector2 pivot, Vector2 anchoredPosition, Vector2 sizeDelta)
-    {
-        var rect = target.GetComponent<RectTransform>();
-        rect.anchorMin = anchor;
-        rect.anchorMax = anchor;
-        rect.pivot = pivot;
-        rect.anchoredPosition = anchoredPosition;
-        rect.sizeDelta = sizeDelta;
-    }
-
-    static Button CreateButton(
-        Transform parent,
-        string name,
-        string label,
-        Vector2 anchor,
-        Vector2 anchoredPosition,
-        Vector2 sizeDelta)
-    {
-        var buttonObject = CreatePanel(parent, name, new Color(0.22f, 0.28f, 0.38f, 1f));
-        var rect = buttonObject.GetComponent<RectTransform>();
-        rect.anchorMin = anchor;
-        rect.anchorMax = anchor;
-        rect.pivot = new Vector2(anchor.x, 0f);
-        rect.anchoredPosition = anchoredPosition;
-        rect.sizeDelta = sizeDelta;
-
-        var button = buttonObject.AddComponent<Button>();
-        var textObject = new GameObject("Label");
-        textObject.transform.SetParent(buttonObject.transform, false);
-        var text = textObject.AddComponent<TextMeshProUGUI>();
-        text.text = label;
-        text.fontSize = 30;
-        text.alignment = TextAlignmentOptions.Center;
-        text.color = Color.white;
-        text.raycastTarget = false;
-
-        if (TMP_Settings.defaultFontAsset != null)
-            text.font = TMP_Settings.defaultFontAsset;
-
-        var textRect = text.rectTransform;
-        textRect.anchorMin = Vector2.zero;
-        textRect.anchorMax = Vector2.one;
-        textRect.offsetMin = Vector2.zero;
-        textRect.offsetMax = Vector2.zero;
-        return button;
     }
 }
