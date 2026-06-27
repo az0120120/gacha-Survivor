@@ -6,8 +6,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
     int expDrop = 1;
     int goldDrop = 1;
 
+    const float HitSoundCooldown = 0.07f;
+
     float currentHealth;
     float contactTimer;
+    float nextHitSoundTime;
     ObjectPool pool;
     EnemyStats enemyStats;
 
@@ -34,6 +37,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
         ApplyDropSettingsFromStats();
         currentHealth = enemyStats.MaxHealth;
         contactTimer = 0f;
+        nextHitSoundTime = 0f;
     }
 
     public void RefreshHealthFromStats()
@@ -56,6 +60,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
     {
         currentHealth = 0f;
         contactTimer = 0f;
+        nextHitSoundTime = 0f;
     }
 
     public void TakeDamage(float damage)
@@ -76,6 +81,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
             DamageNumberManager.Instance.Show(damage, transform.position, isCritical);
 
         currentHealth -= damage;
+        PlayHitSound(isCritical);
 
         if (knockbackForce > 0f)
         {
@@ -100,6 +106,20 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
 
         if (currentHealth <= 0f)
             Die();
+    }
+
+    void PlayHitSound(bool isCritical)
+    {
+        if (Time.time < nextHitSoundTime)
+            return;
+
+        if (EnemyHitSfxManager.Instance == null)
+            return;
+
+        var boss = GetComponent<BossEnemy>();
+        bool isBoss = boss != null && boss.IsConfigured;
+        EnemyHitSfxManager.Instance.PlayHit(transform.position, isCritical, isBoss);
+        nextHitSoundTime = Time.time + HitSoundCooldown;
     }
 
     void Die()

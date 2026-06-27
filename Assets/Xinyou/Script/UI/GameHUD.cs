@@ -49,6 +49,9 @@ public class GameHUD : MonoBehaviour
         if (FindAnyObjectByType<DamageNumberManager>() == null)
             gameObject.AddComponent<DamageNumberManager>();
 
+        if (FindAnyObjectByType<EnemyHitSfxManager>() == null)
+            gameObject.AddComponent<EnemyHitSfxManager>();
+
         EnsureBossHealthBar();
     }
 
