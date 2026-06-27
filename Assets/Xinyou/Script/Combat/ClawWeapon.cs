@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ClawWeapon : WeaponBase
@@ -5,15 +6,16 @@ public class ClawWeapon : WeaponBase
     [Header("Visual")]
     [SerializeField] Sprite weaponSprite;
     [SerializeField] Sprite swingSprite;
-    [SerializeField] float swingDuration = 0.18f;
-    [SerializeField] float swingScale = 1.4f;
+    [SerializeField] float swingDuration = 0.22f;
+    [Tooltip("在按攻击范围自动缩放基础上的额外倍率")]
+    [SerializeField] float swingScale = 1f;
+    [SerializeField] float swingSpriteFacingOffset = -90f;
+    [SerializeField] int swingSortingOrder = 11;
 
     [Header("Combat")]
     [SerializeField] float attackInterval = 1f;
     [SerializeField] float attackRange = 2.8f;
     [SerializeField] float fanHalfAngle = 55f;
-
-    readonly Collider2D[] overlapBuffer = new Collider2D[32];
 
     float attackTimer;
 
@@ -44,102 +46,43 @@ public class ClawWeapon : WeaponBase
             effectiveRange *= weaponManager.GetRangeMultiplier(ShopWeaponType.Claw);
 
         Vector2 origin = transform.position;
-        Vector2 facing = GetAttackDirection(effectiveRange);
-        PerformFanAttack(origin, facing, effectiveRange);
-        SpawnSwingVisual(origin, facing);
+        Vector2 facing = GetAttackDirectionTowardTarget(effectiveRange);
+        SpawnSwingHitbox(origin, facing, effectiveRange);
     }
 
-    Vector2 GetAttackDirection(float range)
+    internal void HandleSwingHit(EnemyHealth enemy, Vector2 knockbackSource)
     {
-        var target = FindNearestEnemy(range);
-        if (target != null)
-        {
-            Vector2 direction = (Vector2)target.transform.position - (Vector2)transform.position;
-            if (direction.sqrMagnitude > 0.0001f)
-                return direction.normalized;
-        }
-
-        return Vector2.right;
+        HitEnemy(enemy, knockbackSource);
     }
 
-    void PerformFanAttack(Vector2 origin, Vector2 facing, float range)
+    internal void HandleSwingShopHit(Collider2D collider)
     {
-        var filter = new ContactFilter2D
-        {
-            useTriggers = true,
-            useLayerMask = false
-        };
-
-        int count = Physics2D.OverlapCircle(origin, range, filter, overlapBuffer);
-
-        for (int i = 0; i < count; i++)
-        {
-            var enemy = overlapBuffer[i].GetComponent<EnemyHealth>();
-            if (enemy == null || !enemy.IsAlive)
-                continue;
-
-            Vector2 enemyPosition = overlapBuffer[i].transform.position;
-            if (!IsInsideFan(origin, facing, enemyPosition, range, fanHalfAngle))
-                continue;
-
-            HitEnemy(enemy, origin);
-        }
-
-        TryHitShopsInFan(origin, facing, range);
+        TryHitShop(collider);
     }
 
-    void TryHitShopsInFan(Vector2 origin, Vector2 facing, float range)
+    void SpawnSwingHitbox(Vector2 origin, Vector2 facing, float range)
     {
-        var filter = new ContactFilter2D
-        {
-            useTriggers = true,
-            useLayerMask = false
-        };
-
-        int count = Physics2D.OverlapCircle(origin, range, filter, overlapBuffer);
-        for (int i = 0; i < count; i++)
-        {
-            var shop = overlapBuffer[i].GetComponent<ShopWorldEntity>();
-            if (shop == null || !shop.IsAlive)
-                continue;
-
-            if (!IsInsideFan(origin, facing, overlapBuffer[i].transform.position, range, fanHalfAngle))
-                continue;
-
-            shop.TakeDamage(1f);
-        }
-    }
-
-    static bool IsInsideFan(Vector2 origin, Vector2 facing, Vector2 point, float range, float halfAngle)
-    {
-        Vector2 offset = point - origin;
-        if (offset.sqrMagnitude > range * range)
-            return false;
-
-        if (offset.sqrMagnitude < 0.0001f)
-            return true;
-
-        float angle = Vector2.Angle(facing, offset.normalized);
-        return angle <= halfAngle;
-    }
-
-    void SpawnSwingVisual(Vector2 origin, Vector2 facing)
-    {
-        if (swingSprite == null)
+        Sprite effectSprite = swingSprite != null ? swingSprite : weaponSprite;
+        if (effectSprite == null)
             return;
 
-        var swingObject = new GameObject("ClawSwing");
-        swingObject.transform.position = origin;
-        swingObject.transform.localScale = Vector3.one * swingScale;
-
-        float angle = Mathf.Atan2(facing.y, facing.x) * Mathf.Rad2Deg;
-        swingObject.transform.rotation = Quaternion.Euler(0f, 0f, angle);
-
+        var swingObject = new GameObject("ClawSwingHitbox");
         var renderer = swingObject.AddComponent<SpriteRenderer>();
-        renderer.sprite = swingSprite;
-        renderer.sortingOrder = 11;
+        renderer.sprite = effectSprite;
+        renderer.sortingOrder = swingSortingOrder;
 
-        swingObject.AddComponent<TimedSpriteFade>().Begin(swingDuration);
+        float visualScale = ClawSwingMotion.CalculateScaleForRange(effectSprite, range, swingScale);
+
+        swingObject.AddComponent<ClawSwingMotion>().Begin(
+            this,
+            origin,
+            facing,
+            range,
+            fanHalfAngle,
+            swingDuration,
+            visualScale,
+            swingSpriteFacingOffset,
+            effectSprite);
     }
 
     void ApplyWeaponVisual()
@@ -155,9 +98,8 @@ public class ClawWeapon : WeaponBase
     void OnDrawGizmosSelected()
     {
         Vector2 origin = transform.position;
-        Vector2 facing = GetAttackDirection(attackRange);
+        Vector2 facing = GetAttackDirectionTowardTarget(attackRange);
         Gizmos.color = new Color(1f, 0.55f, 0.35f, 0.8f);
-
         DrawFanGizmo(origin, facing, attackRange, fanHalfAngle);
     }
 
@@ -181,5 +123,162 @@ public class ClawWeapon : WeaponBase
 
         Gizmos.DrawLine((Vector3)origin, previousPoint);
         Gizmos.DrawLine((Vector3)origin, (Vector3)origin + (Vector3)(facing.normalized * range));
+    }
+}
+
+[RequireComponent(typeof(SpriteRenderer))]
+public class ClawSwingMotion : MonoBehaviour
+{
+    ClawWeapon owner;
+    Vector2 origin;
+    float range;
+    float halfAngle;
+    float baseAngleDeg;
+    float duration;
+    float elapsed;
+    float visualScale;
+    float spriteFacingOffset;
+    SpriteRenderer spriteRenderer;
+    Color startColor;
+    BoxCollider2D hitbox;
+    Rigidbody2D rb;
+    readonly HashSet<EnemyHealth> hitEnemies = new HashSet<EnemyHealth>();
+    readonly HashSet<ShopWorldEntity> hitShops = new HashSet<ShopWorldEntity>();
+
+    public static float CalculateScaleForRange(Sprite sprite, float attackRange, float scaleMultiplier = 1f)
+    {
+        if (attackRange <= 0f)
+            return scaleMultiplier;
+
+        if (sprite == null)
+            return attackRange * 2f * scaleMultiplier;
+
+        Vector2 bounds = sprite.bounds.size;
+        float maxAxis = Mathf.Max(bounds.x, bounds.y);
+        if (maxAxis <= 0.0001f)
+            return attackRange * 2f * scaleMultiplier;
+
+        return attackRange * 2f / maxAxis * scaleMultiplier;
+    }
+
+    public void Begin(
+        ClawWeapon clawWeapon,
+        Vector2 attackOrigin,
+        Vector2 facing,
+        float attackRange,
+        float fanHalfAngle,
+        float swingDuration,
+        float scale,
+        float facingOffset,
+        Sprite swingSprite)
+    {
+        owner = clawWeapon;
+        origin = attackOrigin;
+        range = attackRange;
+        halfAngle = fanHalfAngle;
+        duration = Mathf.Max(0.05f, swingDuration);
+        visualScale = scale;
+        spriteFacingOffset = facingOffset;
+        elapsed = 0f;
+        hitEnemies.Clear();
+        hitShops.Clear();
+
+        if (facing.sqrMagnitude < 0.0001f)
+            facing = Vector2.right;
+
+        baseAngleDeg = Mathf.Atan2(facing.y, facing.x) * Mathf.Rad2Deg;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null)
+            startColor = spriteRenderer.color;
+
+        transform.localScale = Vector3.one * visualScale;
+        SetupHitbox(swingSprite);
+        ApplyPose(0f);
+        SyncHitboxTransform();
+    }
+
+    void SetupHitbox(Sprite swingSprite)
+    {
+        rb = gameObject.AddComponent<Rigidbody2D>();
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.gravityScale = 0f;
+        rb.freezeRotation = true;
+
+        hitbox = gameObject.AddComponent<BoxCollider2D>();
+        hitbox.isTrigger = true;
+
+        if (swingSprite != null)
+            hitbox.size = swingSprite.bounds.size;
+    }
+
+    void SyncHitboxTransform()
+    {
+        if (hitbox == null || spriteRenderer == null || spriteRenderer.sprite == null)
+            return;
+
+        hitbox.offset = spriteRenderer.sprite.bounds.center;
+        hitbox.size = spriteRenderer.sprite.bounds.size;
+    }
+
+    void Update()
+    {
+        elapsed += Time.deltaTime;
+        float progress = Mathf.Clamp01(elapsed / duration);
+        ApplyPose(progress);
+
+        if (spriteRenderer != null)
+        {
+            Color color = startColor;
+            color.a = startColor.a * (1f - progress);
+            spriteRenderer.color = color;
+        }
+
+        if (progress >= 1f)
+            Destroy(gameObject);
+    }
+
+    void ApplyPose(float progress)
+    {
+        float sweepAngleDeg = baseAngleDeg - halfAngle + progress * halfAngle * 2f;
+        float sweepAngleRad = sweepAngleDeg * Mathf.Deg2Rad;
+
+        Vector2 direction = new Vector2(Mathf.Cos(sweepAngleRad), Mathf.Sin(sweepAngleRad));
+        transform.position = origin + direction * (range * 0.5f);
+        transform.rotation = Quaternion.Euler(0f, 0f, sweepAngleDeg + spriteFacingOffset);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        ProcessHit(other);
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        ProcessHit(other);
+    }
+
+    void ProcessHit(Collider2D other)
+    {
+        if (owner == null)
+            return;
+
+        var shop = other.GetComponent<ShopWorldEntity>();
+        if (shop != null && shop.IsAlive)
+        {
+            if (hitShops.Add(shop))
+                owner.HandleSwingShopHit(other);
+            return;
+        }
+
+        var enemy = other.GetComponent<EnemyHealth>();
+        if (enemy == null || !enemy.IsAlive)
+            return;
+
+        if (hitEnemies.Contains(enemy))
+            return;
+
+        hitEnemies.Add(enemy);
+        owner.HandleSwingHit(enemy, origin);
     }
 }

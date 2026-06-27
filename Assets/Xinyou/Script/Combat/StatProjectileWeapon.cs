@@ -102,15 +102,8 @@ public abstract class StatProjectileWeapon : WeaponBase
         if (weaponManager != null)
             effectiveRange *= weaponManager.GetRangeMultiplier(WeaponIdentity);
 
-        var target = FindNearestEnemy(effectiveRange);
-        Vector2 direction = target != null
-            ? (Vector2)target.transform.position - (Vector2)transform.position
-            : Vector2.right;
-
-        if (direction.sqrMagnitude < 0.0001f)
-            direction = Vector2.right;
-
-        FireProjectile(direction.normalized);
+        Vector2 direction = GetAttackDirectionTowardTarget(effectiveRange);
+        FireProjectile(direction);
     }
 
     void FireProjectile(Vector2 direction)

@@ -97,4 +97,26 @@ public abstract class WeaponBase : MonoBehaviour
 
         return nearest;
     }
+
+    protected Vector2 GetDefaultAttackDirection()
+    {
+        var movement = GetComponent<PlayerMovement>();
+        if (movement != null)
+            return movement.LastFacingDirection;
+
+        return Vector2.right;
+    }
+
+    protected Vector2 GetAttackDirectionTowardTarget(float range)
+    {
+        var target = FindNearestEnemy(range);
+        if (target != null)
+        {
+            Vector2 direction = (Vector2)target.transform.position - (Vector2)transform.position;
+            if (direction.sqrMagnitude > 0.0001f)
+                return direction.normalized;
+        }
+
+        return GetDefaultAttackDirection();
+    }
 }

@@ -14,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
     Vector2 moveInput;
     Vector2 lastFacingDirection = Vector2.right;
 
+    public Vector2 LastFacingDirection =>
+        lastFacingDirection.sqrMagnitude > 0.0001f ? lastFacingDirection : Vector2.right;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();

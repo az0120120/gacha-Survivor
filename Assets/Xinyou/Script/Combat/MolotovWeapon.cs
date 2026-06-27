@@ -53,7 +53,7 @@ public class MolotovWeapon : WeaponBase
         if (target != null)
             return target.transform.position;
 
-        return (Vector2)transform.position + Random.insideUnitCircle.normalized * Mathf.Min(range, 3f);
+        return (Vector2)transform.position + GetDefaultAttackDirection() * Mathf.Min(range, 3f);
     }
 
     void LaunchThrow(Vector2 landingPoint)
