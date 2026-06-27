@@ -55,15 +55,24 @@ public class EnemyStats : MonoBehaviour
         if (bossDefinition == null)
             return;
 
-        archetype = bossDefinition.behaviorArchetype;
-        definition = catalog != null ? catalog.GetDefinition(bossDefinition.behaviorArchetype) : null;
-        RefreshFromGameTime();
+        int gameMinutes = GameTimeManager.Instance != null ? GameTimeManager.Instance.GameMinutes : 0;
+        bool usesRangedAttack = bossDefinition.behaviorType == BossBehaviorType.Fazeniko
+            || bossDefinition.behaviorType == BossBehaviorType.G2niko
+            || bossDefinition.behaviorType == BossBehaviorType.FalconNiko;
 
-        maxHealth = StatMath.FloorToInt(maxHealth * bossDefinition.healthMultiplier);
-        attack += bossDefinition.bonusAttack;
-        defense += bossDefinition.bonusDefense;
-        expDrop = bossDefinition.expDrop;
-        goldDrop = bossDefinition.goldDrop;
+        archetype = usesRangedAttack ? EnemyArchetype.RangedShooter : EnemyArchetype.MeleeRush;
+        definition = catalog != null ? catalog.GetDefinition(archetype) : null;
+
+        maxHealth = StatMath.FloorToInt(
+            EnemyStatScaler.GetMaxHealth(EnemyArchetype.MeleeRush, gameMinutes) * bossDefinition.healthMultiplier);
+        attack = usesRangedAttack && definition != null
+            ? definition.baseAttack + definition.attackBonusPerMinute * gameMinutes
+            : EnemyStatScaler.GetAttack(gameMinutes);
+        defense = EnemyStatScaler.GetDefense(gameMinutes);
+
+        int normalGold = EnemyStatScaler.RollGoldDrop(gameMinutes);
+        goldDrop = normalGold * Mathf.Max(1, bossDefinition.goldDropMultiplier);
+        expDrop = EnemyStatScaler.GetExpDropFromGold(goldDrop);
 
         var spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)

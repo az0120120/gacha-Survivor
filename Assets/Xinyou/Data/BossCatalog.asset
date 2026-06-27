@@ -13,43 +13,53 @@ MonoBehaviour:
   m_Name: BossCatalog
   m_EditorClassIdentifier: 
   bosses:
-  - displayName: "Boss I - \u88C2\u5730\u5DE8\u517D"
-    sprite: {fileID: 21300000, guid: fb0e914ae3e3e3f46adcc6adea3949f3, type: 3}
-    tintColor: {r: 1, g: 0.35, b: 0.35, a: 1}
+  - displayName: "\u5C0F\u867E"
+    sprite: {fileID: 21300000, guid: 86b4cef88ba059c45adc43dc4e2d5da6, type: 3}
+    tintColor: {r: 1, g: 0.55, b: 0.45, a: 1}
     localScale: {x: 0.55, y: 0.55, z: 0.55}
-    behaviorArchetype: 0
-    healthMultiplier: 22
-    bonusAttack: 12
-    bonusDefense: 250
-    expDrop: 52
-    goldDrop: 78
-  - displayName: "Boss II - \u7099\u7130\u5C04\u624B"
+    behaviorType: 0
+    healthMultiplier: 15
+    goldDropMultiplier: 10
+    shootInterval: 3
+    fanHalfAngle: 35
+    fanBulletCount: 5
+  - displayName: fazeniko
     sprite: {fileID: 21300000, guid: cfed6e6607f2bf94288e25c818a4f976, type: 3}
-    tintColor: {r: 1, g: 0.55, b: 0.2, a: 1}
+    tintColor: {r: 1, g: 0.75, b: 0.25, a: 1}
     localScale: {x: 0.55, y: 0.55, z: 0.55}
-    behaviorArchetype: 1
-    healthMultiplier: 24
-    bonusAttack: 14
-    bonusDefense: 280
-    expDrop: 54
-    goldDrop: 81
-  - displayName: "Boss III - \u75BE\u98CE\u7559\u5F71"
+    behaviorType: 1
+    healthMultiplier: 15
+    goldDropMultiplier: 10
+    shootInterval: 3
+    fanHalfAngle: 35
+    fanBulletCount: 5
+  - displayName: s1mple
     sprite: {fileID: 21300000, guid: 7b66a0d9ea9d44749a0a8bfd3c251f98, type: 3}
     tintColor: {r: 0.55, g: 0.85, b: 1, a: 1}
-    localScale: {x: 0.55, y: 0.55, z: 0.55}
-    behaviorArchetype: 2
-    healthMultiplier: 26
-    bonusAttack: 16
-    bonusDefense: 310
-    expDrop: 56
-    goldDrop: 84
-  - displayName: "Boss IV - \u7EC8\u7131\u9886\u4E3B"
+    localScale: {x: 0.5, y: 0.5, z: 0.5}
+    behaviorType: 2
+    healthMultiplier: 10
+    goldDropMultiplier: 10
+    shootInterval: 3
+    fanHalfAngle: 35
+    fanBulletCount: 5
+  - displayName: g2niko
     sprite: {fileID: 21300000, guid: e995a95555e650c4e9187e580bc99bde, type: 3}
-    tintColor: {r: 0.75, g: 0.35, b: 1, a: 1}
-    localScale: {x: 0.65, y: 0.65, z: 0.65}
-    behaviorArchetype: 0
-    healthMultiplier: 30
-    bonusAttack: 20
-    bonusDefense: 350
-    expDrop: 60
-    goldDrop: 90
+    tintColor: {r: 0.85, g: 0.35, b: 0.35, a: 1}
+    localScale: {x: 0.6, y: 0.6, z: 0.6}
+    behaviorType: 3
+    healthMultiplier: 25
+    goldDropMultiplier: 10
+    shootInterval: 2
+    fanHalfAngle: 35
+    fanBulletCount: 5
+  - displayName: "\u730E\u9E70niko"
+    sprite: {fileID: 21300000, guid: b2cbf8b6f41a13f4cb584545d7ffaa12, type: 3}
+    tintColor: {r: 0.65, g: 0.35, b: 1, a: 1}
+    localScale: {x: 0.7, y: 0.7, z: 0.7}
+    behaviorType: 4
+    healthMultiplier: 40
+    goldDropMultiplier: 10
+    shootInterval: 0.5
+    fanHalfAngle: 40
+    fanBulletCount: 7

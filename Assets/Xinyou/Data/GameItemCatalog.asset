@@ -194,8 +194,8 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_element
     displayName: "\u5143\u7D20\u4E4B\u529B"
-    description: "\u5143\u7D20\u653B\u51FB\u529B +5\u3002\n\n\n\u8C6A\u5916\u6709\u8C6A\u3002"
-    icon: {fileID: 21300000, guid: 569aa30e2f8db26408cbbdef4f8906f6, type: 3}
+    description: "\u5143\u7D20\u653B\u51FB\u529B +5\u3002\n\n\n\u5916\u661F\u79D1\u6280\uFF0C\u5C0F\u5B50\u3002"
+    icon: {fileID: 21300000, guid: 7629aee085f3de6469881ba5aab43cb6, type: 3}
     kind: 4
     statType: 1
     price: 0

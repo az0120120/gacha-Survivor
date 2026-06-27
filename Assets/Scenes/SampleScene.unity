@@ -427,7 +427,7 @@ MonoBehaviour:
   enemyCatalog: {fileID: 11400000, guid: 3dc1396fc9d09bd459855fd0deab2ced, type: 2}
   player: {fileID: 2143937440}
   spawnIntervalSeconds: 180
-  totalBossCount: 4
+  totalBossCount: 5
   spawnMinRadius: 10
   spawnMaxRadius: 14
 --- !u!1 &437879534

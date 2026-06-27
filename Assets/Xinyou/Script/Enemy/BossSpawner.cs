@@ -8,7 +8,7 @@ public class BossSpawner : MonoBehaviour
     [SerializeField] EnemyCatalog enemyCatalog;
     [SerializeField] Transform player;
     [SerializeField] float spawnIntervalSeconds = 180f;
-    [SerializeField] int totalBossCount = 4;
+    [SerializeField] int totalBossCount = 5;
     [SerializeField] float spawnMinRadius = 10f;
     [SerializeField] float spawnMaxRadius = 14f;
 
@@ -17,7 +17,10 @@ public class BossSpawner : MonoBehaviour
     GameObject activeBossObject;
 
     public int SpawnedBossCount => spawnedBossCount;
+    public int TotalBossCount => totalBossCount;
     public bool HasActiveBoss => activeBossObject != null && activeBossObject.activeInHierarchy;
+    public BossEnemy ActiveBoss => HasActiveBoss ? activeBossObject.GetComponent<BossEnemy>() : null;
+    public EnemyHealth ActiveBossHealth => HasActiveBoss ? activeBossObject.GetComponent<EnemyHealth>() : null;
     public bool IsComplete => spawnedBossCount >= totalBossCount && !HasActiveBoss;
 
     void Awake()
@@ -109,7 +112,7 @@ public class BossSpawner : MonoBehaviour
             sourcePool = FindFirstObjectByType<WaveSpawner>()?.GetComponent<ObjectPool>();
 
         if (sourcePool != null && sourcePool.Prefab != null)
-            bossPool.Setup(sourcePool.Prefab, 4);
+            bossPool.Setup(sourcePool.Prefab, 5);
     }
 
     void EnsureCatalogs()

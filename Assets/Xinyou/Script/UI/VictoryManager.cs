@@ -5,13 +5,10 @@ public class VictoryManager : MonoBehaviour
 {
     public static VictoryManager Instance { get; private set; }
 
-    const int TotalBosses = 4;
-
     [SerializeField] WaveSpawner waveSpawner;
     [SerializeField] BossSpawner bossSpawner;
     [SerializeField] Sprite settlementImage;
 
-    int defeatedBossCount;
     bool isVictory;
     bool isSettlementOpen;
     VictoryUI victoryUI;
@@ -54,8 +51,7 @@ public class VictoryManager : MonoBehaviour
         if (isVictory || boss == null || !boss.IsConfigured)
             return;
 
-        defeatedBossCount++;
-        if (defeatedBossCount < TotalBosses)
+        if (!boss.IsFinalBoss)
             return;
 
         TriggerVictory();

@@ -17,7 +17,7 @@ MonoBehaviour:
     displayName: "\u8FD1\u6218\u76F4\u51B2"
     sprite: {fileID: 21300000, guid: fb0e914ae3e3e3f46adcc6adea3949f3, type: 3}
     tintColor: {r: 1, g: 1, b: 1, a: 1}
-    localScale: {x: 0.2, y: 0.2, z: 0.2}
+    localScale: {x: 0.3, y: 0.3, z: 0.3}
     baseMaxHealth: 80
     healthScalePerMinute: 1.18
     baseAttack: 3
@@ -45,7 +45,7 @@ MonoBehaviour:
     displayName: "\u8FDC\u7A0B\u5C04\u51FB"
     sprite: {fileID: 21300000, guid: 5e1d11161b3431d4bbbd5c665723a312, type: 3}
     tintColor: {r: 1, g: 1, b: 1, a: 1}
-    localScale: {x: 0.2, y: 0.2, z: 0.2}
+    localScale: {x: 0.3, y: 0.3, z: 0.3}
     baseMaxHealth: 40
     healthScalePerMinute: 1.18
     baseAttack: 3
@@ -73,7 +73,7 @@ MonoBehaviour:
     displayName: "\u9AD8\u901F\u9A9A\u6270"
     sprite: {fileID: 21300000, guid: 7b66a0d9ea9d44749a0a8bfd3c251f98, type: 3}
     tintColor: {r: 1, g: 1, b: 1, a: 1}
-    localScale: {x: 0.2, y: 0.2, z: 0.2}
+    localScale: {x: 0.3, y: 0.3, z: 0.3}
     baseMaxHealth: 55
     healthScalePerMinute: 1.18
     baseAttack: 3

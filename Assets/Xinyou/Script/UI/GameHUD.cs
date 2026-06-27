@@ -18,10 +18,18 @@ public class GameHUD : MonoBehaviour
     [SerializeField] Transform player;
     [SerializeField] float shopArrowScreenOffset = 120f;
     [SerializeField] float screenEdgeMargin = 48f;
+    [SerializeField] Color bossBarFullColor = new Color(0.95f, 0.35f, 0.25f);
+    [SerializeField] Color bossBarLowColor = new Color(0.75f, 0.1f, 0.1f);
+    [SerializeField] Color bossNameColor = new Color(1f, 0.88f, 0.55f);
 
     RectTransform canvasRect;
     Camera mainCamera;
     PlayerHealth playerHealth;
+    BossSpawner bossSpawner;
+    GameObject bossBarRoot;
+    TextMeshProUGUI bossNameText;
+    TextMeshProUGUI bossHealthText;
+    Image bossBarFill;
 
     void Awake()
     {
@@ -40,6 +48,8 @@ public class GameHUD : MonoBehaviour
 
         if (FindAnyObjectByType<DamageNumberManager>() == null)
             gameObject.AddComponent<DamageNumberManager>();
+
+        EnsureBossHealthBar();
     }
 
     void OnEnable()
@@ -71,6 +81,7 @@ public class GameHUD : MonoBehaviour
     {
         RefreshTime();
         UpdateShopArrow();
+        UpdateBossHealthBar();
     }
 
     void CacheReferences()
@@ -187,6 +198,158 @@ public class GameHUD : MonoBehaviour
         float ratio = max > 0 ? (float)current / max : 0f;
         healthBarFill.fillAmount = ratio;
         healthBarFill.color = Color.Lerp(healthBarLowColor, healthBarFullColor, ratio);
+    }
+
+    void UpdateBossHealthBar()
+    {
+        if (bossSpawner == null)
+            bossSpawner = FindFirstObjectByType<BossSpawner>();
+
+        if (bossSpawner == null || !bossSpawner.HasActiveBoss)
+        {
+            SetBossBarVisible(false);
+            return;
+        }
+
+        EnemyHealth health = bossSpawner.ActiveBossHealth;
+        BossEnemy boss = bossSpawner.ActiveBoss;
+        if (health == null || !health.IsAlive)
+        {
+            SetBossBarVisible(false);
+            return;
+        }
+
+        EnsureBossHealthBar();
+        bossBarRoot.SetActive(true);
+
+        int current = StatMath.FloorToInt(health.CurrentHealth);
+        int max = health.MaxHealth;
+        float ratio = max > 0 ? health.CurrentHealth / max : 0f;
+
+        if (bossNameText != null)
+        {
+            string bossName = boss != null ? boss.DisplayName : "Boss";
+            bossNameText.text = $"{bossName}  ({bossSpawner.SpawnedBossCount}/{bossSpawner.TotalBossCount})";
+        }
+
+        if (bossHealthText != null)
+            bossHealthText.text = $"{current} / {max}";
+
+        if (bossBarFill != null)
+        {
+            bossBarFill.fillAmount = ratio;
+            bossBarFill.color = Color.Lerp(bossBarLowColor, bossBarFullColor, ratio);
+        }
+    }
+
+    void SetBossBarVisible(bool visible)
+    {
+        if (bossBarRoot != null)
+            bossBarRoot.SetActive(visible);
+    }
+
+    void EnsureBossHealthBar()
+    {
+        if (bossBarRoot != null)
+            return;
+
+        var canvasObject = new GameObject("BossHealthBarCanvas");
+        canvasObject.transform.SetParent(transform, false);
+
+        var canvas = canvasObject.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 120;
+
+        var scaler = canvasObject.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        canvasObject.AddComponent<GraphicRaycaster>();
+
+        bossBarRoot = new GameObject("BossHealthBarPanel");
+        bossBarRoot.transform.SetParent(canvasObject.transform, false);
+        var panelImage = bossBarRoot.AddComponent<Image>();
+        panelImage.color = new Color(0f, 0f, 0f, 0f);
+        panelImage.raycastTarget = false;
+
+        var panelRect = bossBarRoot.GetComponent<RectTransform>();
+        panelRect.anchorMin = new Vector2(0.5f, 1f);
+        panelRect.anchorMax = new Vector2(0.5f, 1f);
+        panelRect.pivot = new Vector2(0.5f, 1f);
+        panelRect.anchoredPosition = new Vector2(0f, -24f);
+        panelRect.sizeDelta = new Vector2(720f, 72f);
+
+        bossNameText = CreateBossLabel(bossBarRoot.transform, "BossNameText", 30f, TextAlignmentOptions.Center,
+            new Vector2(0.5f, 1f), new Vector2(0f, 0f), new Vector2(680f, 36f), bossNameColor, FontStyles.Bold);
+
+        var barBackground = new GameObject("BossBarBackground");
+        barBackground.transform.SetParent(bossBarRoot.transform, false);
+        var backgroundRect = barBackground.AddComponent<RectTransform>();
+        backgroundRect.anchorMin = new Vector2(0.5f, 0f);
+        backgroundRect.anchorMax = new Vector2(0.5f, 0f);
+        backgroundRect.pivot = new Vector2(0.5f, 0f);
+        backgroundRect.anchoredPosition = new Vector2(0f, 8f);
+        backgroundRect.sizeDelta = new Vector2(680f, 22f);
+
+        var backgroundImage = barBackground.AddComponent<Image>();
+        backgroundImage.sprite = CreateSolidSprite();
+        backgroundImage.color = new Color(0.1f, 0.1f, 0.12f, 0.92f);
+        backgroundImage.raycastTarget = false;
+
+        var fillObject = new GameObject("BossBarFill");
+        fillObject.transform.SetParent(barBackground.transform, false);
+        var fillRect = fillObject.AddComponent<RectTransform>();
+        fillRect.anchorMin = Vector2.zero;
+        fillRect.anchorMax = Vector2.one;
+        fillRect.offsetMin = Vector2.zero;
+        fillRect.offsetMax = Vector2.zero;
+
+        bossBarFill = fillObject.AddComponent<Image>();
+        bossBarFill.sprite = CreateSolidSprite();
+        bossBarFill.color = bossBarFullColor;
+        bossBarFill.type = Image.Type.Filled;
+        bossBarFill.fillMethod = Image.FillMethod.Horizontal;
+        bossBarFill.fillOrigin = (int)Image.OriginHorizontal.Left;
+        bossBarFill.fillAmount = 1f;
+        bossBarFill.raycastTarget = false;
+
+        bossHealthText = CreateBossLabel(bossBarRoot.transform, "BossHealthText", 22f, TextAlignmentOptions.Center,
+            new Vector2(0.5f, 0f), new Vector2(0f, 34f), new Vector2(680f, 28f),
+            new Color(0.92f, 0.92f, 0.92f, 0.95f), FontStyles.Normal);
+
+        bossBarRoot.SetActive(false);
+    }
+
+    static TextMeshProUGUI CreateBossLabel(
+        Transform parent,
+        string objectName,
+        float fontSize,
+        TextAlignmentOptions alignment,
+        Vector2 anchor,
+        Vector2 anchoredPosition,
+        Vector2 sizeDelta,
+        Color color,
+        FontStyles fontStyle)
+    {
+        var textObject = new GameObject(objectName);
+        textObject.transform.SetParent(parent, false);
+
+        var label = textObject.AddComponent<TextMeshProUGUI>();
+        label.fontSize = fontSize;
+        label.alignment = alignment;
+        label.color = color;
+        label.fontStyle = fontStyle;
+        label.raycastTarget = false;
+
+        if (TMP_Settings.defaultFontAsset != null)
+            label.font = TMP_Settings.defaultFontAsset;
+
+        var rectTransform = label.rectTransform;
+        rectTransform.anchorMin = anchor;
+        rectTransform.anchorMax = anchor;
+        rectTransform.pivot = new Vector2(0.5f, anchor.y);
+        rectTransform.anchoredPosition = anchoredPosition;
+        rectTransform.sizeDelta = sizeDelta;
+        return label;
     }
 
     void UpdateShopArrow()

@@ -12,6 +12,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
     EnemyStats enemyStats;
 
     public bool IsAlive => currentHealth > 0f;
+    public float CurrentHealth => currentHealth;
+    public int MaxHealth => enemyStats != null ? enemyStats.MaxHealth : 0;
     public EnemyStats Stats => enemyStats;
 
     void Awake()
@@ -66,6 +68,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
         if (!IsAlive || damage <= 0)
             return;
 
+        var bossBehavior = GetComponent<BossBehavior>();
+        if (bossBehavior != null && bossBehavior.TryDodge())
+            return;
+
         if (DamageNumberManager.Instance != null)
             DamageNumberManager.Instance.Show(damage, transform.position, isCritical);
 
@@ -74,13 +80,21 @@ public class EnemyHealth : MonoBehaviour, IDamageable, IPoolable
         if (knockbackForce > 0f)
         {
             var enemyAI = GetComponent<EnemyAI>();
-            if (enemyAI != null)
+            if (enemyAI != null && enemyAI.enabled)
             {
                 Vector2 direction = (Vector2)transform.position - knockbackSource;
                 if (direction.sqrMagnitude < 0.0001f)
                     direction = Vector2.up;
 
                 enemyAI.ApplyKnockback(direction.normalized, knockbackForce);
+            }
+            else if (bossBehavior != null && bossBehavior.IsActive)
+            {
+                Vector2 direction = (Vector2)transform.position - knockbackSource;
+                if (direction.sqrMagnitude < 0.0001f)
+                    direction = Vector2.up;
+
+                bossBehavior.ApplyKnockback(direction.normalized, knockbackForce);
             }
         }
 
