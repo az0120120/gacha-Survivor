@@ -33,6 +33,7 @@ public class ObjectPool : MonoBehaviour
             ? available.Dequeue()
             : CreateInstance();
 
+        instance.transform.SetParent(null, true);
         instance.transform.SetPositionAndRotation(position, rotation);
         instance.SetActive(true);
         active.Add(instance);
