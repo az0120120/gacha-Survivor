@@ -101,7 +101,7 @@ public class ShopManager : MonoBehaviour
 
         currentShopSize = shopSize;
         isShopOpen = true;
-        Time.timeScale = 0f;
+        GameSpeedController.Instance?.RefreshTimeScale();
         RollOffers(shopSize);
 
         int shopTier = GetCurrentShopTier();
@@ -163,7 +163,7 @@ public class ShopManager : MonoBehaviour
             return;
 
         isShopOpen = false;
-        Time.timeScale = 1f;
+        GameSpeedController.Instance?.RefreshTimeScale();
         shopUI.Hide();
         OnShopClosed?.Invoke();
     }
