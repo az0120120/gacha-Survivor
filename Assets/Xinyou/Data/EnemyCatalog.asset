@@ -18,11 +18,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: fb0e914ae3e3e3f46adcc6adea3949f3, type: 3}
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.3, y: 0.3, z: 0.3}
-    baseMaxHealth: 80
+    baseMaxHealth: 400
     healthScalePerMinute: 1.18
     baseAttack: 3
     attackBonusPerMinute: 1
-    baseDefense: 0
+    baseDefense: 50
     defensePerMinute: 50
     expDrop: 3
     goldDrop: 5
@@ -46,9 +46,9 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 5e1d11161b3431d4bbbd5c665723a312, type: 3}
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.3, y: 0.3, z: 0.3}
-    baseMaxHealth: 40
+    baseMaxHealth: 200
     healthScalePerMinute: 1.18
-    baseAttack: 3
+    baseAttack: 1
     attackBonusPerMinute: 1
     baseDefense: 0
     defensePerMinute: 50
@@ -74,11 +74,11 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7b66a0d9ea9d44749a0a8bfd3c251f98, type: 3}
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.3, y: 0.3, z: 0.3}
-    baseMaxHealth: 55
+    baseMaxHealth: 300
     healthScalePerMinute: 1.18
     baseAttack: 3
     attackBonusPerMinute: 1
-    baseDefense: 0
+    baseDefense: 50
     defensePerMinute: 50
     expDrop: 3
     goldDrop: 5
