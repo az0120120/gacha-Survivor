@@ -36,6 +36,7 @@ public static class DamageCalculator
             totalDamage *= attacker.CritDamageMultiplier;
 
         totalDamage *= specialMultiplier;
+        totalDamage *= MapPropStatusEffects.OutgoingDamageMultiplier;
 
         return new DamageResult
         {

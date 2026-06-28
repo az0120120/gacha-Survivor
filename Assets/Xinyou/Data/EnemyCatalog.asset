@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2a520a104eeecf47be9a53ae47540c8, type: 3}
+  m_Name: EnemyCatalog
+  m_EditorClassIdentifier: 
+  archetypes:
+  - archetype: 0
+    displayName: "\u8FD1\u6218\u76F4\u51B2"
+    sprite: {fileID: 21300000, guid: fb0e914ae3e3e3f46adcc6adea3949f3, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
+    localScale: {x: 0.3, y: 0.3, z: 0.3}
+    baseMaxHealth: 80
+    healthScalePerMinute: 1.18
+    baseAttack: 3
+    attackBonusPerMinute: 1
+    baseDefense: 0
+    defensePerMinute: 50
+    expDrop: 3
+    goldDrop: 5
+    contactCooldown: 1
+    meleeMoveSpeed: 2.8
+    rangedMoveSpeed: 1.6
+    preferredRange: 7
+    minRange: 4.5
+    shootInterval: 1.4
+    projectileSpeed: 7
+    projectileSprite: {fileID: 0}
+    projectileColor: {r: 1, g: 1, b: 1, a: 0.95}
+    projectileScale: 1
+    harasserCruiseSpeed: 1.4
+    harasserDashSpeed: 7
+    harasserPauseDuration: 0.55
+    harasserDashDuration: 0.4
+    harasserRecoverDuration: 0.75
+  - archetype: 1
+    displayName: "\u8FDC\u7A0B\u5C04\u51FB"
+    sprite: {fileID: 21300000, guid: 5e1d11161b3431d4bbbd5c665723a312, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
+    localScale: {x: 0.3, y: 0.3, z: 0.3}
+    baseMaxHealth: 40
+    healthScalePerMinute: 1.18
+    baseAttack: 3
+    attackBonusPerMinute: 1
+    baseDefense: 0
+    defensePerMinute: 50
+    expDrop: 3
+    goldDrop: 5
+    contactCooldown: 1
+    meleeMoveSpeed: 2.8
+    rangedMoveSpeed: 1.6
+    preferredRange: 7
+    minRange: 4.5
+    shootInterval: 1.4
+    projectileSpeed: 7
+    projectileSprite: {fileID: 21300000, guid: 5eeff78ba309b7947bcdd5569666085c, type: 3}
+    projectileColor: {r: 1, g: 1, b: 1, a: 0.95}
+    projectileScale: 1
+    harasserCruiseSpeed: 1.4
+    harasserDashSpeed: 7
+    harasserPauseDuration: 0.55
+    harasserDashDuration: 0.4
+    harasserRecoverDuration: 0.75
+  - archetype: 2
+    displayName: "\u9AD8\u901F\u9A9A\u6270"
+    sprite: {fileID: 21300000, guid: 7b66a0d9ea9d44749a0a8bfd3c251f98, type: 3}
+    tintColor: {r: 1, g: 1, b: 1, a: 1}
+    localScale: {x: 0.3, y: 0.3, z: 0.3}
+    baseMaxHealth: 55
+    healthScalePerMinute: 1.18
+    baseAttack: 3
+    attackBonusPerMinute: 1
+    baseDefense: 0
+    defensePerMinute: 50
+    expDrop: 3
+    goldDrop: 5
+    contactCooldown: 1
+    meleeMoveSpeed: 1.4
+    rangedMoveSpeed: 1.6
+    preferredRange: 7
+    minRange: 4.5
+    shootInterval: 1.4
+    projectileSpeed: 7
+    projectileSprite: {fileID: 0}
+    projectileColor: {r: 1, g: 0.35, b: 0.35, a: 0.95}
+    projectileScale: 1
+    harasserCruiseSpeed: 1.4
+    harasserDashSpeed: 7
+    harasserPauseDuration: 0.55
+    harasserDashDuration: 0.4
+    harasserRecoverDuration: 0.75

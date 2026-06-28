@@ -90,6 +90,11 @@ public class GoldCoin : MonoBehaviour, IPoolable
             Destroy(gameObject);
     }
 
+    public void ForceCollect()
+    {
+        Collect();
+    }
+
     void CachePlayer()
     {
         if (ExperienceMagnet.Instance != null)

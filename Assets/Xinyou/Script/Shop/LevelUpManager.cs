@@ -116,7 +116,7 @@ public class LevelUpManager : MonoBehaviour
     void OpenLevelUp()
     {
         IsOpen = true;
-        Time.timeScale = 0f;
+        GameSpeedController.Instance?.RefreshTimeScale();
 
         int tier = ExperienceManager.Instance != null
             ? ShopOfferRoller.GetShopTier(ExperienceManager.Instance.Level)
@@ -148,7 +148,17 @@ public class LevelUpManager : MonoBehaviour
         if (ShopManager.Instance != null && ShopManager.Instance.IsShopOpen)
             return;
 
-        Time.timeScale = 1f;
+        GameSpeedController.Instance?.RefreshTimeScale();
         TryOpenNext();
+    }
+
+    public void ForceClose()
+    {
+        if (!IsOpen)
+            return;
+
+        IsOpen = false;
+        levelUpUI?.Hide();
+        GameSpeedController.Instance?.RefreshTimeScale();
     }
 }

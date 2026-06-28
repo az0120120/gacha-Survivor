@@ -9,6 +9,20 @@ public class GameFlowManager : MonoBehaviour
     {
         if (waveSpawner == null)
             waveSpawner = FindFirstObjectByType<WaveSpawner>();
+
+        EnsureBossSystems();
+    }
+
+    void EnsureBossSystems()
+    {
+        if (waveSpawner != null && waveSpawner.GetComponent<BossSpawner>() == null)
+            waveSpawner.gameObject.AddComponent<BossSpawner>();
+
+        if (GetComponent<VictoryManager>() == null)
+            gameObject.AddComponent<VictoryManager>();
+
+        if (GetComponent<DefeatManager>() == null)
+            gameObject.AddComponent<DefeatManager>();
     }
 
     void Start()
@@ -28,6 +42,12 @@ public class GameFlowManager : MonoBehaviour
 
     void HandleWaveCompleted(int wave)
     {
+        if (VictoryManager.Instance != null && VictoryManager.Instance.IsVictory)
+            return;
+
+        if (DefeatManager.Instance != null && DefeatManager.Instance.IsDefeat)
+            return;
+
         if (waveSpawner != null)
             waveSpawner.StartNextWave();
     }

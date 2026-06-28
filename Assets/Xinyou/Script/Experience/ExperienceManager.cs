@@ -9,8 +9,8 @@ public class ExperienceManager : MonoBehaviour
     [SerializeField] ObjectPool orbPool;
     [SerializeField] int defaultOrbValue = 1;
     [SerializeField] float dropScatterRadius = 0.25f;
-    [SerializeField] int baseExpRequired = 10;
-    [SerializeField] float expGrowth = 1.25f;
+    [SerializeField] int baseExpRequired = 45;
+    [SerializeField] float expGrowth = 1.18f;
 
     int level = 1;
     int currentExp;
@@ -110,7 +110,7 @@ public class ExperienceManager : MonoBehaviour
 
     int CalculateExpRequired(int currentLevel)
     {
-        return StatMath.FloorToInt(baseExpRequired * Mathf.Pow(expGrowth, currentLevel - 1));
+        return StatMath.FloorToInt(baseExpRequired * Mathf.Pow(expGrowth, currentLevel));
     }
 
     void NotifyExpProgress()

@@ -5,6 +5,7 @@ public class WeaponUpgradeData
 {
     public float RangeBonusPercent;
     public float CooldownReductionPercent;
+    public float DamageBonusPercent;
     public int MajorUpgradeLevel;
 }
 
@@ -12,8 +13,9 @@ public class WeaponUpgradeData
 public class WeaponManager : MonoBehaviour
 {
     [SerializeField] CharacterStats characterStats;
-    [SerializeField] ObjectPool projectilePool;
-    [SerializeField] ShopWeaponType[] startingWeapons = { ShopWeaponType.Projectile };
+    [SerializeField] ObjectPool desertEagleProjectilePool;
+    [SerializeField] ObjectPool akProjectilePool;
+    [SerializeField] ShopWeaponType[] startingWeapons;
 
     readonly HashSet<ShopWeaponType> equippedWeapons = new HashSet<ShopWeaponType>();
     readonly Dictionary<ShopWeaponType, WeaponUpgradeData> upgradeData = new Dictionary<ShopWeaponType, WeaponUpgradeData>();
@@ -22,10 +24,6 @@ public class WeaponManager : MonoBehaviour
     {
         if (characterStats == null)
             characterStats = GetComponent<CharacterStats>();
-
-        upgradeData[ShopWeaponType.Projectile] = new WeaponUpgradeData();
-        upgradeData[ShopWeaponType.Area] = new WeaponUpgradeData();
-        upgradeData[ShopWeaponType.DirectTarget] = new WeaponUpgradeData();
 
         DisableAllWeapons();
 
@@ -64,23 +62,21 @@ public class WeaponManager : MonoBehaviour
     public float GetRangeMultiplier(ShopWeaponType weaponType)
     {
         var data = GetUpgradeData(weaponType);
-        float multiplier = 1f + data.RangeBonusPercent * 0.01f;
-
-        if (data.MajorUpgradeLevel > 0 && weaponType == ShopWeaponType.Area)
-            multiplier *= 1.3f;
-
-        return multiplier;
+        return 1f + data.RangeBonusPercent * 0.01f;
     }
 
     public float GetWeaponCooldownMultiplier(ShopWeaponType weaponType)
     {
         var data = GetUpgradeData(weaponType);
         float reduction = Mathf.Clamp01(data.CooldownReductionPercent * 0.01f);
-
-        if (data.MajorUpgradeLevel > 0 && weaponType == ShopWeaponType.Area)
-            reduction = Mathf.Clamp01(reduction + 0.15f);
-
         return 1f - reduction;
+    }
+
+    public float GetMajorUpgradeDamageMultiplier(ShopWeaponType weaponType)
+    {
+        var data = GetUpgradeData(weaponType);
+        float majorBonus = data.MajorUpgradeLevel * 15f;
+        return 1f + (data.DamageBonusPercent + majorBonus) * 0.01f;
     }
 
     public int GetMajorUpgradeLevel(ShopWeaponType weaponType)
@@ -98,6 +94,11 @@ public class WeaponManager : MonoBehaviour
         GetUpgradeData(weaponType).CooldownReductionPercent += percent;
     }
 
+    public void AddWeaponDamagePercent(ShopWeaponType weaponType, float percent)
+    {
+        GetUpgradeData(weaponType).DamageBonusPercent += percent;
+    }
+
     public void ApplyMajorUpgrade(ShopWeaponType weaponType, int levelDelta)
     {
         var data = GetUpgradeData(weaponType);
@@ -105,6 +106,11 @@ public class WeaponManager : MonoBehaviour
 
         if (!HasWeapon(weaponType))
             EquipWeapon(weaponType);
+    }
+
+    public WeaponUpgradeData GetWeaponUpgradeData(ShopWeaponType weaponType)
+    {
+        return GetUpgradeData(weaponType);
     }
 
     WeaponUpgradeData GetUpgradeData(ShopWeaponType weaponType)
@@ -122,43 +128,41 @@ public class WeaponManager : MonoBehaviour
     {
         switch (weaponType)
         {
-            case ShopWeaponType.Projectile:
-            {
-                var weapon = GetComponent<ProjectileWeapon>();
-                if (weapon == null)
-                    weapon = gameObject.AddComponent<ProjectileWeapon>();
-
-                if (projectilePool != null)
-                    weapon.SetProjectilePool(projectilePool);
-
-                return weapon;
-            }
-            case ShopWeaponType.Area:
-            {
-                var weapon = GetComponent<AreaWeapon>();
-                return weapon != null ? weapon : gameObject.AddComponent<AreaWeapon>();
-            }
-            case ShopWeaponType.DirectTarget:
-            {
-                var weapon = GetComponent<DirectTargetWeapon>();
-                return weapon != null ? weapon : gameObject.AddComponent<DirectTargetWeapon>();
-            }
+            case ShopWeaponType.DesertEagle:
+                return AssignProjectilePool(GetOrAddComponent<DesertEagleWeapon>(), desertEagleProjectilePool);
+            case ShopWeaponType.Ak:
+                return AssignProjectilePool(GetOrAddComponent<AkWeapon>(), akProjectilePool);
+            case ShopWeaponType.Molotov:
+                return GetOrAddComponent<MolotovWeapon>();
+            case ShopWeaponType.Kunai:
+                return GetOrAddComponent<KunaiWeapon>();
+            case ShopWeaponType.Claw:
+                return GetOrAddComponent<ClawWeapon>();
             default:
                 return null;
         }
     }
 
-    void DisableAllWeapons()
+    T GetOrAddComponent<T>() where T : Component
     {
-        SetWeaponEnabled(GetComponent<ProjectileWeapon>(), false);
-        SetWeaponEnabled(GetComponent<AreaWeapon>(), false);
-        SetWeaponEnabled(GetComponent<DirectTargetWeapon>(), false);
-        equippedWeapons.Clear();
+        var component = GetComponent<T>();
+        return component != null ? component : gameObject.AddComponent<T>();
     }
 
-    static void SetWeaponEnabled(WeaponBase weapon, bool enabled)
+    WeaponBase AssignProjectilePool(WeaponBase weapon, ObjectPool dedicatedPool)
     {
-        if (weapon != null)
-            weapon.enabled = enabled;
+        if (weapon is StatProjectileWeapon statProjectile)
+            statProjectile.AssignProjectilePoolIfEmpty(dedicatedPool);
+
+        return weapon;
+    }
+
+    void DisableAllWeapons()
+    {
+        var weapons = GetComponents<WeaponBase>();
+        for (int i = 0; i < weapons.Length; i++)
+            weapons[i].enabled = false;
+
+        equippedWeapons.Clear();
     }
 }

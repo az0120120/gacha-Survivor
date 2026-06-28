@@ -21,10 +21,14 @@ public enum LevelUpStatType
     Attack,
     [InspectorName("元素攻击")]
     ElementalAttack,
+    [InspectorName("破防")]
+    ArmorPenetration,
     [InspectorName("最大生命")]
     MaxHealth,
-    [InspectorName("移动速度")]
+    [InspectorName("移动速度(固定值)")]
     MoveSpeed,
+    [InspectorName("移动速度(%)")]
+    MoveSpeedPercent,
     [InspectorName("暴击率")]
     CritRate,
     [InspectorName("暴击效果")]
@@ -46,7 +50,7 @@ public enum LevelUpStatType
 [System.Serializable]
 public class GameItemEntry
 {
-    [Tooltip("唯一 ID，建议英文，如 weapon_projectile")]
+    [Tooltip("唯一 ID，建议英文，如 weapon_desert_eagle")]
     public string id = "new_item";
 
     public string displayName = "新道具";
@@ -61,14 +65,14 @@ public class GameItemEntry
     [Tooltip("仅「升级 - 属性强化」需要选择")]
     public LevelUpStatType statType = LevelUpStatType.Attack;
 
-    [Tooltip("商店价格；升级道具可填 0")]
-    public int price = 50;
+    [Tooltip("商店价格（基础价，35-50）；升级道具可填 0")]
+    public int price = 40;
 
     [Tooltip("品级，影响商店刷新权重")]
     public int tier = 1;
 
     [Tooltip("关联武器（武器/武器强化时填写）")]
-    public ShopWeaponType weapon = ShopWeaponType.Projectile;
+    public ShopWeaponType weapon = ShopWeaponType.DesertEagle;
 
     [Tooltip("强化数值：范围%、冷却%、属性加成等")]
     public float effectValue = 10f;
@@ -174,8 +178,10 @@ public class GameItemEntry
         {
             case LevelUpStatType.Attack: return ItemEffectType.AttackUp;
             case LevelUpStatType.ElementalAttack: return ItemEffectType.ElementalAttackUp;
+            case LevelUpStatType.ArmorPenetration: return ItemEffectType.ArmorPenetrationUp;
             case LevelUpStatType.MaxHealth: return ItemEffectType.MaxHealthUp;
             case LevelUpStatType.MoveSpeed: return ItemEffectType.MoveSpeedUp;
+            case LevelUpStatType.MoveSpeedPercent: return ItemEffectType.MoveSpeedPercentUp;
             case LevelUpStatType.CritRate: return ItemEffectType.CritRateUp;
             case LevelUpStatType.CritEffect: return ItemEffectType.CritEffectUp;
             case LevelUpStatType.Defense: return ItemEffectType.DefenseUp;
@@ -238,35 +244,46 @@ public class GameItemCatalog : ScriptableObject
     {
         return new List<GameItemEntry>
         {
-            Entry("weapon_projectile", "魔弹杖", "装备后每 0.5 秒发射子弹，造成 4 倍伤害。", GameItemKind.ShopWeapon, 75, 2, ShopWeaponType.Projectile),
-            Entry("weapon_area", "旋转法阵", "装备后以自身为中心持续造成区域伤害。", GameItemKind.ShopWeapon, 80, 3, ShopWeaponType.Area),
-            Entry("weapon_direct", "虚空指", "装备后锁定最近敌人，每秒造成 6 倍瞬发伤害。", GameItemKind.ShopWeapon, 90, 3, ShopWeaponType.DirectTarget),
+            Entry("weapon_desert_eagle", "火沙鹰", "每 0.75 秒发射子弹，6 倍伤害，穿透 3。", GameItemKind.ShopWeapon, 48, 2, ShopWeaponType.DesertEagle),
+            Entry("weapon_molotov", "燃烧瓶", "每 3 秒投掷，落点形成持续 5 秒的区域伤害。", GameItemKind.ShopWeapon, 50, 2, ShopWeaponType.Molotov),
+            Entry("weapon_kunai", "苦无", "每秒锁定单体造成 6 倍瞬发伤害。", GameItemKind.ShopWeapon, 46, 2, ShopWeaponType.Kunai),
+            Entry("weapon_claw", "虾钳", "扇形近战，每秒 4 倍伤害。", GameItemKind.ShopWeapon, 44, 1, ShopWeaponType.Claw),
+            Entry("weapon_ak", "AK", "每 0.25 秒发射子弹，7 倍伤害，穿透 3。", GameItemKind.ShopWeapon, 52, 3, ShopWeaponType.Ak),
 
-            Minor("w_range_projectile", "延伸弹匣", "魔弹杖攻击范围 +20%。", ShopWeaponType.Projectile, GameItemKind.ShopWeaponRangeUp, 35, 1, 20f),
-            Minor("w_cd_projectile", "速射核心", "魔弹杖冷却缩减 +10%。", ShopWeaponType.Projectile, GameItemKind.ShopWeaponCooldownUp, 35, 1, 10f),
-            Minor("w_range_area", "法阵扩张", "旋转法阵范围 +25%。", ShopWeaponType.Area, GameItemKind.ShopWeaponRangeUp, 40, 2, 25f),
-            Minor("w_cd_area", "法阵加速", "旋转法阵冷却缩减 +10%。", ShopWeaponType.Area, GameItemKind.ShopWeaponCooldownUp, 40, 2, 10f),
-            Minor("w_range_direct", "虚空延伸", "虚空指索敌范围 +20%。", ShopWeaponType.DirectTarget, GameItemKind.ShopWeaponRangeUp, 45, 2, 20f),
-            Minor("w_cd_direct", "虚空加速", "虚空指冷却缩减 +10%。", ShopWeaponType.DirectTarget, GameItemKind.ShopWeaponCooldownUp, 45, 2, 10f),
+            Minor("w_range_desert_eagle", "火沙鹰延伸", "火沙鹰攻击范围 +20%。", ShopWeaponType.DesertEagle, GameItemKind.ShopWeaponRangeUp, 38, 2, 20f),
+            Minor("w_cd_desert_eagle", "火沙鹰速射", "火沙鹰冷却缩减 +10%。", ShopWeaponType.DesertEagle, GameItemKind.ShopWeaponCooldownUp, 40, 2, 10f),
+            Minor("w_range_molotov", "燃烧延伸", "燃烧瓶投掷范围 +20%。", ShopWeaponType.Molotov, GameItemKind.ShopWeaponRangeUp, 40, 2, 20f),
+            Minor("w_cd_molotov", "燃烧加速", "燃烧瓶冷却缩减 +10%。", ShopWeaponType.Molotov, GameItemKind.ShopWeaponCooldownUp, 42, 2, 10f),
+            Minor("w_range_kunai", "苦无延伸", "苦无索敌范围 +20%。", ShopWeaponType.Kunai, GameItemKind.ShopWeaponRangeUp, 38, 2, 20f),
+            Minor("w_cd_kunai", "苦无加速", "苦无冷却缩减 +10%。", ShopWeaponType.Kunai, GameItemKind.ShopWeaponCooldownUp, 40, 2, 10f),
+            Minor("w_range_claw", "虾钳延伸", "虾钳攻击范围 +20%。", ShopWeaponType.Claw, GameItemKind.ShopWeaponRangeUp, 35, 1, 20f),
+            Minor("w_cd_claw", "虾钳加速", "虾钳冷却缩减 +10%。", ShopWeaponType.Claw, GameItemKind.ShopWeaponCooldownUp, 37, 1, 10f),
+            Minor("w_range_ak", "AK 延伸", "AK 攻击范围 +20%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponRangeUp, 42, 3, 20f),
+            Minor("w_cd_ak", "AK 速射", "AK 冷却缩减 +10%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponCooldownUp, 44, 3, 10f),
 
-            Entry("w_major_projectile", "三重散射", "魔弹杖改为三向散射攻击。", GameItemKind.ShopWeaponMajorUpgrade, 120, 1, ShopWeaponType.Projectile),
-            Entry("w_major_area", "双环法阵", "旋转法阵频率提升，伤害范围扩大。", GameItemKind.ShopWeaponMajorUpgrade, 130, 2, ShopWeaponType.Area),
-            Entry("w_major_direct", "连锁虚空", "虚空指改为范围连锁打击。", GameItemKind.ShopWeaponMajorUpgrade, 140, 3, ShopWeaponType.DirectTarget),
-
-            Stat("lv_attack", "力量提升", "攻击力 +3。", LevelUpStatType.Attack, 1, 3f),
-            Stat("lv_attack2", "强力打击", "攻击力 +6。", LevelUpStatType.Attack, 3, 6f),
-            Stat("lv_element", "元素亲和", "元素攻击力 +4。", LevelUpStatType.ElementalAttack, 2, 4f),
-            Stat("lv_health", "生命强化", "最大生命 +15，并立即恢复。", LevelUpStatType.MaxHealth, 1, 15f),
-            Stat("lv_health2", "坚韧体魄", "最大生命 +30，并立即恢复。", LevelUpStatType.MaxHealth, 4, 30f),
-            Stat("lv_speed", "迅捷", "移动速度 +0.5。", LevelUpStatType.MoveSpeed, 1, 0.5f),
+            Stat("lv_attack", "强攻", "攻击力 +15。", LevelUpStatType.Attack, 1, 15f),
+            Stat("lv_element", "元素之力", "元素攻击力 +5。", LevelUpStatType.ElementalAttack, 1, 5f),
+            Stat("lv_armor_pen", "破甲", "破防 +25。", LevelUpStatType.ArmorPenetration, 2, 25f),
+            Stat("lv_defense", "护甲", "防御 +1。", LevelUpStatType.Defense, 1, 1f),
+            Stat("lv_health", "生命", "最大生命 +15，并立即恢复。", LevelUpStatType.MaxHealth, 1, 15f),
             Stat("lv_crit_rate", "精准", "暴击率 +3%。", LevelUpStatType.CritRate, 2, 3f),
-            Stat("lv_crit_effect", "致命", "暴击效果 +15%。", LevelUpStatType.CritEffect, 3, 15f),
-            Stat("lv_defense", "铁壁", "防御 +5。", LevelUpStatType.Defense, 2, 5f),
-            Stat("lv_cdr", "冷却精通", "冷却缩减 +3%。", LevelUpStatType.CooldownReduction, 2, 3f),
-            Stat("lv_exp", "学者", "经验获取 +10%。", LevelUpStatType.ExpBonus, 2, 10f),
-            Stat("lv_gold", "贪婪", "金币获取 +10%。", LevelUpStatType.GoldBonus, 2, 10f),
-            Stat("lv_ad_bonus", "攻势", "攻击增伤 +5%。", LevelUpStatType.AttackDamageBonus, 3, 5f),
-            Stat("lv_elem_bonus", "元素增幅", "元素攻击增伤 +8%。", LevelUpStatType.ElementalDamageBonus, 4, 8f)
+            Stat("lv_crit_effect", "致命", "暴击效果 +10%。", LevelUpStatType.CritEffect, 2, 10f),
+            Stat("lv_speed_pct", "迅捷", "移动速度 +3%。", LevelUpStatType.MoveSpeedPercent, 1, 3f)
+        };
+    }
+
+    public static List<GameItemEntry> CreateDefaultLevelUpEntries()
+    {
+        return new List<GameItemEntry>
+        {
+            Stat("lv_attack", "强攻", "攻击力 +15。", LevelUpStatType.Attack, 1, 15f),
+            Stat("lv_element", "元素之力", "元素攻击力 +5。", LevelUpStatType.ElementalAttack, 1, 5f),
+            Stat("lv_armor_pen", "破甲", "破防 +25。", LevelUpStatType.ArmorPenetration, 2, 25f),
+            Stat("lv_defense", "护甲", "防御 +1。", LevelUpStatType.Defense, 1, 1f),
+            Stat("lv_health", "生命", "最大生命 +15，并立即恢复。", LevelUpStatType.MaxHealth, 1, 15f),
+            Stat("lv_crit_rate", "精准", "暴击率 +3%。", LevelUpStatType.CritRate, 2, 3f),
+            Stat("lv_crit_effect", "致命", "暴击效果 +10%。", LevelUpStatType.CritEffect, 2, 10f),
+            Stat("lv_speed_pct", "迅捷", "移动速度 +3%。", LevelUpStatType.MoveSpeedPercent, 1, 3f)
         };
     }
 

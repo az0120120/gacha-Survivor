@@ -94,12 +94,16 @@ public static class ShopItemIconUtility
         {
             switch (item.WeaponType)
             {
-                case ShopWeaponType.Projectile:
-                    return new Color(0.45f, 0.7f, 1f);
-                case ShopWeaponType.Area:
-                    return new Color(0.55f, 0.85f, 0.45f);
-                case ShopWeaponType.DirectTarget:
-                    return new Color(0.85f, 0.45f, 1f);
+                case ShopWeaponType.DesertEagle:
+                    return new Color(1f, 0.55f, 0.25f);
+                case ShopWeaponType.Molotov:
+                    return new Color(1f, 0.4f, 0.15f);
+                case ShopWeaponType.Kunai:
+                    return new Color(1f, 0.92f, 0.25f);
+                case ShopWeaponType.Claw:
+                    return new Color(1f, 0.5f, 0.45f);
+                case ShopWeaponType.Ak:
+                    return new Color(0.75f, 0.55f, 0.35f);
             }
         }
 
@@ -117,9 +121,12 @@ public static class ShopItemIconUtility
             case ItemEffectType.ElementalAttackUp:
             case ItemEffectType.ElementalDamageBonusUp:
                 return new Color(0.55f, 0.45f, 0.95f);
+            case ItemEffectType.ArmorPenetrationUp:
+                return new Color(0.85f, 0.55f, 0.25f);
             case ItemEffectType.MaxHealthUp:
                 return new Color(0.95f, 0.35f, 0.4f);
             case ItemEffectType.MoveSpeedUp:
+            case ItemEffectType.MoveSpeedPercentUp:
                 return new Color(0.4f, 0.9f, 0.85f);
             case ItemEffectType.CritRateUp:
             case ItemEffectType.CritEffectUp:

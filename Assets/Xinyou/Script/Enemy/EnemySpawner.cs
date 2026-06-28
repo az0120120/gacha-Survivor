@@ -5,12 +5,19 @@ using UnityEngine;
 public class WaveSpawner : MonoBehaviour
 {
     [SerializeField] ObjectPool enemyPool;
+    [SerializeField] EnemyCatalog enemyCatalog;
     [SerializeField] Transform player;
     [SerializeField] int baseEnemiesPerWave = 6;
     [SerializeField] int enemiesIncreasePerWave = 3;
     [SerializeField] float spawnInterval = 0.6f;
     [SerializeField] float spawnMinRadius = 8f;
     [SerializeField] float spawnMaxRadius = 12f;
+    [SerializeField] EnemyArchetype[] spawnArchetypes =
+    {
+        EnemyArchetype.MeleeRush,
+        EnemyArchetype.RangedShooter,
+        EnemyArchetype.Harasser
+    };
 
     int currentWave;
     int enemiesToSpawn;
@@ -20,6 +27,7 @@ public class WaveSpawner : MonoBehaviour
 
     public int CurrentWave => currentWave;
     public bool IsWaveActive => waveActive;
+    public EnemyCatalog EnemyCatalog => enemyCatalog;
 
     public event Action<int> OnWaveStarted;
     public event Action<int> OnWaveCompleted;
@@ -28,6 +36,11 @@ public class WaveSpawner : MonoBehaviour
     {
         if (enemyPool == null)
             enemyPool = GetComponent<ObjectPool>();
+
+        if (enemyCatalog == null)
+            enemyCatalog = Resources.Load<EnemyCatalog>("EnemyCatalog");
+
+        EnsureProjectilePool();
     }
 
     void Start()
@@ -62,6 +75,11 @@ public class WaveSpawner : MonoBehaviour
             CompleteWave();
     }
 
+    public void StopWaves()
+    {
+        waveActive = false;
+    }
+
     public void StartNextWave()
     {
         currentWave++;
@@ -84,7 +102,37 @@ public class WaveSpawner : MonoBehaviour
         float distance = UnityEngine.Random.Range(spawnMinRadius, spawnMaxRadius);
         var offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance;
         var spawnPosition = (Vector2)player.position + offset;
-        enemyPool.Get(spawnPosition, Quaternion.identity);
+
+        GameObject enemyObject = enemyPool.Get(spawnPosition, Quaternion.identity);
+        if (enemyObject == null)
+            return;
+
+        var enemyStats = enemyObject.GetComponent<EnemyStats>();
+        var enemyAI = enemyObject.GetComponent<EnemyAI>();
+        EnemyArchetype archetype = PickSpawnArchetype();
+
+        if (enemyStats != null)
+        {
+            enemyStats.SetArchetype(archetype, enemyCatalog);
+            enemyAI?.ApplyArchetypeConfig(enemyStats.Definition);
+        }
+    }
+
+    EnemyArchetype PickSpawnArchetype()
+    {
+        if (spawnArchetypes == null || spawnArchetypes.Length == 0)
+            return EnemyArchetype.MeleeRush;
+
+        int index = UnityEngine.Random.Range(0, spawnArchetypes.Length);
+        return spawnArchetypes[index];
+    }
+
+    void EnsureProjectilePool()
+    {
+        if (FindAnyObjectByType<EnemyProjectilePool>() != null)
+            return;
+
+        gameObject.AddComponent<EnemyProjectilePool>();
     }
 }
 

@@ -97,7 +97,7 @@ public class ShopUI : MonoBehaviour
 
             slot.item = offers[i];
             slot.titleText.text = slot.item.ItemName;
-            slot.priceText.text = $"{slot.item.Price} 金币";
+            slot.priceText.text = $"{GetDisplayPrice(slot.item)} 金币";
             slot.background.color = i == selectedIndex ? SelectedSlotColor : NormalSlotColor;
             ShopItemIconUtility.ApplyIcon(slot.iconImage, slot.item);
         }
@@ -241,7 +241,7 @@ public class ShopUI : MonoBehaviour
             detailDescriptionText.text = selectedItem.Description;
 
         if (detailPriceText != null)
-            detailPriceText.text = $"价格: {selectedItem.Price} 金币  |  品级: {selectedItem.ItemTier}";
+            detailPriceText.text = $"价格: {GetDisplayPrice(selectedItem)} 金币  |  品级: {selectedItem.ItemTier}";
 
         ShopItemIconUtility.ApplyIcon(detailIconImage, selectedItem);
 
@@ -286,6 +286,14 @@ public class ShopUI : MonoBehaviour
     void UpdateGoldText()
     {
         UpdateGoldText(GoldWallet.Instance != null ? GoldWallet.Instance.Gold : 0);
+    }
+
+    int GetDisplayPrice(ShopItemDefinition item)
+    {
+        if (shopManager != null)
+            return shopManager.GetItemPrice(item);
+
+        return item != null ? item.Price : 0;
     }
 
     static GameObject CreatePanel(Transform parent, string name, Color color)

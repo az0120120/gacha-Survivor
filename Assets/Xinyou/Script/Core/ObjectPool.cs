@@ -12,16 +12,37 @@ public class ObjectPool : MonoBehaviour
 
     public int ActiveCount => active.Count;
 
+    public GameObject Prefab => prefab;
+
+    public void Setup(GameObject poolPrefab, int warmCount = 20)
+    {
+        if (poolPrefab == null)
+            return;
+
+        prefab = poolPrefab;
+        prewarmCount = warmCount;
+        EnsurePoolRoot();
+
+        if (available.Count == 0 && active.Count == 0)
+            Prewarm();
+    }
+
     void Awake()
     {
-        if (poolRoot == null)
-        {
-            var rootObject = new GameObject("PoolRoot");
-            poolRoot = rootObject.transform;
-            poolRoot.SetParent(transform, false);
-        }
+        EnsurePoolRoot();
 
-        Prewarm();
+        if (prefab != null)
+            Prewarm();
+    }
+
+    void EnsurePoolRoot()
+    {
+        if (poolRoot != null)
+            return;
+
+        var rootObject = new GameObject("PoolRoot");
+        poolRoot = rootObject.transform;
+        poolRoot.SetParent(transform, false);
     }
 
     public GameObject Get(Vector3 position, Quaternion rotation)
@@ -33,6 +54,7 @@ public class ObjectPool : MonoBehaviour
             ? available.Dequeue()
             : CreateInstance();
 
+        instance.transform.SetParent(null, true);
         instance.transform.SetPositionAndRotation(position, rotation);
         instance.SetActive(true);
         active.Add(instance);
@@ -75,7 +97,7 @@ public class ObjectPool : MonoBehaviour
         if (experienceOrb != null)
             experienceOrb.BindPool(this);
 
-        var projectile = instance.GetComponent<Projectile>();
+        var projectile = instance.GetComponent<Projectile>() ?? instance.GetComponentInChildren<Projectile>();
         if (projectile != null)
             projectile.BindPool(this);
 

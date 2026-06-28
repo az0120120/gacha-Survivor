@@ -1,6 +1,6 @@
 public enum EnemyArchetype
 {
-    Melee,
-    Ranged,
-    Boss
+    MeleeRush,
+    RangedShooter,
+    Harasser
 }

@@ -31,11 +31,17 @@ public static class ItemEffectApplier
             case ItemEffectType.ElementalAttackUp:
                 characterStats?.AddElementalAttack(StatMath.FloorToInt(item.EffectValue));
                 break;
+            case ItemEffectType.ArmorPenetrationUp:
+                characterStats?.AddArmorPenetration(StatMath.FloorToInt(item.EffectValue));
+                break;
             case ItemEffectType.MaxHealthUp:
                 playerHealth?.AddMaxHealthBonus(StatMath.FloorToInt(item.EffectValue));
                 break;
             case ItemEffectType.MoveSpeedUp:
                 characterStats?.AddMoveSpeed(item.EffectValue);
+                break;
+            case ItemEffectType.MoveSpeedPercentUp:
+                characterStats?.AddMoveSpeedPercent(item.EffectValue);
                 break;
             case ItemEffectType.CritRateUp:
                 characterStats?.AddCritRatePercent(item.EffectValue);

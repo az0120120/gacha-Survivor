@@ -49,7 +49,7 @@ public class ShopItemDefinition : ScriptableObject
         int itemPrice = 0,
         ShopSizeType sizeType = ShopSizeType.Large,
         bool once = true,
-        ShopWeaponType weapon = ShopWeaponType.Projectile,
+        ShopWeaponType weapon = ShopWeaponType.DesertEagle,
         float value = 0f,
         float value2 = 0f,
         Sprite itemIcon = null)

@@ -52,6 +52,18 @@ public abstract class WeaponBase : MonoBehaviour
         shop.TakeDamage(1f);
     }
 
+    protected void TryHitMapProp(Collider2D collider)
+    {
+        if (collider == null)
+            return;
+
+        var mapProp = collider.GetComponent<MapDestructibleProp>();
+        if (mapProp == null || !mapProp.IsActive)
+            return;
+
+        mapProp.TakeDamage(1f);
+    }
+
     protected void TryHitShopsInRadius(Vector2 center, float radius)
     {
         var filter = new ContactFilter2D
@@ -64,7 +76,10 @@ public abstract class WeaponBase : MonoBehaviour
         int count = Physics2D.OverlapCircle(center, radius, filter, buffer);
 
         for (int i = 0; i < count; i++)
+        {
             TryHitShop(buffer[i]);
+            TryHitMapProp(buffer[i]);
+        }
     }
 
     protected EnemyHealth FindNearestEnemy(float range)
@@ -96,5 +111,35 @@ public abstract class WeaponBase : MonoBehaviour
         }
 
         return nearest;
+    }
+
+    protected Vector2 GetDefaultAttackDirection()
+    {
+        var movement = GetComponent<PlayerMovement>();
+        if (movement != null)
+            return movement.LastFacingDirection;
+
+        return Vector2.right;
+    }
+
+    protected Vector2 GetAttackDirectionTowardTarget(float range)
+    {
+        var target = FindNearestEnemy(range);
+        if (target != null)
+        {
+            Vector2 direction = (Vector2)target.transform.position - (Vector2)transform.position;
+            if (direction.sqrMagnitude > 0.0001f)
+                return direction.normalized;
+        }
+
+        return GetDefaultAttackDirection();
+    }
+
+    protected void PlayAttackSound(AudioClip clip, float volume = 0.85f)
+    {
+        if (clip == null)
+            return;
+
+        AudioSource.PlayClipAtPoint(clip, transform.position, volume);
     }
 }
