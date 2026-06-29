@@ -68,6 +68,17 @@ public class EnemyProjectilePool : MonoBehaviour
         available.Enqueue(projectile);
     }
 
+    public void ReleaseAllActive()
+    {
+        if (active.Count == 0)
+            return;
+
+        var snapshot = new EnemyProjectile[active.Count];
+        active.CopyTo(snapshot);
+        for (int i = 0; i < snapshot.Length; i++)
+            Release(snapshot[i]);
+    }
+
     void Prewarm()
     {
         for (int i = 0; i < prewarmCount; i++)

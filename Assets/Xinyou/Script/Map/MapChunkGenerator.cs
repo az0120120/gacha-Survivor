@@ -63,6 +63,11 @@ public class MapChunkGenerator : MonoBehaviour
         UpdateActiveChunks();
     }
 
+    public void StopGeneration()
+    {
+        enabled = false;
+    }
+
     void EnsureChunksRoot()
     {
         if (chunksRoot != null)

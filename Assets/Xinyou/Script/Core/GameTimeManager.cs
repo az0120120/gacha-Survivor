@@ -33,6 +33,9 @@ public class GameTimeManager : MonoBehaviour
 
     void Update()
     {
+        if (VictoryManager.Instance != null && VictoryManager.Instance.IsSettlementOpen)
+            return;
+
         if (Time.timeScale <= 0f)
             return;
 
