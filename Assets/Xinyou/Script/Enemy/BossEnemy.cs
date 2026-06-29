@@ -71,8 +71,6 @@ public class BossBehavior : MonoBehaviour, IPoolable
     const float RangedMoveSpeed = 1.4f;
     const float PreferredRange = 7f;
     const float MinRange = 4.5f;
-    const float ProjectileSpeed = 7f;
-    const float S1mpleDodgeChance = 0.7f;
     const float S1mpleRetreatSpeed = 2f;
 
     BossDefinition definition;
@@ -124,7 +122,7 @@ public class BossBehavior : MonoBehaviour, IPoolable
         if (!isActive || definition == null || definition.behaviorType != BossBehaviorType.S1mple)
             return false;
 
-        return Random.value < S1mpleDodgeChance;
+        return Random.value < definition.dodgeChance;
     }
 
     public void ApplyKnockback(Vector2 direction, float force)
@@ -269,8 +267,8 @@ public class BossBehavior : MonoBehaviour, IPoolable
         EnemyProjectilePool.Instance.Fire(
             transform.position,
             direction,
-            enemyStats.Attack,
-            ProjectileSpeed,
+            GetRangedBulletDamage(),
+            GetProjectileSpeed(),
             rangedDefinition);
     }
 
@@ -282,6 +280,8 @@ public class BossBehavior : MonoBehaviour, IPoolable
         int count = Mathf.Max(1, definition.fanBulletCount);
         float halfAngle = definition.fanHalfAngle;
         float baseAngle = Mathf.Atan2(baseDirection.y, baseDirection.x) * Mathf.Rad2Deg;
+        int damage = GetRangedBulletDamage();
+        float speed = GetProjectileSpeed();
 
         for (int i = 0; i < count; i++)
         {
@@ -293,10 +293,24 @@ public class BossBehavior : MonoBehaviour, IPoolable
             EnemyProjectilePool.Instance.Fire(
                 transform.position,
                 direction,
-                enemyStats.Attack,
-                ProjectileSpeed,
+                damage,
+                speed,
                 rangedDefinition);
         }
+    }
+
+    int GetRangedBulletDamage()
+    {
+        if (rangedDefinition == null || enemyStats == null)
+            return enemyStats != null ? enemyStats.Attack : 0;
+
+        int gameMinutes = GameTimeManager.Instance != null ? GameTimeManager.Instance.GameMinutes : 0;
+        return rangedDefinition.baseAttack + rangedDefinition.attackBonusPerMinute * gameMinutes;
+    }
+
+    float GetProjectileSpeed()
+    {
+        return rangedDefinition != null ? rangedDefinition.projectileSpeed : 7f;
     }
 
     void UpdateS1mpleFacing()
@@ -308,7 +322,8 @@ public class BossBehavior : MonoBehaviour, IPoolable
         if (toPlayer.sqrMagnitude < 0.0001f)
             return;
 
-        spriteRenderer.flipX = toPlayer.x > 0f;
+        Vector2 awayFromPlayer = -toPlayer;
+        spriteRenderer.flipX = awayFromPlayer.x < 0f;
     }
 
     Vector2 GetDirectionToPlayer()

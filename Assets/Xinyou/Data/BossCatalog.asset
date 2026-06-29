@@ -20,7 +20,8 @@ MonoBehaviour:
     behaviorType: 0
     healthMultiplier: 15
     goldDropMultiplier: 10
-    shootInterval: 3
+    shootInterval: 0
+    dodgeChance: 0
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: fazeniko
@@ -31,6 +32,7 @@ MonoBehaviour:
     healthMultiplier: 15
     goldDropMultiplier: 10
     shootInterval: 3
+    dodgeChance: 0
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: s1mple
@@ -40,7 +42,8 @@ MonoBehaviour:
     behaviorType: 2
     healthMultiplier: 10
     goldDropMultiplier: 10
-    shootInterval: 3
+    shootInterval: 0
+    dodgeChance: 0.7
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: g2niko
@@ -51,6 +54,7 @@ MonoBehaviour:
     healthMultiplier: 25
     goldDropMultiplier: 10
     shootInterval: 2
+    dodgeChance: 0
     fanHalfAngle: 35
     fanBulletCount: 5
   - displayName: "\u730E\u9E70niko"
@@ -61,5 +65,6 @@ MonoBehaviour:
     healthMultiplier: 40
     goldDropMultiplier: 10
     shootInterval: 0.5
+    dodgeChance: 0
     fanHalfAngle: 40
     fanBulletCount: 7

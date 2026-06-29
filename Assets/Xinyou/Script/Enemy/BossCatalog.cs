@@ -18,12 +18,17 @@ public class BossDefinition
     public Color tintColor = Color.white;
     public Vector3 localScale = new Vector3(0.45f, 0.45f, 0.45f);
     public BossBehaviorType behaviorType = BossBehaviorType.Xiaoxia;
+    [Tooltip("相对近战普通怪的最大生命值倍率")]
     public float healthMultiplier = 15f;
     [Tooltip("相对普通怪物的金币掉落倍率")]
     public int goldDropMultiplier = 10;
+    [Tooltip("射击间隔（秒）。fazeniko=3，g2niko=2，猎鹰niko=0.5")]
     public float shootInterval = 3f;
-    [Tooltip("扇形弹幕半角（度）")]
+    [Tooltip("s1mple 闪避攻击的概率")]
+    [Range(0f, 1f)] public float dodgeChance = 0.7f;
+    [Tooltip("扇形弹幕半角（度），猎鹰niko 使用")]
     public float fanHalfAngle = 35f;
+    [Tooltip("扇形弹幕数量，猎鹰niko 使用")]
     public int fanBulletCount = 5;
 }
 
@@ -53,13 +58,18 @@ public class BossCatalog : ScriptableObject
         {
             Create("小虾", BossBehaviorType.Xiaoxia, 15f, 3f),
             Create("fazeniko", BossBehaviorType.Fazeniko, 15f, 3f),
-            Create("s1mple", BossBehaviorType.S1mple, 10f, 0f),
+            Create("s1mple", BossBehaviorType.S1mple, 10f, 0f, 0.7f),
             Create("g2niko", BossBehaviorType.G2niko, 25f, 2f),
             Create("猎鹰niko", BossBehaviorType.FalconNiko, 40f, 0.5f)
         };
     }
 
-    static BossDefinition Create(string name, BossBehaviorType type, float healthMultiplier, float shootInterval)
+    static BossDefinition Create(
+        string name,
+        BossBehaviorType type,
+        float healthMultiplier,
+        float shootInterval,
+        float dodgeChance = 0f)
     {
         var definition = new BossDefinition
         {
@@ -68,6 +78,7 @@ public class BossCatalog : ScriptableObject
             healthMultiplier = healthMultiplier,
             goldDropMultiplier = 10,
             shootInterval = shootInterval,
+            dodgeChance = dodgeChance,
             localScale = new Vector3(0.55f, 0.55f, 0.55f)
         };
 

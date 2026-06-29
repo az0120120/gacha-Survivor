@@ -65,8 +65,8 @@ public class EnemyStats : MonoBehaviour
 
         maxHealth = StatMath.FloorToInt(
             EnemyStatScaler.GetMaxHealth(EnemyArchetype.MeleeRush, gameMinutes) * bossDefinition.healthMultiplier);
-        attack = usesRangedAttack && definition != null
-            ? definition.baseAttack + definition.attackBonusPerMinute * gameMinutes
+        attack = usesRangedAttack
+            ? GetRangedSmallEnemyAttack(catalog, gameMinutes)
             : EnemyStatScaler.GetAttack(gameMinutes);
         defense = EnemyStatScaler.GetDefense(gameMinutes);
 
@@ -85,6 +85,15 @@ public class EnemyStats : MonoBehaviour
 
         spriteRenderer.color = bossDefinition.tintColor;
         transform.localScale = bossDefinition.localScale;
+    }
+
+    static int GetRangedSmallEnemyAttack(EnemyCatalog catalog, int gameMinutes)
+    {
+        var rangedDefinition = catalog != null ? catalog.GetDefinition(EnemyArchetype.RangedShooter) : null;
+        if (rangedDefinition == null)
+            return EnemyStatScaler.GetAttack(gameMinutes);
+
+        return rangedDefinition.baseAttack + rangedDefinition.attackBonusPerMinute * gameMinutes;
     }
 
     public void ApplyArchetypeVisual()
