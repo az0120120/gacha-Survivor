@@ -15,12 +15,16 @@ public class GameHUD : MonoBehaviour
     [SerializeField] Color healthBarLowColor = new Color(0.95f, 0.3f, 0.3f);
     [SerializeField] RectTransform shopArrowRoot;
     [SerializeField] Image shopArrowImage;
+    [SerializeField] RectTransform bossArrowRoot;
+    [SerializeField] Image bossArrowImage;
     [SerializeField] Transform player;
     [SerializeField] float shopArrowScreenOffset = 120f;
+    [SerializeField] float bossArrowScreenOffset = 120f;
     [SerializeField] float screenEdgeMargin = 48f;
     [SerializeField] Color bossBarFullColor = new Color(0.95f, 0.35f, 0.25f);
     [SerializeField] Color bossBarLowColor = new Color(0.75f, 0.1f, 0.1f);
     [SerializeField] Color bossNameColor = new Color(1f, 0.88f, 0.55f);
+    [SerializeField] Color bossArrowColor = new Color(0.95f, 0.35f, 0.25f, 0.95f);
 
     RectTransform canvasRect;
     Camera mainCamera;
@@ -87,6 +91,7 @@ public class GameHUD : MonoBehaviour
     {
         RefreshTime();
         UpdateShopArrow();
+        UpdateBossArrow();
         UpdateBossHealthBar();
     }
 
@@ -381,7 +386,7 @@ public class GameHUD : MonoBehaviour
     {
         if (shopArrowRoot == null || player == null)
         {
-            SetShopArrowVisible(false);
+            SetArrowVisible(shopArrowRoot, false);
             return;
         }
 
@@ -390,50 +395,102 @@ public class GameHUD : MonoBehaviour
 
         if (mainCamera == null || canvasRect == null)
         {
-            SetShopArrowVisible(false);
+            SetArrowVisible(shopArrowRoot, false);
             return;
         }
 
         ShopWorldEntity targetShop = FindNearestOffScreenShop();
         if (targetShop == null)
         {
-            SetShopArrowVisible(false);
+            SetArrowVisible(shopArrowRoot, false);
+            return;
+        }
+
+        Color shopColor = targetShop.ShopSize == ShopSizeType.Large
+            ? new Color(1f, 0.82f, 0.2f, 0.95f)
+            : new Color(0.3f, 0.75f, 1f, 0.95f);
+
+        UpdateOffscreenTargetArrow(
+            shopArrowRoot,
+            shopArrowImage,
+            targetShop.transform,
+            targetShop.IsAlive,
+            shopArrowScreenOffset,
+            shopColor);
+    }
+
+    void UpdateBossArrow()
+    {
+        EnsureBossArrow();
+
+        if (bossSpawner == null)
+            bossSpawner = FindFirstObjectByType<BossSpawner>();
+
+        BossEnemy boss = bossSpawner != null ? bossSpawner.ActiveBoss : null;
+        EnemyHealth bossHealth = boss != null ? boss.GetComponent<EnemyHealth>() : null;
+        Transform bossTransform = boss != null ? boss.transform : null;
+
+        UpdateOffscreenTargetArrow(
+            bossArrowRoot,
+            bossArrowImage,
+            bossTransform,
+            bossHealth != null && bossHealth.IsAlive,
+            bossArrowScreenOffset,
+            bossArrowColor);
+    }
+
+    void UpdateOffscreenTargetArrow(
+        RectTransform arrowRoot,
+        Image arrowImage,
+        Transform target,
+        bool targetValid,
+        float screenOffset,
+        Color arrowColor)
+    {
+        if (arrowRoot == null || !targetValid || target == null || player == null)
+        {
+            SetArrowVisible(arrowRoot, false);
+            return;
+        }
+
+        if (mainCamera == null)
+            mainCamera = Camera.main;
+
+        if (mainCamera == null || canvasRect == null)
+        {
+            SetArrowVisible(arrowRoot, false);
+            return;
+        }
+
+        Vector3 targetViewport = mainCamera.WorldToViewportPoint(target.position);
+        if (targetViewport.z <= 0f || IsInsideViewport(targetViewport))
+        {
+            SetArrowVisible(arrowRoot, false);
             return;
         }
 
         Vector3 playerViewport = mainCamera.WorldToViewportPoint(player.position);
-        Vector3 shopViewport = mainCamera.WorldToViewportPoint(targetShop.transform.position);
-        if (shopViewport.z <= 0f)
-        {
-            SetShopArrowVisible(false);
-            return;
-        }
-
         Vector2 playerScreen = ViewportToScreen(playerViewport);
-        Vector2 shopScreen = ViewportToScreen(shopViewport);
-        Vector2 direction = shopScreen - playerScreen;
+        Vector2 targetScreen = ViewportToScreen(targetViewport);
+        Vector2 direction = targetScreen - playerScreen;
         if (direction.sqrMagnitude < 0.0001f)
             direction = Vector2.up;
 
         direction.Normalize();
-        Vector2 arrowScreen = playerScreen + direction * shopArrowScreenOffset;
+        Vector2 arrowScreen = playerScreen + direction * screenOffset;
         arrowScreen.x = Mathf.Clamp(arrowScreen.x, screenEdgeMargin, Screen.width - screenEdgeMargin);
         arrowScreen.y = Mathf.Clamp(arrowScreen.y, screenEdgeMargin, Screen.height - screenEdgeMargin);
 
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, arrowScreen, null, out Vector2 localPoint))
-            shopArrowRoot.anchoredPosition = localPoint;
+            arrowRoot.anchoredPosition = localPoint;
 
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        shopArrowRoot.localRotation = Quaternion.Euler(0f, 0f, angle);
+        arrowRoot.localRotation = Quaternion.Euler(0f, 0f, angle);
 
-        if (shopArrowImage != null)
-        {
-            shopArrowImage.color = targetShop.ShopSize == ShopSizeType.Large
-                ? new Color(1f, 0.82f, 0.2f, 0.95f)
-                : new Color(0.3f, 0.75f, 1f, 0.95f);
-        }
+        if (arrowImage != null)
+            arrowImage.color = arrowColor;
 
-        SetShopArrowVisible(true);
+        SetArrowVisible(arrowRoot, true);
     }
 
     ShopWorldEntity FindNearestOffScreenShop()
@@ -481,10 +538,22 @@ public class GameHUD : MonoBehaviour
         return new Vector2(viewport.x * Screen.width, viewport.y * Screen.height);
     }
 
-    void SetShopArrowVisible(bool visible)
+    void SetArrowVisible(RectTransform arrowRoot, bool visible)
     {
-        if (shopArrowRoot != null)
-            shopArrowRoot.gameObject.SetActive(visible);
+        if (arrowRoot != null)
+            arrowRoot.gameObject.SetActive(visible);
+    }
+
+    void EnsureBossArrow()
+    {
+        if (bossArrowRoot != null)
+            return;
+
+        CacheReferences();
+        if (canvasRect == null)
+            return;
+
+        bossArrowRoot = CreateDirectionArrow(canvasRect, "BossArrow", bossArrowColor, out bossArrowImage);
     }
 
     void CreateDefaultUI()
@@ -512,7 +581,9 @@ public class GameHUD : MonoBehaviour
         killText = CreateLabel(canvasObject.transform, "KillText", "击杀: 0", 28f, new Color(1f, 0.55f, 0.55f),
             new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(24f, -164f), new Vector2(260f, 40f));
 
-        shopArrowRoot = CreateShopArrow(canvasObject.transform);
+        shopArrowRoot = CreateDirectionArrow(canvasObject.transform, "ShopArrow",
+            new Color(0.3f, 0.75f, 1f, 0.95f), out shopArrowImage);
+        bossArrowRoot = CreateDirectionArrow(canvasObject.transform, "BossArrow", bossArrowColor, out bossArrowImage);
     }
 
     void CreateHealthBar(Transform parent)
@@ -598,18 +669,18 @@ public class GameHUD : MonoBehaviour
         return label;
     }
 
-    RectTransform CreateShopArrow(Transform parent)
+    RectTransform CreateDirectionArrow(Transform parent, string objectName, Color color, out Image arrowImage)
     {
-        var arrowObject = new GameObject("ShopArrow");
+        var arrowObject = new GameObject(objectName);
         arrowObject.transform.SetParent(parent, false);
 
         var rectTransform = arrowObject.AddComponent<RectTransform>();
         rectTransform.sizeDelta = new Vector2(36f, 36f);
 
-        shopArrowImage = arrowObject.AddComponent<Image>();
-        shopArrowImage.sprite = CreateArrowSprite();
-        shopArrowImage.color = new Color(0.3f, 0.75f, 1f, 0.95f);
-        shopArrowImage.raycastTarget = false;
+        arrowImage = arrowObject.AddComponent<Image>();
+        arrowImage.sprite = CreateArrowSprite();
+        arrowImage.color = color;
+        arrowImage.raycastTarget = false;
 
         arrowObject.SetActive(false);
         return rectTransform;
