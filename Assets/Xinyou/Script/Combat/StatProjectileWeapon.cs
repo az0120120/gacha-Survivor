@@ -22,6 +22,16 @@ public abstract class StatProjectileWeapon : WeaponBase
     [SerializeField] AudioClip attackClip;
     [SerializeField] [Range(0f, 1f)] float attackVolume = 0.85f;
 
+    [Header("Muzzle Flash")]
+    [SerializeField] Sprite muzzleFlashSprite;
+    [SerializeField] Color muzzleFlashColor = new Color(1f, 0.85f, 0.35f, 0.9f);
+    [SerializeField] float muzzleFlashDuration = 0.08f;
+    [SerializeField] float muzzleFlashScale = 0.35f;
+    [SerializeField] float muzzleFlashOffset = 0.35f;
+    [Tooltip("贴图默认朝向与发射方向 (+X) 的夹角")]
+    [SerializeField] float muzzleFlashFacingOffset;
+    [SerializeField] int muzzleFlashSortingOrder = 13;
+
     float fireTimer;
     SpriteRenderer weaponRenderer;
 
@@ -150,7 +160,55 @@ public abstract class StatProjectileWeapon : WeaponBase
             pierceCount,
             projectileSprite);
 
+        SpawnMuzzleFlash(direction);
         PlayAttackSound(attackClip, attackVolume);
+    }
+
+    void SpawnMuzzleFlash(Vector2 direction)
+    {
+        if (direction.sqrMagnitude < 0.0001f)
+            direction = GetDefaultAttackDirection();
+
+        direction = direction.normalized;
+
+        var flashObject = new GameObject("MuzzleFlash");
+        flashObject.transform.position = transform.position + (Vector3)(direction * muzzleFlashOffset);
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        flashObject.transform.rotation = Quaternion.Euler(0f, 0f, angle + muzzleFlashFacingOffset);
+        flashObject.transform.localScale = Vector3.one * muzzleFlashScale;
+
+        var renderer = flashObject.AddComponent<SpriteRenderer>();
+        renderer.sprite = muzzleFlashSprite != null ? muzzleFlashSprite : CreateFallbackMuzzleFlashSprite();
+        renderer.color = muzzleFlashColor;
+        renderer.sortingOrder = muzzleFlashSortingOrder;
+
+        flashObject.AddComponent<TimedSpriteFade>().Begin(muzzleFlashDuration);
+    }
+
+    static Sprite CreateFallbackMuzzleFlashSprite()
+    {
+        const int width = 24;
+        const int height = 16;
+        var texture = new Texture2D(width, height, TextureFormat.RGBA32, false);
+
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                float nx = x / (float)(width - 1);
+                float ny = (y / (float)(height - 1) - 0.5f) * 2f;
+                float core = Mathf.Clamp01(1f - nx * 1.15f);
+                float edge = Mathf.Clamp01(1f - Mathf.Abs(ny));
+                float alpha = core * edge;
+                var color = Color.Lerp(new Color(1f, 0.55f, 0.1f, 1f), new Color(1f, 0.95f, 0.45f, 1f), nx);
+                color.a = alpha;
+                texture.SetPixel(x, y, color);
+            }
+        }
+
+        texture.Apply();
+        return Sprite.Create(texture, new Rect(0f, 0f, width, height), new Vector2(0f, 0.5f), 16f);
     }
 
     void ApplyWeaponVisual()

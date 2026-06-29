@@ -1750,6 +1750,13 @@ MonoBehaviour:
   pierceCount: 2
   attackClip: {fileID: 8300000, guid: 5a0e80b55e39a3647b79de286d1eda11, type: 3}
   attackVolume: 0.85
+  muzzleFlashSprite: {fileID: 0}
+  muzzleFlashColor: {r: 1, g: 0.85, b: 0.35, a: 0.9}
+  muzzleFlashDuration: 0.08
+  muzzleFlashScale: 0.35
+  muzzleFlashOffset: 0.35
+  muzzleFlashFacingOffset: 0
+  muzzleFlashSortingOrder: 13
 --- !u!114 &2143937460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1773,6 +1780,13 @@ MonoBehaviour:
   pierceCount: 2
   attackClip: {fileID: 8300000, guid: 6075f6ee5bc8d4a47aec3d5f78bfce1e, type: 3}
   attackVolume: 0.85
+  muzzleFlashSprite: {fileID: 0}
+  muzzleFlashColor: {r: 1, g: 0.85, b: 0.35, a: 0.9}
+  muzzleFlashDuration: 0.08
+  muzzleFlashScale: 0.35
+  muzzleFlashOffset: 0.35
+  muzzleFlashFacingOffset: 0
+  muzzleFlashSortingOrder: 13
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
