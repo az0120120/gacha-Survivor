@@ -7,7 +7,6 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] ObjectPool enemyPool;
     [SerializeField] EnemyCatalog enemyCatalog;
     [SerializeField] Transform player;
-<<<<<<< HEAD
 
     [Header("Spawn Cycle")]
     [Tooltip("每多少秒触发一批刷怪")]
@@ -19,10 +18,6 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] float spawnCountSinAmplitude = 30f;
 
     [Header("Spawn Placement")]
-=======
-    [SerializeField] int baseEnemiesPerWave = 6;
-    [SerializeField] int enemiesIncreasePerWave = 3;
->>>>>>> parent of a44cd50 (Update EnemySpawner.cs)
     [SerializeField] float spawnInterval = 0.6f;
     [SerializeField] float spawnMinRadius = 11f;
     [SerializeField] float spawnMaxRadius = 16f;
@@ -36,6 +31,7 @@ public class WaveSpawner : MonoBehaviour
     int currentWave;
     int pendingSpawnCount;
     float spawnTimer;
+    float waveCycleTimer;
     bool waveActive;
 
     public int CurrentWave => currentWave;
@@ -77,24 +73,21 @@ public class WaveSpawner : MonoBehaviour
             if (spawnTimer <= 0f)
             {
                 spawnTimer = spawnInterval;
-<<<<<<< HEAD
                 if (SpawnEnemy())
                 {
                     pendingSpawnCount--;
                     if (pendingSpawnCount <= 0)
                         OnWaveCompleted?.Invoke(currentWave);
                 }
-=======
-                SpawnEnemy();
-                enemiesSpawned++;
->>>>>>> parent of a44cd50 (Update EnemySpawner.cs)
             }
-
-            return;
         }
 
-        if (enemyPool.ActiveCount <= 0)
-            CompleteWave();
+        waveCycleTimer -= Time.deltaTime;
+        if (waveCycleTimer <= 0f)
+        {
+            waveCycleTimer = waveCycleInterval;
+            BeginSpawnBatch();
+        }
     }
 
     public void StopWaves()
@@ -104,7 +97,6 @@ public class WaveSpawner : MonoBehaviour
 
     public void StartNextWave()
     {
-<<<<<<< HEAD
         waveActive = true;
         waveCycleTimer = waveCycleInterval;
         BeginSpawnBatch();
@@ -131,27 +123,11 @@ public class WaveSpawner : MonoBehaviour
             spawnCountBase,
             spawnCountPerMinute,
             spawnCountSinAmplitude);
-=======
-        currentWave++;
-        enemiesToSpawn = baseEnemiesPerWave + (currentWave - 1) * enemiesIncreasePerWave;
-        enemiesSpawned = 0;
->>>>>>> parent of a44cd50 (Update EnemySpawner.cs)
         spawnTimer = 0f;
-        waveActive = true;
         OnWaveStarted?.Invoke(currentWave);
     }
 
-<<<<<<< HEAD
     bool SpawnEnemy()
-=======
-    void CompleteWave()
-    {
-        waveActive = false;
-        OnWaveCompleted?.Invoke(currentWave);
-    }
-
-    void SpawnEnemy()
->>>>>>> parent of a44cd50 (Update EnemySpawner.cs)
     {
         float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         float distance = UnityEngine.Random.Range(spawnMinRadius, spawnMaxRadius);
