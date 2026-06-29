@@ -12,13 +12,22 @@ public static class DamageCalculator
         CharacterStats attacker,
         EnemyStats defender,
         float attackMultiplierK,
-        float specialMultiplier = 1f)
+        float specialMultiplier = 1f,
+        bool useWeaponDamageContext = false,
+        WeaponDamageContext weaponContext = default)
     {
         if (attacker == null || defender == null)
             return default;
 
+        int armorPenetration = useWeaponDamageContext
+            ? weaponContext.ArmorPenetration
+            : attacker.ArmorPenetration;
+        int elementalAttack = useWeaponDamageContext
+            ? weaponContext.ElementalAttack
+            : attacker.ElementalAttack;
+
         int gameMinutes = GetGameMinutes();
-        float defenseReduction = CalculateDefenseReduction(defender.Defense, attacker.ArmorPenetration, gameMinutes);
+        float defenseReduction = CalculateDefenseReduction(defender.Defense, armorPenetration, gameMinutes);
 
         float attackPower = attackMultiplierK
                             * attacker.Attack
@@ -26,7 +35,7 @@ public static class DamageCalculator
                             * (1f + attacker.AttackDamageBonus);
 
         float elementalPower = attackMultiplierK
-                               * attacker.ElementalAttack
+                               * elementalAttack
                                * (1f + attacker.ElementalDamageBonus);
 
         float totalDamage = attackPower + elementalPower;

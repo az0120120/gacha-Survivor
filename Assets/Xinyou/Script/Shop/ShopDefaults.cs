@@ -21,7 +21,23 @@ public static class ShopDefaults
             CreateMinor("w_range_claw", "虾钳延伸", "虾钳攻击范围 +20%。", 35, ShopWeaponType.Claw, ItemEffectType.WeaponRangeUp, 20f, 1),
             CreateMinor("w_cd_claw", "虾钳加速", "虾钳冷却缩减 +10%。", 37, ShopWeaponType.Claw, ItemEffectType.WeaponCooldownUp, 10f, 1),
             CreateMinor("w_range_ak", "AK 延伸", "AK 攻击范围 +20%。", 42, ShopWeaponType.Ak, ItemEffectType.WeaponRangeUp, 20f, 3),
-            CreateMinor("w_cd_ak", "AK 速射", "AK 冷却缩减 +10%。", 44, ShopWeaponType.Ak, ItemEffectType.WeaponCooldownUp, 10f, 3)
+            CreateMinor("w_cd_ak", "AK 速射", "AK 冷却缩减 +10%。", 44, ShopWeaponType.Ak, ItemEffectType.WeaponCooldownUp, 10f, 3),
+
+            CreateMinor("w_proj_desert_eagle", "火沙鹰齐射", "火沙鹰发射数量 +1。", 250, ShopWeaponType.DesertEagle, ItemEffectType.WeaponProjectileCountUp, 1f, 2),
+            CreateMinor("w_ap_desert_eagle", "火沙鹰破甲", "火沙鹰破防 +30%。", 35, ShopWeaponType.DesertEagle, ItemEffectType.WeaponArmorPenUp, 30f, 2),
+            CreateMinor("w_elem_desert_eagle", "火沙鹰元素", "火沙鹰元素攻击力 +30%。", 35, ShopWeaponType.DesertEagle, ItemEffectType.WeaponElementalAttackUp, 30f, 2),
+            CreateMinor("w_proj_molotov", "燃烧齐射", "燃烧瓶发射数量 +1。", 250, ShopWeaponType.Molotov, ItemEffectType.WeaponProjectileCountUp, 1f, 2),
+            CreateMinor("w_ap_molotov", "燃烧破甲", "燃烧瓶破防 +30%。", 35, ShopWeaponType.Molotov, ItemEffectType.WeaponArmorPenUp, 30f, 2),
+            CreateMinor("w_elem_molotov", "燃烧元素", "燃烧瓶元素攻击力 +30%。", 35, ShopWeaponType.Molotov, ItemEffectType.WeaponElementalAttackUp, 30f, 2),
+            CreateMinor("w_proj_kunai", "苦无齐射", "苦无发射数量 +1。", 250, ShopWeaponType.Kunai, ItemEffectType.WeaponProjectileCountUp, 1f, 2),
+            CreateMinor("w_ap_kunai", "苦无破甲", "苦无破防 +30%。", 35, ShopWeaponType.Kunai, ItemEffectType.WeaponArmorPenUp, 30f, 2),
+            CreateMinor("w_elem_kunai", "苦无元素", "苦无元素攻击力 +30%。", 35, ShopWeaponType.Kunai, ItemEffectType.WeaponElementalAttackUp, 30f, 2),
+            CreateMinor("w_proj_claw", "虾钳齐射", "虾钳发射数量 +1。", 250, ShopWeaponType.Claw, ItemEffectType.WeaponProjectileCountUp, 1f, 1),
+            CreateMinor("w_ap_claw", "虾钳破甲", "虾钳破防 +30%。", 35, ShopWeaponType.Claw, ItemEffectType.WeaponArmorPenUp, 30f, 1),
+            CreateMinor("w_elem_claw", "虾钳元素", "虾钳元素攻击力 +30%。", 35, ShopWeaponType.Claw, ItemEffectType.WeaponElementalAttackUp, 30f, 1),
+            CreateMinor("w_proj_ak", "AK 齐射", "AK 发射数量 +1。", 250, ShopWeaponType.Ak, ItemEffectType.WeaponProjectileCountUp, 1f, 3),
+            CreateMinor("w_ap_ak", "AK 破甲", "AK 破防 +30%。", 35, ShopWeaponType.Ak, ItemEffectType.WeaponArmorPenUp, 30f, 3),
+            CreateMinor("w_elem_ak", "AK 元素", "AK 元素攻击力 +30%。", 35, ShopWeaponType.Ak, ItemEffectType.WeaponElementalAttackUp, 30f, 3)
         };
     }
 

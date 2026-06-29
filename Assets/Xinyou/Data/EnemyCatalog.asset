@@ -61,9 +61,9 @@ MonoBehaviour:
     minRange: 4.5
     shootInterval: 1.4
     projectileSpeed: 7
-    projectileSprite: {fileID: 21300000, guid: 5eeff78ba309b7947bcdd5569666085c, type: 3}
+    projectileSprite: {fileID: 21300000, guid: a2ab2a9ee1cac17498edd2ba6d9693c8, type: 3}
     projectileColor: {r: 1, g: 1, b: 1, a: 0.95}
-    projectileScale: 1
+    projectileScale: 0.48
     harasserCruiseSpeed: 1.4
     harasserDashSpeed: 7
     harasserPauseDuration: 0.55
@@ -93,7 +93,7 @@ MonoBehaviour:
     projectileColor: {r: 1, g: 0.35, b: 0.35, a: 0.95}
     projectileScale: 1
     harasserCruiseSpeed: 1.4
-    harasserDashSpeed: 7
+    harasserDashSpeed: 12
     harasserPauseDuration: 0.55
-    harasserDashDuration: 0.4
+    harasserDashDuration: 0.6
     harasserRecoverDuration: 0.75

@@ -1,8 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [AddComponentMenu("GachaSurvivor/Map Prop Grid Spawner")]
 public class MapPropGridSpawner : MonoBehaviour
 {
+    [Header("Chunks")]
+    [SerializeField] MapChunkGenerator mapChunkGenerator;
+    [SerializeField] Vector2 chunkSize = new Vector2(10f, 10f);
+    [SerializeField] bool autoChunkSizeFromCamera = true;
+    [SerializeField] float cameraChunkPadding = 0f;
+    [SerializeField] float chunkCheckInterval = 0.2f;
+    [SerializeField] bool preloadAdjacentChunks = true;
+    [Tooltip("以当前区块为中心，向四周预加载的区块层数（1 = 3×3）")]
+    [SerializeField] int adjacentChunkRadius = 1;
+
     [Header("Grid")]
     [Tooltip("网格间距，15cm = 0.15")]
     [SerializeField] float gridStep = 0.15f;
@@ -10,17 +21,21 @@ public class MapPropGridSpawner : MonoBehaviour
     [SerializeField] [Range(0f, 1f)] float cellSpawnChance = 0.35f;
     [Tooltip("在格子内部随机偏移位置")]
     [SerializeField] bool randomizePositionInCell = true;
-    [SerializeField] bool useCameraViewArea = true;
-    [SerializeField] float cameraAreaPadding = 1f;
-    [SerializeField] Vector2 areaSize = new Vector2(8f, 8f);
-    [SerializeField] Vector2 areaCenterOffset = Vector2.zero;
     [SerializeField] float playerSpawnClearRadius = 1.2f;
-    [SerializeField] Transform spawnCenter;
 
     [Header("Destructible")]
     [SerializeField] Sprite destructibleSprite;
+    [SerializeField] float destructibleSpriteScale = 1f;
     [SerializeField] float destructibleColliderRadius = 0.08f;
     [SerializeField] int destructibleSortingOrder = 2;
+    [SerializeField] int destructibleMaxHealth = 20;
+
+    [Header("Destructible Wander")]
+    [SerializeField] bool destructibleWanderEnabled = true;
+    [Tooltip("以生成点为中心的可游荡半径")]
+    [SerializeField] float destructibleWanderRadius = 0.45f;
+    [SerializeField] float destructibleWanderSpeed = 0.35f;
+    [SerializeField] float destructibleWanderRetargetInterval = 2f;
 
     [Header("Audio")]
     [SerializeField] AudioClip breakClip;
@@ -40,14 +55,31 @@ public class MapPropGridSpawner : MonoBehaviour
         MapPropDropEntry.CreateDefault(MapPropDropType.SitTight, 10f)
     };
 
+    readonly HashSet<Vector2Int> generatedChunks = new HashSet<Vector2Int>();
+
     Transform propsRoot;
+    Transform player;
     float lastBreakSoundTime;
+    float chunkCheckTimer;
+    Vector2Int currentPlayerChunk = new Vector2Int(int.MinValue, int.MinValue);
 
     void Start()
     {
         EnsureStatusEffects();
         EnsurePropsRoot();
-        SpawnGrid();
+        ResolveChunkSize();
+        CachePlayer();
+        UpdateActiveChunk();
+    }
+
+    void Update()
+    {
+        chunkCheckTimer -= Time.deltaTime;
+        if (chunkCheckTimer > 0f)
+            return;
+
+        chunkCheckTimer = chunkCheckInterval;
+        UpdateActiveChunk();
     }
 
     void EnsureStatusEffects()
@@ -66,28 +98,97 @@ public class MapPropGridSpawner : MonoBehaviour
         propsRoot.SetParent(transform, false);
     }
 
-    void SpawnGrid()
+    void CachePlayer()
     {
-        if (gridStep <= 0f)
+        if (player != null)
             return;
 
-        Vector2 spawnArea = ResolveAreaSize();
-        if (spawnArea.x <= 0f || spawnArea.y <= 0f)
+        var playerObject = GameObject.FindWithTag("Player");
+        if (playerObject != null)
+            player = playerObject.transform;
+    }
+
+    void ResolveChunkSize()
+    {
+        if (mapChunkGenerator != null)
+        {
+            mapChunkGenerator.ResolveChunkSize();
+            chunkSize = mapChunkGenerator.ChunkSize;
+            return;
+        }
+
+        if (!autoChunkSizeFromCamera)
             return;
 
-        Vector2 center = GetSpawnCenter();
-        Vector2 min = center - spawnArea * 0.5f;
-        Vector2 playerPosition = GetPlayerPosition(center);
+        chunkSize = MapChunkGrid.ResolveChunkSizeFromCamera(chunkSize, cameraChunkPadding);
+    }
+
+    void UpdateActiveChunk()
+    {
+        CachePlayer();
+        ResolveChunkSize();
+        if (player == null || chunkSize.x <= 0f || chunkSize.y <= 0f || gridStep <= 0f)
+            return;
+
+        Vector2Int playerChunk = WorldToChunk(player.position);
+        currentPlayerChunk = playerChunk;
+        EnsureChunksAround(playerChunk);
+    }
+
+    void EnsureChunksAround(Vector2Int centerChunk)
+    {
+        int radius = GetAdjacentChunkRadius();
+
+        for (int offsetY = -radius; offsetY <= radius; offsetY++)
+        {
+            for (int offsetX = -radius; offsetX <= radius; offsetX++)
+            {
+                var chunkCoord = new Vector2Int(centerChunk.x + offsetX, centerChunk.y + offsetY);
+                TryGenerateChunk(chunkCoord);
+            }
+        }
+    }
+
+    int GetAdjacentChunkRadius()
+    {
+        if (mapChunkGenerator != null)
+            return mapChunkGenerator.PreloadAdjacentChunks
+                ? Mathf.Max(0, mapChunkGenerator.AdjacentChunkRadius)
+                : 0;
+
+        return preloadAdjacentChunks ? Mathf.Max(0, adjacentChunkRadius) : 0;
+    }
+
+    void TryGenerateChunk(Vector2Int chunkCoord)
+    {
+        if (generatedChunks.Contains(chunkCoord))
+            return;
+
+        GenerateChunk(chunkCoord);
+        generatedChunks.Add(chunkCoord);
+    }
+
+    void GenerateChunk(Vector2Int chunkCoord)
+    {
+        Vector2 chunkMin = ChunkToWorldMin(chunkCoord);
+        Vector2 playerPosition = player != null ? (Vector2)player.position : chunkMin;
         float clearRadiusSqr = playerSpawnClearRadius * playerSpawnClearRadius;
 
-        for (float y = min.y; y <= min.y + spawnArea.y + 0.0001f; y += gridStep)
+        var chunkRoot = new GameObject($"MapChunk_{chunkCoord.x}_{chunkCoord.y}");
+        chunkRoot.transform.SetParent(propsRoot, false);
+        chunkRoot.transform.position = chunkMin;
+
+        Random.State randomBackup = Random.state;
+        Random.InitState(GetChunkSeed(chunkCoord));
+
+        for (float y = 0f; y <= chunkSize.y + 0.0001f; y += gridStep)
         {
-            for (float x = min.x; x <= min.x + spawnArea.x + 0.0001f; x += gridStep)
+            for (float x = 0f; x <= chunkSize.x + 0.0001f; x += gridStep)
             {
                 if (Random.value > cellSpawnChance)
                     continue;
 
-                Vector2 position = new Vector2(x, y);
+                Vector2 position = chunkMin + new Vector2(x, y);
                 if (randomizePositionInCell)
                 {
                     float halfCell = gridStep * 0.45f;
@@ -95,53 +196,61 @@ public class MapPropGridSpawner : MonoBehaviour
                     position.y += Random.Range(-halfCell, halfCell);
                 }
 
+                position.x = Mathf.Clamp(position.x, chunkMin.x, chunkMin.x + chunkSize.x);
+                position.y = Mathf.Clamp(position.y, chunkMin.y, chunkMin.y + chunkSize.y);
+
                 if ((position - playerPosition).sqrMagnitude <= clearRadiusSqr)
                     continue;
 
-                SpawnDestructible(position);
+                SpawnDestructible(position, chunkRoot.transform);
             }
+        }
+
+        Random.state = randomBackup;
+    }
+
+    Vector2Int WorldToChunk(Vector2 worldPosition)
+    {
+        if (mapChunkGenerator != null)
+            return mapChunkGenerator.WorldToChunk(worldPosition);
+
+        return MapChunkGrid.WorldToChunk(worldPosition, chunkSize);
+    }
+
+    Vector2 ChunkToWorldMin(Vector2Int chunkCoord)
+    {
+        if (mapChunkGenerator != null)
+            return mapChunkGenerator.ChunkToWorldMin(chunkCoord);
+
+        return MapChunkGrid.ChunkToWorldMin(chunkCoord, chunkSize);
+    }
+
+    static int GetChunkSeed(Vector2Int chunkCoord)
+    {
+        unchecked
+        {
+            return chunkCoord.x * 73856093 ^ chunkCoord.y * 19349663;
         }
     }
 
-    Vector2 ResolveAreaSize()
-    {
-        if (!useCameraViewArea)
-            return areaSize;
-
-        var camera = Camera.main;
-        if (camera == null || !camera.orthographic)
-            return areaSize;
-
-        float height = camera.orthographicSize * 2f + cameraAreaPadding * 2f;
-        float width = height * camera.aspect;
-        return new Vector2(width, height);
-    }
-
-    Vector2 GetSpawnCenter()
-    {
-        if (spawnCenter != null)
-            return spawnCenter.position;
-
-        if (useCameraViewArea && Camera.main != null)
-            return Camera.main.transform.position;
-
-        return GetPlayerPosition((Vector2)transform.position + areaCenterOffset);
-    }
-
-    static Vector2 GetPlayerPosition(Vector2 fallback)
-    {
-        var player = GameObject.FindWithTag("Player");
-        return player != null ? (Vector2)player.transform.position : fallback;
-    }
-
-    void SpawnDestructible(Vector2 position)
+    void SpawnDestructible(Vector2 position, Transform chunkParent)
     {
         var propObject = new GameObject("MapDestructible");
-        propObject.transform.SetParent(propsRoot, false);
+        propObject.transform.SetParent(chunkParent, false);
         propObject.transform.position = position;
 
         var prop = propObject.AddComponent<MapDestructibleProp>();
-        prop.Initialize(this, destructibleSprite, destructibleColliderRadius, destructibleSortingOrder);
+        prop.Initialize(
+            this,
+            destructibleSprite,
+            destructibleColliderRadius,
+            destructibleSortingOrder,
+            destructibleMaxHealth,
+            destructibleSpriteScale,
+            destructibleWanderEnabled,
+            destructibleWanderRadius,
+            destructibleWanderSpeed,
+            destructibleWanderRetargetInterval);
     }
 
     public void PlayBreakSound(Vector3 position)
@@ -176,11 +285,29 @@ public class MapPropGridSpawner : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        Vector2 center = spawnCenter != null ? (Vector2)spawnCenter.position : (Vector2)transform.position + areaCenterOffset;
-        Vector2 size = useCameraViewArea && Camera.main != null && Camera.main.orthographic
-            ? ResolveAreaSize()
-            : areaSize;
+        Vector2 size = chunkSize;
+        if (mapChunkGenerator == null && autoChunkSizeFromCamera && Camera.main != null && Camera.main.orthographic)
+            size = MapChunkGrid.ResolveChunkSizeFromCamera(chunkSize, cameraChunkPadding);
+
+        if (size.x <= 0f || size.y <= 0f)
+            return;
+
+        Vector2Int centerChunk = Application.isPlaying && player != null
+            ? WorldToChunk(player.position)
+            : Vector2Int.zero;
+
+        int radius = GetAdjacentChunkRadius();
         Gizmos.color = new Color(0.95f, 0.75f, 0.25f, 0.35f);
-        Gizmos.DrawWireCube(center, new Vector3(size.x, size.y, 0f));
+
+        for (int offsetY = -radius; offsetY <= radius; offsetY++)
+        {
+            for (int offsetX = -radius; offsetX <= radius; offsetX++)
+            {
+                Vector2 chunkMin = ChunkToWorldMin(new Vector2Int(
+                    centerChunk.x + offsetX,
+                    centerChunk.y + offsetY));
+                Gizmos.DrawWireCube(chunkMin + size * 0.5f, new Vector3(size.x, size.y, 0f));
+            }
+        }
     }
 }

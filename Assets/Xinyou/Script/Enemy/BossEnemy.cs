@@ -89,7 +89,6 @@ public class BossBehavior : MonoBehaviour, IPoolable
     {
         rb = GetComponent<Rigidbody2D>();
         enemyStats = GetComponent<EnemyStats>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     public void Activate(BossDefinition bossDefinition, EnemyCatalog enemyCatalog)
@@ -315,7 +314,8 @@ public class BossBehavior : MonoBehaviour, IPoolable
 
     void UpdateS1mpleFacing()
     {
-        if (spriteRenderer == null)
+        var renderer = ResolveSpriteRenderer();
+        if (renderer == null)
             return;
 
         Vector2 toPlayer = GetDirectionToPlayer();
@@ -323,7 +323,22 @@ public class BossBehavior : MonoBehaviour, IPoolable
             return;
 
         Vector2 awayFromPlayer = -toPlayer;
-        spriteRenderer.flipX = awayFromPlayer.x < 0f;
+        renderer.flipX = awayFromPlayer.x < 0f;
+    }
+
+    SpriteRenderer ResolveSpriteRenderer()
+    {
+        if (spriteRenderer != null)
+            return spriteRenderer;
+
+        var bounceVisual = GetComponent<SpriteBounceVisual>();
+        if (bounceVisual != null)
+            spriteRenderer = bounceVisual.GetSpriteRenderer();
+
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+
+        return spriteRenderer;
     }
 
     Vector2 GetDirectionToPlayer()

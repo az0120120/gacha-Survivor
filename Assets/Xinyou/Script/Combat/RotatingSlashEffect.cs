@@ -103,10 +103,12 @@ public class RotatingSlashEffect : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             var mapProp = overlapBuffer[i].GetComponent<MapDestructibleProp>();
-            if (mapProp == null || !mapProp.IsActive)
+            if (mapProp != null && mapProp.IsAlive)
+            {
+                int finalDamage = StatMath.FloorToInt(currentDamage * MapPropStatusEffects.OutgoingDamageMultiplier);
+                mapProp.TakeDamage(finalDamage, playerPosition, 2f);
                 continue;
-
-            mapProp.TakeDamage(1f);
+            }
         }
     }
 

@@ -37,7 +37,9 @@ public class EnemyArchetypeDefinition
     public float projectileSpeed = 7f;
     public Sprite projectileSprite;
     public Color projectileColor = new Color(1f, 0.35f, 0.35f, 0.95f);
-    public float projectileScale = 1f;
+    [Tooltip("子弹在世界中的缩放倍率。可在 EnemyCatalog 里按怪物类型分别调节，数值越小子弹越小。")]
+    [Range(0.05f, 2f)]
+    public float projectileScale = 0.15f;
 
     [Header("Harasser")]
     public float harasserCruiseSpeed = 1.4f;
@@ -112,13 +114,17 @@ public class EnemyCatalog : ScriptableObject
 
     static EnemyArchetypeDefinition CreateRangedDefault()
     {
-        return CreateDefault(EnemyArchetype.RangedShooter, "远程射击", 40f, new Color(0.45f, 0.65f, 1f));
+        var definition = CreateDefault(EnemyArchetype.RangedShooter, "远程射击", 40f, new Color(0.45f, 0.65f, 1f));
+        definition.projectileScale = 0.15f;
+        return definition;
     }
 
     static EnemyArchetypeDefinition CreateHarasserDefault()
     {
         var definition = CreateDefault(EnemyArchetype.Harasser, "高速骚扰", 55f, new Color(1f, 0.85f, 0.3f));
         definition.meleeMoveSpeed = 1.4f;
+        definition.harasserDashSpeed = 12f;
+        definition.harasserDashDuration = 0.6f;
         return definition;
     }
 }

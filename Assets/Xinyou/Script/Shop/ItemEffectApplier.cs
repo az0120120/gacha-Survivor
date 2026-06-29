@@ -25,6 +25,15 @@ public static class ItemEffectApplier
             case ItemEffectType.WeaponMajorUpgrade:
                 weaponManager?.ApplyMajorUpgrade(item.WeaponType, StatMath.FloorToInt(item.EffectValue));
                 break;
+            case ItemEffectType.WeaponProjectileCountUp:
+                weaponManager?.AddWeaponProjectileCount(item.WeaponType, StatMath.FloorToInt(item.EffectValue));
+                break;
+            case ItemEffectType.WeaponArmorPenUp:
+                weaponManager?.AddWeaponArmorPenetrationPercent(item.WeaponType, item.EffectValue);
+                break;
+            case ItemEffectType.WeaponElementalAttackUp:
+                weaponManager?.AddWeaponElementalAttackPercent(item.WeaponType, item.EffectValue);
+                break;
             case ItemEffectType.AttackUp:
                 characterStats?.AddAttack(StatMath.FloorToInt(item.EffectValue));
                 break;

@@ -23,6 +23,7 @@ public class MolotovWeapon : WeaponBase
     [SerializeField] float zoneRadius = 2f;
     [SerializeField] float zoneDuration = 5f;
     [SerializeField] float zoneTickInterval = 0.5f;
+    [SerializeField] float multiThrowScatterRadius = 1.2f;
 
     float throwTimer;
 
@@ -42,27 +43,28 @@ public class MolotovWeapon : WeaponBase
         if (throwTimer > 0f)
             return;
 
-        float effectiveInterval = throwInterval;
-        if (weaponManager != null)
-            effectiveInterval *= weaponManager.GetWeaponCooldownMultiplier(ShopWeaponType.Molotov);
+        float effectiveInterval = ApplyWeaponCooldown(throwInterval, ShopWeaponType.Molotov);
+        throwTimer = effectiveInterval;
 
-        throwTimer = stats.GetEffectiveCooldown(effectiveInterval);
-
-        float effectiveRange = throwRange;
-        if (weaponManager != null)
-            effectiveRange *= weaponManager.GetRangeMultiplier(ShopWeaponType.Molotov);
+        float effectiveRange = ApplyWeaponRange(throwRange, ShopWeaponType.Molotov);
 
         Vector2 landingPoint = GetLandingPoint(effectiveRange);
-        LaunchThrow(landingPoint);
+        int throwCount = GetProjectileCount(ShopWeaponType.Molotov);
+
+        for (int i = 0; i < throwCount; i++)
+        {
+            Vector2 offset = throwCount <= 1 ? Vector2.zero : GetThrowScatterOffset(i, throwCount);
+            LaunchThrow(landingPoint + offset);
+        }
     }
 
-    Vector2 GetLandingPoint(float range)
+    Vector2 GetThrowScatterOffset(int index, int totalCount)
     {
-        var target = FindNearestEnemy(range);
-        if (target != null)
-            return target.transform.position;
+        if (totalCount <= 1)
+            return Vector2.zero;
 
-        return (Vector2)transform.position + GetDefaultAttackDirection() * Mathf.Min(range, 3f);
+        float angle = index / (float)totalCount * Mathf.PI * 2f;
+        return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * multiThrowScatterRadius;
     }
 
     void LaunchThrow(Vector2 landingPoint)
@@ -91,6 +93,15 @@ public class MolotovWeapon : WeaponBase
             OnMolotovLanded);
     }
 
+    Vector2 GetLandingPoint(float range)
+    {
+        var target = FindNearestTarget(range);
+        if (target.IsValid)
+            return target.Position;
+
+        return (Vector2)transform.position + GetDefaultAttackDirection() * Mathf.Min(range, 3f);
+    }
+
     void OnMolotovLanded(Vector2 position)
     {
         PlayImpactSound(position);
@@ -117,6 +128,8 @@ public class MolotovWeapon : WeaponBase
             zoneTickInterval,
             stats,
             damageMultiplier,
+            GetWeaponSpecialMultiplier(ShopWeaponType.Molotov),
+            GetWeaponDamageContext(ShopWeaponType.Molotov),
             knockbackForce,
             fireZoneSprite,
             weaponManager,
@@ -211,6 +224,8 @@ public class MolotovFireZone : MonoBehaviour
     float tickInterval;
     CharacterStats attackerStats;
     float attackMultiplier;
+    float specialDamageMultiplier;
+    WeaponDamageContext weaponDamageContext;
     float knockback;
     WeaponManager weaponManager;
     ShopWeaponType weaponType;
@@ -223,6 +238,8 @@ public class MolotovFireZone : MonoBehaviour
         float interval,
         CharacterStats stats,
         float multiplier,
+        float specialMultiplier,
+        WeaponDamageContext damageContext,
         float knockbackForce,
         Sprite zoneSprite,
         WeaponManager manager,
@@ -235,6 +252,8 @@ public class MolotovFireZone : MonoBehaviour
         tickTimer = 0f;
         attackerStats = stats;
         attackMultiplier = multiplier;
+        specialDamageMultiplier = specialMultiplier;
+        weaponDamageContext = damageContext;
         knockback = knockbackForce;
         weaponManager = manager;
         weaponType = type;
@@ -310,10 +329,28 @@ public class MolotovFireZone : MonoBehaviour
             DamageResult result = DamageCalculator.CalculateAgainstEnemy(
                 attackerStats,
                 enemyStats,
-                attackMultiplier);
+                attackMultiplier,
+                specialDamageMultiplier,
+                true,
+                weaponDamageContext);
 
             if (result.FinalDamage > 0)
                 enemy.TakeDamage(result.FinalDamage, origin, knockback, result.IsCritical);
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            var mapProp = overlapBuffer[i].GetComponent<MapDestructibleProp>();
+            if (mapProp == null || !mapProp.IsAlive)
+                continue;
+
+            int damage = MapPropCombatUtility.CalculateWeaponDamage(
+                attackerStats,
+                attackMultiplier,
+                specialDamageMultiplier,
+                weaponDamageContext,
+                true);
+            mapProp.TakeDamage(damage, origin, knockback * 0.5f);
         }
 
         TryHitShopsInRadius(origin, effectiveRadius);
@@ -333,10 +370,6 @@ public class MolotovFireZone : MonoBehaviour
             var shop = overlapBuffer[i].GetComponent<ShopWorldEntity>();
             if (shop != null && shop.IsAlive)
                 shop.TakeDamage(1f);
-
-            var mapProp = overlapBuffer[i].GetComponent<MapDestructibleProp>();
-            if (mapProp != null && mapProp.IsActive)
-                mapProp.TakeDamage(1f);
         }
     }
 

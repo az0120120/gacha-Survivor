@@ -12,7 +12,13 @@ public enum GameItemKind
     [InspectorName("商店 - 武器大强化")]
     ShopWeaponMajorUpgrade,
     [InspectorName("升级 - 属性强化")]
-    LevelUpStat
+    LevelUpStat,
+    [InspectorName("商店 - 武器发射数量")]
+    ShopWeaponProjectileCountUp,
+    [InspectorName("商店 - 武器破防强化")]
+    ShopWeaponArmorPenUp,
+    [InspectorName("商店 - 武器元素攻击强化")]
+    ShopWeaponElementalAttackUp
 }
 
 public enum LevelUpStatType
@@ -156,6 +162,30 @@ public class GameItemEntry
                 once = false;
                 return;
 
+            case GameItemKind.ShopWeaponProjectileCountUp:
+                pool = ItemPoolType.Shop;
+                category = ShopItemCategory.WeaponMinorUpgrade;
+                effect = ItemEffectType.WeaponProjectileCountUp;
+                shopSize = ShopSizeType.Small;
+                once = false;
+                return;
+
+            case GameItemKind.ShopWeaponArmorPenUp:
+                pool = ItemPoolType.Shop;
+                category = ShopItemCategory.WeaponMinorUpgrade;
+                effect = ItemEffectType.WeaponArmorPenUp;
+                shopSize = ShopSizeType.Small;
+                once = false;
+                return;
+
+            case GameItemKind.ShopWeaponElementalAttackUp:
+                pool = ItemPoolType.Shop;
+                category = ShopItemCategory.WeaponMinorUpgrade;
+                effect = ItemEffectType.WeaponElementalAttackUp;
+                shopSize = ShopSizeType.Small;
+                once = false;
+                return;
+
             case GameItemKind.LevelUpStat:
                 pool = ItemPoolType.LevelUp;
                 category = ShopItemCategory.StatUpgrade;
@@ -261,13 +291,29 @@ public class GameItemCatalog : ScriptableObject
             Minor("w_range_ak", "AK 延伸", "AK 攻击范围 +20%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponRangeUp, 42, 3, 20f),
             Minor("w_cd_ak", "AK 速射", "AK 冷却缩减 +10%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponCooldownUp, 44, 3, 10f),
 
-            Stat("lv_attack", "强攻", "攻击力 +15。", LevelUpStatType.Attack, 1, 15f),
-            Stat("lv_element", "元素之力", "元素攻击力 +5。", LevelUpStatType.ElementalAttack, 1, 5f),
-            Stat("lv_armor_pen", "破甲", "破防 +25。", LevelUpStatType.ArmorPenetration, 2, 25f),
+            Minor("w_proj_desert_eagle", "火沙鹰齐射", "火沙鹰发射数量 +1。", ShopWeaponType.DesertEagle, GameItemKind.ShopWeaponProjectileCountUp, 250, 2, 1f),
+            Minor("w_ap_desert_eagle", "火沙鹰破甲", "火沙鹰破防 +30%。", ShopWeaponType.DesertEagle, GameItemKind.ShopWeaponArmorPenUp, 35, 2, 30f),
+            Minor("w_elem_desert_eagle", "火沙鹰元素", "火沙鹰元素攻击力 +30%。", ShopWeaponType.DesertEagle, GameItemKind.ShopWeaponElementalAttackUp, 35, 2, 30f),
+            Minor("w_proj_molotov", "燃烧齐射", "燃烧瓶发射数量 +1。", ShopWeaponType.Molotov, GameItemKind.ShopWeaponProjectileCountUp, 250, 2, 1f),
+            Minor("w_ap_molotov", "燃烧破甲", "燃烧瓶破防 +30%。", ShopWeaponType.Molotov, GameItemKind.ShopWeaponArmorPenUp, 35, 2, 30f),
+            Minor("w_elem_molotov", "燃烧元素", "燃烧瓶元素攻击力 +30%。", ShopWeaponType.Molotov, GameItemKind.ShopWeaponElementalAttackUp, 35, 2, 30f),
+            Minor("w_proj_kunai", "苦无齐射", "苦无发射数量 +1。", ShopWeaponType.Kunai, GameItemKind.ShopWeaponProjectileCountUp, 250, 2, 1f),
+            Minor("w_ap_kunai", "苦无破甲", "苦无破防 +30%。", ShopWeaponType.Kunai, GameItemKind.ShopWeaponArmorPenUp, 35, 2, 30f),
+            Minor("w_elem_kunai", "苦无元素", "苦无元素攻击力 +30%。", ShopWeaponType.Kunai, GameItemKind.ShopWeaponElementalAttackUp, 35, 2, 30f),
+            Minor("w_proj_claw", "虾钳齐射", "虾钳发射数量 +1。", ShopWeaponType.Claw, GameItemKind.ShopWeaponProjectileCountUp, 250, 1, 1f),
+            Minor("w_ap_claw", "虾钳破甲", "虾钳破防 +30%。", ShopWeaponType.Claw, GameItemKind.ShopWeaponArmorPenUp, 35, 1, 30f),
+            Minor("w_elem_claw", "虾钳元素", "虾钳元素攻击力 +30%。", ShopWeaponType.Claw, GameItemKind.ShopWeaponElementalAttackUp, 35, 1, 30f),
+            Minor("w_proj_ak", "AK 齐射", "AK 发射数量 +1。", ShopWeaponType.Ak, GameItemKind.ShopWeaponProjectileCountUp, 250, 3, 1f),
+            Minor("w_ap_ak", "AK 破甲", "AK 破防 +30%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponArmorPenUp, 35, 3, 30f),
+            Minor("w_elem_ak", "AK 元素", "AK 元素攻击力 +30%。", ShopWeaponType.Ak, GameItemKind.ShopWeaponElementalAttackUp, 35, 3, 30f),
+
+            Stat("lv_attack", "强攻", "攻击力 +15（所有武器）。", LevelUpStatType.Attack, 1, 15f),
+            Stat("lv_element", "元素之力", "元素攻击力 +5（所有武器）。", LevelUpStatType.ElementalAttack, 1, 5f),
+            Stat("lv_armor_pen", "破甲", "破防 +25（所有武器）。", LevelUpStatType.ArmorPenetration, 2, 25f),
             Stat("lv_defense", "护甲", "防御 +1。", LevelUpStatType.Defense, 1, 1f),
             Stat("lv_health", "生命", "最大生命 +15，并立即恢复。", LevelUpStatType.MaxHealth, 1, 15f),
-            Stat("lv_crit_rate", "精准", "暴击率 +3%。", LevelUpStatType.CritRate, 2, 3f),
-            Stat("lv_crit_effect", "致命", "暴击效果 +10%。", LevelUpStatType.CritEffect, 2, 10f),
+            Stat("lv_crit_rate", "精准", "暴击率 +3%（所有武器）。", LevelUpStatType.CritRate, 2, 3f),
+            Stat("lv_crit_effect", "致命", "暴击效果 +10%（所有武器）。", LevelUpStatType.CritEffect, 2, 10f),
             Stat("lv_speed_pct", "迅捷", "移动速度 +3%。", LevelUpStatType.MoveSpeedPercent, 1, 3f)
         };
     }
@@ -276,13 +322,13 @@ public class GameItemCatalog : ScriptableObject
     {
         return new List<GameItemEntry>
         {
-            Stat("lv_attack", "强攻", "攻击力 +15。", LevelUpStatType.Attack, 1, 15f),
-            Stat("lv_element", "元素之力", "元素攻击力 +5。", LevelUpStatType.ElementalAttack, 1, 5f),
-            Stat("lv_armor_pen", "破甲", "破防 +25。", LevelUpStatType.ArmorPenetration, 2, 25f),
+            Stat("lv_attack", "强攻", "攻击力 +15（所有武器）。", LevelUpStatType.Attack, 1, 15f),
+            Stat("lv_element", "元素之力", "元素攻击力 +5（所有武器）。", LevelUpStatType.ElementalAttack, 1, 5f),
+            Stat("lv_armor_pen", "破甲", "破防 +25（所有武器）。", LevelUpStatType.ArmorPenetration, 2, 25f),
             Stat("lv_defense", "护甲", "防御 +1。", LevelUpStatType.Defense, 1, 1f),
             Stat("lv_health", "生命", "最大生命 +15，并立即恢复。", LevelUpStatType.MaxHealth, 1, 15f),
-            Stat("lv_crit_rate", "精准", "暴击率 +3%。", LevelUpStatType.CritRate, 2, 3f),
-            Stat("lv_crit_effect", "致命", "暴击效果 +10%。", LevelUpStatType.CritEffect, 2, 10f),
+            Stat("lv_crit_rate", "精准", "暴击率 +3%（所有武器）。", LevelUpStatType.CritRate, 2, 3f),
+            Stat("lv_crit_effect", "致命", "暴击效果 +10%（所有武器）。", LevelUpStatType.CritEffect, 2, 10f),
             Stat("lv_speed_pct", "迅捷", "移动速度 +3%。", LevelUpStatType.MoveSpeedPercent, 1, 3f)
         };
     }

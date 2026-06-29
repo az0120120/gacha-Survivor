@@ -7,6 +7,9 @@ public class WeaponUpgradeData
     public float CooldownReductionPercent;
     public float DamageBonusPercent;
     public int MajorUpgradeLevel;
+    public int ExtraProjectileCount;
+    public float ArmorPenetrationBonusPercent;
+    public float ElementalAttackBonusPercent;
 }
 
 [AddComponentMenu("GachaSurvivor/Weapon Manager")]
@@ -106,6 +109,42 @@ public class WeaponManager : MonoBehaviour
 
         if (!HasWeapon(weaponType))
             EquipWeapon(weaponType);
+    }
+
+    public int GetProjectileCount(ShopWeaponType weaponType)
+    {
+        return 1 + GetUpgradeData(weaponType).ExtraProjectileCount;
+    }
+
+    public void AddWeaponProjectileCount(ShopWeaponType weaponType, int amount = 1)
+    {
+        GetUpgradeData(weaponType).ExtraProjectileCount += amount;
+    }
+
+    public void AddWeaponArmorPenetrationPercent(ShopWeaponType weaponType, float percent)
+    {
+        GetUpgradeData(weaponType).ArmorPenetrationBonusPercent += percent;
+    }
+
+    public void AddWeaponElementalAttackPercent(ShopWeaponType weaponType, float percent)
+    {
+        GetUpgradeData(weaponType).ElementalAttackBonusPercent += percent;
+    }
+
+    public WeaponDamageContext GetWeaponDamageContext(CharacterStats sourceStats, ShopWeaponType weaponType)
+    {
+        if (sourceStats == null)
+            return default;
+
+        var data = GetUpgradeData(weaponType);
+        float armorPenMultiplier = 1f + data.ArmorPenetrationBonusPercent * 0.01f;
+        float elementalMultiplier = 1f + data.ElementalAttackBonusPercent * 0.01f;
+
+        return new WeaponDamageContext
+        {
+            ArmorPenetration = StatMath.FloorToInt(sourceStats.ArmorPenetration * armorPenMultiplier),
+            ElementalAttack = StatMath.FloorToInt(sourceStats.ElementalAttack * elementalMultiplier)
+        };
     }
 
     public WeaponUpgradeData GetWeaponUpgradeData(ShopWeaponType weaponType)

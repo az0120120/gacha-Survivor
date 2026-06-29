@@ -182,6 +182,171 @@ MonoBehaviour:
     weapon: 4
     effectValue: 10
     purchaseOnce: 0
+  - id: w_proj_desert_eagle
+    displayName: "\u706B\u6C99\u9E70\u9F50\u5C04"
+    description: "\u706B\u6C99\u9E70\u53D1\u5C04\u6570\u91CF +1\u3002"
+    icon: {fileID: 21300000, guid: ffb0ab2285cdd2348901b49a3347daa7, type: 3}
+    kind: 5
+    statType: 0
+    price: 250
+    tier: 2
+    weapon: 0
+    effectValue: 1
+    purchaseOnce: 0
+  - id: w_ap_desert_eagle
+    displayName: "\u706B\u6C99\u9E70\u7834\u7532"
+    description: "\u706B\u6C99\u9E70\u7834\u9632 +30%\u3002"
+    icon: {fileID: 21300000, guid: ffb0ab2285cdd2348901b49a3347daa7, type: 3}
+    kind: 6
+    statType: 0
+    price: 35
+    tier: 2
+    weapon: 0
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_elem_desert_eagle
+    displayName: "\u706B\u6C99\u9E70\u5143\u7D20"
+    description: "\u706B\u6C99\u9E70\u5143\u7D20\u653B\u51FB\u529B +30%\u3002"
+    icon: {fileID: 21300000, guid: ffb0ab2285cdd2348901b49a3347daa7, type: 3}
+    kind: 7
+    statType: 0
+    price: 35
+    tier: 2
+    weapon: 0
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_proj_molotov
+    displayName: "\u71C3\u70E7\u9F50\u5C04"
+    description: "\u71C3\u70E7\u74F6\u53D1\u5C04\u6570\u91CF +1\u3002"
+    icon: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
+    kind: 5
+    statType: 0
+    price: 250
+    tier: 2
+    weapon: 1
+    effectValue: 1
+    purchaseOnce: 0
+  - id: w_ap_molotov
+    displayName: "\u71C3\u70E7\u7834\u7532"
+    description: "\u71C3\u70E7\u74F6\u7834\u9632 +30%\u3002"
+    icon: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
+    kind: 6
+    statType: 0
+    price: 35
+    tier: 2
+    weapon: 1
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_elem_molotov
+    displayName: "\u71C3\u70E7\u5143\u7D20"
+    description: "\u71C3\u70E7\u74F6\u5143\u7D20\u653B\u51FB\u529B +30%\u3002"
+    icon: {fileID: 21300000, guid: 4653dc5bfed244940a4847e6e1d8aaf7, type: 3}
+    kind: 7
+    statType: 0
+    price: 35
+    tier: 2
+    weapon: 1
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_proj_kunai
+    displayName: "\u82E6\u65E0\u9F50\u5C04"
+    description: "\u82E6\u65E0\u53D1\u5C04\u6570\u91CF +1\u3002"
+    icon: {fileID: 21300000, guid: d0b4e47f0d385624ca11268d16952dc4, type: 3}
+    kind: 5
+    statType: 0
+    price: 250
+    tier: 2
+    weapon: 2
+    effectValue: 1
+    purchaseOnce: 0
+  - id: w_ap_kunai
+    displayName: "\u82E6\u65E0\u7834\u7532"
+    description: "\u82E6\u65E0\u7834\u9632 +30%\u3002"
+    icon: {fileID: 21300000, guid: d0b4e47f0d385624ca11268d16952dc4, type: 3}
+    kind: 6
+    statType: 0
+    price: 35
+    tier: 2
+    weapon: 2
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_elem_kunai
+    displayName: "\u82E6\u65E0\u5143\u7D20"
+    description: "\u82E6\u65E0\u5143\u7D20\u653B\u51FB\u529B +30%\u3002"
+    icon: {fileID: 21300000, guid: d0b4e47f0d385624ca11268d16952dc4, type: 3}
+    kind: 7
+    statType: 0
+    price: 35
+    tier: 2
+    weapon: 2
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_proj_claw
+    displayName: "\u867E\u94B3\u9F50\u5C04"
+    description: "\u867E\u94B3\u53D1\u5C04\u6570\u91CF +1\u3002"
+    icon: {fileID: 21300000, guid: 339af6d73137eb8479dddfda5960e9c5, type: 3}
+    kind: 5
+    statType: 0
+    price: 250
+    tier: 1
+    weapon: 3
+    effectValue: 1
+    purchaseOnce: 0
+  - id: w_ap_claw
+    displayName: "\u867E\u94B3\u7834\u7532"
+    description: "\u867E\u94B3\u7834\u9632 +30%\u3002"
+    icon: {fileID: 21300000, guid: 339af6d73137eb8479dddfda5960e9c5, type: 3}
+    kind: 6
+    statType: 0
+    price: 35
+    tier: 1
+    weapon: 3
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_elem_claw
+    displayName: "\u867E\u94B3\u5143\u7D20"
+    description: "\u867E\u94B3\u5143\u7D20\u653B\u51FB\u529B +30%\u3002"
+    icon: {fileID: 21300000, guid: 339af6d73137eb8479dddfda5960e9c5, type: 3}
+    kind: 7
+    statType: 0
+    price: 35
+    tier: 1
+    weapon: 3
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_proj_ak
+    displayName: "AK \u9F50\u5C04"
+    description: "AK \u53D1\u5C04\u6570\u91CF +1\u3002"
+    icon: {fileID: 21300000, guid: d5e5376aaf26403409a8d6cac0b49ea8, type: 3}
+    kind: 5
+    statType: 0
+    price: 250
+    tier: 3
+    weapon: 4
+    effectValue: 1
+    purchaseOnce: 0
+  - id: w_ap_ak
+    displayName: "AK \u7834\u7532"
+    description: "AK \u7834\u9632 +30%\u3002"
+    icon: {fileID: 21300000, guid: d5e5376aaf26403409a8d6cac0b49ea8, type: 3}
+    kind: 6
+    statType: 0
+    price: 35
+    tier: 3
+    weapon: 4
+    effectValue: 30
+    purchaseOnce: 0
+  - id: w_elem_ak
+    displayName: "AK \u5143\u7D20"
+    description: "AK \u5143\u7D20\u653B\u51FB\u529B +30%\u3002"
+    icon: {fileID: 21300000, guid: d5e5376aaf26403409a8d6cac0b49ea8, type: 3}
+    kind: 7
+    statType: 0
+    price: 35
+    tier: 3
+    weapon: 4
+    effectValue: 30
+    purchaseOnce: 0
   - id: lv_attack
     displayName: "\u5F3A\u653B"
     description: "\u653B\u51FB\u529B +15\u3002\n\n\n\u5F80\u91CC\u8C6A\uFF0C\u5F80\u91CC\u8C6A\uFF01"
@@ -228,9 +393,8 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_health
     displayName: "\u751F\u547D"
-    description: "\u6700\u5927\u751F\u547D +15\uFF0C\u5E76\u7ACB\u5373\u6062\u590D\u3002\n\n\n__
-      __\u9009\u624B\u7684\u52A0\u5165\u5927\u5E45\u63D0\u9AD8\u4E86\u961F\u4F0D\u7684\u4E0A\u9650"
-    icon: {fileID: 21300000, guid: 1e09a7c7dec7d654bab7d0a99a834896, type: 3}
+    description: "\u6700\u5927\u751F\u547D +15\uFF0C\u5E76\u7ACB\u5373\u6062\u590D\u3002\n\n\n\u6551\u62A4\u8F66\u6765\u55BD\uFF01"
+    icon: {fileID: 21300000, guid: 4d5a441cd6288d9449d653282537f299, type: 3}
     kind: 4
     statType: 3
     price: 0
@@ -240,8 +404,8 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_crit_rate
     displayName: "\u7CBE\u51C6"
-    description: "\u66B4\u51FB\u7387 +3%\u3002\n\n\n\u6218\u672F\u662F\u653B\u51FB\u5BF9\u65B9\u5F31\u4FA7"
-    icon: {fileID: 21300000, guid: 4d5a441cd6288d9449d653282537f299, type: 3}
+    description: "\u66B4\u51FB\u7387 +3%\u3002\n\n\n\u4E00\u5934\u666E\u901A\u7684\u9A74\u3002\u5B83\u6253\u67AA\u6BD4\u4F60\u51C6\uFF0C\u76F8\u4FE1\u6211\u3002\n"
+    icon: {fileID: 21300000, guid: bec9c23c6727ca346bf4e4be6b1326ea, type: 3}
     kind: 4
     statType: 6
     price: 0
@@ -251,8 +415,8 @@ MonoBehaviour:
     purchaseOnce: 0
   - id: lv_crit_effect
     displayName: "\u81F4\u547D"
-    description: "\u66B4\u51FB\u6548\u679C +10%\u3002\n\n\n\u4E00\u5934\u666E\u901A\u7684\u9A74\u3002\u4F46\u4ED6\u6253\u7684\u6BD4\u4F60\u51C6\uFF0C\u76F8\u4FE1\u6211"
-    icon: {fileID: 21300000, guid: bec9c23c6727ca346bf4e4be6b1326ea, type: 3}
+    description: "\u66B4\u51FB\u6548\u679C +10%\u3002\n\n\nhide\u662F\u4E3A\u4E86\u4E00\u51FB\u6BD9\u547D"
+    icon: {fileID: 21300000, guid: 1e09a7c7dec7d654bab7d0a99a834896, type: 3}
     kind: 4
     statType: 7
     price: 0
