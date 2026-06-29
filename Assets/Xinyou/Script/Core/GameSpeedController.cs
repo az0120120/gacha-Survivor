@@ -51,13 +51,13 @@ public class GameSpeedController : MonoBehaviour
 
     static bool IsGameplayPaused()
     {
+        if (VictoryManager.Instance != null && VictoryManager.Instance.IsSettlementOpen)
+            return false;
+
         if (ShopManager.Instance != null && ShopManager.Instance.IsShopOpen)
             return true;
 
         if (LevelUpManager.Instance != null && LevelUpManager.Instance.IsOpen)
-            return true;
-
-        if (VictoryManager.Instance != null && VictoryManager.Instance.IsSettlementOpen)
             return true;
 
         if (DefeatManager.Instance != null && DefeatManager.Instance.IsDefeatScreenOpen)

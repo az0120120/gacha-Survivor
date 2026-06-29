@@ -90,6 +90,25 @@ public class GameHUD : MonoBehaviour
         UpdateBossHealthBar();
     }
 
+    public void SetGameplayHudVisible(bool visible)
+    {
+        enabled = visible;
+        CacheReferences();
+
+        if (canvasRect != null)
+            canvasRect.gameObject.SetActive(visible);
+        else if (timeText != null)
+        {
+            var canvas = timeText.GetComponentInParent<Canvas>();
+            if (canvas != null)
+                canvas.gameObject.SetActive(visible);
+        }
+
+        SetBossBarVisible(visible);
+        if (bossBarRoot != null && bossBarRoot.transform.parent != null)
+            bossBarRoot.transform.parent.gameObject.SetActive(visible);
+    }
+
     void CacheReferences()
     {
         if (player == null)

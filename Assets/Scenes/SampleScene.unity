@@ -911,6 +911,7 @@ GameObject:
   - component: {fileID: 1055431324}
   - component: {fileID: 1055431325}
   - component: {fileID: 1055431326}
+  - component: {fileID: 1055431327}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -1092,7 +1093,110 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveSpawner: {fileID: 416152049}
   bossSpawner: {fileID: 416152052}
-  settlementImage: {fileID: 21300000, guid: 82b94cd189da3d542b8448df6a80ea62, type: 3}
+  terminalFallSpeed: 20
+  fallGravityScale: 2.5
+  upwardImpulse: 10
+  endingMusic: {fileID: 8300000, guid: a56ec774ed682cd4583759ebf2c42619, type: 3}
+  endingMusicVolume: 0.85
+  loopEndingMusic: 1
+  goldenTrail:
+    particleColor: {r: 1, g: 0.82, b: 0.15, a: 0.95}
+    minSpawnInterval: 0.01
+    spawnStepDistance: 0.53
+    spawnStepJitter: 0.1
+    spawnChance: 0.82
+    particleLifetime: 0.88
+    particleScale: 1.21
+    lengthStretch: 1.05
+    widthStretch: 0.65
+    sizeRandomness: 0.4
+    rotationJitter: 28
+    positionJitter: 1.03
+    sortingOrder: 14
+  objectA:
+    delaySeconds: 5
+    settings:
+      sprite: {fileID: 21300000, guid: ffb0ab2285cdd2348901b49a3347daa7, type: 3}
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      scale: 0.5
+      sortingOrder: 20
+      spawnViewport: {x: 1.15, y: 1.2}
+      targetViewport: {x: 0.72, y: 0.58}
+      rushAcceleration: 5
+      maxRushSpeed: 22
+      arriveDistance: 0.35
+  objectB:
+    delaySeconds: 10
+    settings:
+      sprite: {fileID: 21300000, guid: d5e5376aaf26403409a8d6cac0b49ea8, type: 3}
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      scale: 0.5
+      sortingOrder: 21
+      spawnViewport: {x: -0.15, y: 1.2}
+      targetViewport: {x: 0.28, y: 0.55}
+      rushAcceleration: 5
+      maxRushSpeed: 22
+      arriveDistance: 0.35
+  objectC:
+    delaySeconds: 10
+    settings:
+      sprite: {fileID: 21300000, guid: 1e09a7c7dec7d654bab7d0a99a834896, type: 3}
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      scale: 0.5
+      sortingOrder: 22
+      spawnViewport: {x: 1.15, y: 1.2}
+      targetViewport: {x: 0.55, y: 0.48}
+      rushAcceleration: 5
+      maxRushSpeed: 22
+      arriveDistance: 0.35
+  objectD:
+    delaySeconds: 10
+    settings:
+      sprite: {fileID: 21300000, guid: 4e71ce769bd5e8c4e924012005b497ad, type: 3}
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      scale: 0.5
+      sortingOrder: 23
+      spawnViewport: {x: -0.15, y: 1.2}
+      targetViewport: {x: 0.15, y: 0.48}
+      rushAcceleration: 5
+      maxRushSpeed: 22
+      arriveDistance: 0.35
+  objectE:
+    delaySeconds: 10
+    settings:
+      sprite: {fileID: 21300000, guid: 569aa30e2f8db26408cbbdef4f8906f6, type: 3}
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      scale: 0.5
+      sortingOrder: 24
+      spawnViewport: {x: 0.5, y: 1.2}
+      targetViewport: {x: 0.85, y: 0.42}
+      rushAcceleration: 5
+      maxRushSpeed: 22
+      arriveDistance: 0.35
+  objectF:
+    delaySeconds: 10
+    settings:
+      sprite: {fileID: 21300000, guid: 4d5a441cd6288d9449d653282537f299, type: 3}
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      scale: 0.5
+      sortingOrder: 25
+      spawnViewport: {x: 1.15, y: 1.2}
+      targetViewport: {x: 0.5, y: 0.32}
+      rushAcceleration: 5
+      maxRushSpeed: 22
+      arriveDistance: 0.35
+  objectG:
+    delaySeconds: 10
+    settings:
+      sprite: {fileID: 21300000, guid: 82b94cd189da3d542b8448df6a80ea62, type: 3}
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      scale: 1
+      sortingOrder: 26
+      spawnViewport: {x: 0.5, y: 1.2}
+      targetViewport: {x: 0.5, y: 0.32}
+      rushAcceleration: 5
+      maxRushSpeed: 22
+      arriveDistance: 0.35
 --- !u!114 &1055431323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,6 +1307,22 @@ MonoBehaviour:
   chunkColor: {r: 1, g: 1, b: 1, a: 1}
   sortingOrder: -10
   spriteScale: 1
+--- !u!114 &1055431327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1c2d3e4f5a6478990abcdef12345679, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enabledInGame: 0
+  buttonLabel: "\u6D4B\u8BD5\u7ED3\u7B97"
+  screenOffset: {x: 24, y: 24}
+  buttonSize: {x: 180, y: 52}
 --- !u!1 &1269217973
 GameObject:
   m_ObjectHideFlags: 0

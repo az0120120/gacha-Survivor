@@ -58,7 +58,7 @@ public class DamageNumberManager : MonoBehaviour
 
     public void Show(int damage, Vector3 worldPosition, bool isCritical = false)
     {
-        if (damage <= 0 || canvasRect == null)
+        if (damage <= 0 || canvasRect == null || !canvasRect.gameObject.activeInHierarchy)
             return;
 
         if (mainCamera == null)
@@ -91,5 +91,21 @@ public class DamageNumberManager : MonoBehaviour
             mainCamera,
             canvasRect,
             rectTransform);
+    }
+
+    public void SetGameplayHudVisible(bool visible)
+    {
+        EnsureCanvas();
+
+        if (canvasRect == null)
+            return;
+
+        if (!visible)
+        {
+            for (int i = canvasRect.childCount - 1; i >= 0; i--)
+                Destroy(canvasRect.GetChild(i).gameObject);
+        }
+
+        canvasRect.gameObject.SetActive(visible);
     }
 }

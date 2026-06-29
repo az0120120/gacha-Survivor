@@ -48,6 +48,18 @@ public class ExperienceUI : MonoBehaviour
         UnbindExperienceManager();
     }
 
+    public void SetGameplayHudVisible(bool visible)
+    {
+        enabled = visible;
+
+        Canvas canvas = expText != null
+            ? expText.GetComponentInParent<Canvas>()
+            : GetComponentInChildren<Canvas>();
+
+        if (canvas != null)
+            canvas.gameObject.SetActive(visible);
+    }
+
     void EnsureGameSpeedController()
     {
         if (FindAnyObjectByType<GameSpeedController>() != null)

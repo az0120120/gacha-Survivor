@@ -82,6 +82,18 @@ public class MapPropGridSpawner : MonoBehaviour
         UpdateActiveChunk();
     }
 
+    public void StopGenerationAndClearProps()
+    {
+        enabled = false;
+        EnsurePropsRoot();
+
+        for (int i = propsRoot.childCount - 1; i >= 0; i--)
+            Destroy(propsRoot.GetChild(i).gameObject);
+
+        generatedChunks.Clear();
+        currentPlayerChunk = new Vector2Int(int.MinValue, int.MinValue);
+    }
+
     void EnsureStatusEffects()
     {
         if (FindAnyObjectByType<MapPropStatusEffects>() == null)

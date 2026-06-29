@@ -57,6 +57,18 @@ public class GoldUI : MonoBehaviour
             goldText.text = $"金币: {gold}";
     }
 
+    public void SetGameplayHudVisible(bool visible)
+    {
+        enabled = visible;
+
+        if (goldText == null)
+            return;
+
+        var canvas = goldText.GetComponentInParent<Canvas>();
+        if (canvas != null)
+            canvas.gameObject.SetActive(visible);
+    }
+
     void CreateDefaultUI()
     {
         var canvasObject = new GameObject("GoldCanvas");

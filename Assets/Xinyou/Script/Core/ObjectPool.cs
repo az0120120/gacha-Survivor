@@ -74,6 +74,17 @@ public class ObjectPool : MonoBehaviour
         available.Enqueue(instance);
     }
 
+    public void ReleaseAllActive()
+    {
+        if (active.Count == 0)
+            return;
+
+        var snapshot = new GameObject[active.Count];
+        active.CopyTo(snapshot);
+        for (int i = 0; i < snapshot.Length; i++)
+            Release(snapshot[i]);
+    }
+
     void Prewarm()
     {
         for (int i = 0; i < prewarmCount; i++)
