@@ -145,6 +145,12 @@ public static class ShopItemIconUtility
                 return new Color(0.95f, 0.6f, 0.35f);
             case ItemEffectType.WeaponMajorUpgrade:
                 return new Color(1f, 0.55f, 0.15f);
+            case ItemEffectType.WeaponProjectileCountUp:
+                return new Color(0.95f, 0.75f, 0.25f);
+            case ItemEffectType.WeaponArmorPenUp:
+                return new Color(0.9f, 0.5f, 0.2f);
+            case ItemEffectType.WeaponElementalAttackUp:
+                return new Color(0.55f, 0.45f, 0.95f);
             default:
                 return new Color(0.7f, 0.7f, 0.75f);
         }

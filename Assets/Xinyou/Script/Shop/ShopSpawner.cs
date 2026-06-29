@@ -7,6 +7,7 @@ public class ShopSpawner : MonoBehaviour
     [SerializeField] float spawnInterval = 90f;
     [SerializeField] float spawnMinRadius = 6f;
     [SerializeField] float spawnMaxRadius = 14f;
+    [SerializeField] ShopWorldVisualSettings visualSettings;
 
     float spawnTimer;
     int spawnCycleIndex;
@@ -48,6 +49,6 @@ public class ShopSpawner : MonoBehaviour
         var shopObject = new GameObject(shopSize == ShopSizeType.Large ? "LargeShop" : "SmallShop");
         shopObject.transform.position = spawnPosition;
         var entity = shopObject.AddComponent<ShopWorldEntity>();
-        entity.Initialize(shopSize);
+        entity.Initialize(shopSize, visualSettings);
     }
 }

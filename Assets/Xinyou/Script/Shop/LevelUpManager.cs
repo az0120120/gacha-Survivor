@@ -136,8 +136,17 @@ public class LevelUpManager : MonoBehaviour
         if (!IsOpen || item == null)
             return;
 
+        EnsurePlayerReferences();
         ItemEffectApplier.Apply(item, weaponManager, characterStats, playerHealth);
         CloseLevelUp();
+    }
+
+    void EnsurePlayerReferences()
+    {
+        if (weaponManager != null && characterStats != null && playerHealth != null)
+            return;
+
+        CachePlayerReferences();
     }
 
     void CloseLevelUp()

@@ -18,6 +18,7 @@ public class KunaiWeapon : WeaponBase
     [SerializeField] [Range(0f, 1f)] float attackVolume = 0.85f;
 
     float attackTimer;
+    readonly WeaponTarget[] targetBuffer = new WeaponTarget[8];
 
     protected override void OnInitialized()
     {
@@ -35,25 +36,30 @@ public class KunaiWeapon : WeaponBase
         if (attackTimer > 0f)
             return;
 
-        float effectiveInterval = attackInterval;
-        if (weaponManager != null)
-            effectiveInterval *= weaponManager.GetWeaponCooldownMultiplier(ShopWeaponType.Kunai);
+        float effectiveInterval = ApplyWeaponCooldown(attackInterval, ShopWeaponType.Kunai);
+        attackTimer = effectiveInterval;
 
-        attackTimer = stats.GetEffectiveCooldown(effectiveInterval);
+        float effectiveRange = ApplyWeaponRange(targetRange, ShopWeaponType.Kunai);
+        int projectileCount = GetProjectileCount(ShopWeaponType.Kunai);
+        int targetCount = CollectNearestTargets(effectiveRange, projectileCount, targetBuffer);
 
-        float effectiveRange = targetRange;
-        if (weaponManager != null)
-            effectiveRange *= weaponManager.GetRangeMultiplier(ShopWeaponType.Kunai);
-
-        var target = FindNearestEnemy(effectiveRange);
-        if (target == null)
+        if (targetCount <= 0)
         {
             TryHitShopsInRadius(transform.position, effectiveRange);
             return;
         }
 
-        HitEnemy(target, transform.position);
-        SpawnFlash(target.transform.position);
+        for (int i = 0; i < targetCount; i++)
+        {
+            var target = targetBuffer[i];
+            if (target.Enemy != null)
+                HitEnemy(target.Enemy, transform.position, ShopWeaponType.Kunai);
+            else if (target.MapProp != null)
+                HitMapProp(target.MapProp, transform.position, ShopWeaponType.Kunai);
+
+            SpawnFlash(target.Position);
+        }
+
         PlayAttackSound(attackClip, attackVolume);
     }
 

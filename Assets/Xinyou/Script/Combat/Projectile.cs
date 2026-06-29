@@ -10,6 +10,9 @@ public class Projectile : MonoBehaviour, IPoolable
 
     CharacterStats attackerStats;
     float attackMultiplierK;
+    float specialDamageMultiplier;
+    WeaponDamageContext weaponDamageContext;
+    bool useWeaponDamageContext;
     float knockbackForce;
     Vector2 direction;
     float lifetime;
@@ -17,6 +20,7 @@ public class Projectile : MonoBehaviour, IPoolable
     ObjectPool pool;
     Sprite defaultSprite;
     readonly HashSet<EnemyHealth> hitEnemies = new HashSet<EnemyHealth>();
+    readonly HashSet<MapDestructibleProp> hitMapProps = new HashSet<MapDestructibleProp>();
 
     void Awake()
     {
@@ -34,10 +38,16 @@ public class Projectile : MonoBehaviour, IPoolable
         float multiplierK,
         float projectileKnockback,
         int pierceCount = -1,
-        Sprite spriteOverride = null)
+        Sprite spriteOverride = null,
+        float specialMultiplier = 1f,
+        WeaponDamageContext damageContext = default,
+        bool useDamageContext = false)
     {
         attackerStats = stats;
         attackMultiplierK = multiplierK;
+        specialDamageMultiplier = specialMultiplier;
+        weaponDamageContext = damageContext;
+        useWeaponDamageContext = useDamageContext;
         knockbackForce = projectileKnockback;
         direction = launchDirection.sqrMagnitude > 0.0001f ? launchDirection.normalized : Vector2.right;
         lifetime = maxLifetime;
@@ -45,6 +55,7 @@ public class Projectile : MonoBehaviour, IPoolable
             ? pierceCount
             : stats != null ? stats.BulletPenetration : 1;
         hitEnemies.Clear();
+        hitMapProps.Clear();
 
         ApplySprite(spriteOverride);
         ApplyFacingRotation();
@@ -54,6 +65,7 @@ public class Projectile : MonoBehaviour, IPoolable
     {
         lifetime = maxLifetime;
         hitEnemies.Clear();
+        hitMapProps.Clear();
         remainingPenetrations = 0;
         direction = Vector2.zero;
     }
@@ -63,10 +75,14 @@ public class Projectile : MonoBehaviour, IPoolable
         attackerStats = null;
         direction = Vector2.zero;
         attackMultiplierK = 0f;
+        specialDamageMultiplier = 1f;
+        weaponDamageContext = default;
+        useWeaponDamageContext = false;
         knockbackForce = 0f;
         lifetime = 0f;
         remainingPenetrations = 0;
         hitEnemies.Clear();
+        hitMapProps.Clear();
         transform.rotation = Quaternion.identity;
         RestoreDefaultSprite();
     }
@@ -86,9 +102,32 @@ public class Projectile : MonoBehaviour, IPoolable
     void OnTriggerEnter2D(Collider2D other)
     {
         var mapProp = other.GetComponent<MapDestructibleProp>();
-        if (mapProp != null && mapProp.IsActive)
+        if (mapProp != null && mapProp.IsAlive)
         {
-            mapProp.TakeDamage(1f);
+            if (hitMapProps.Contains(mapProp))
+                return;
+
+            if (attackerStats != null)
+            {
+                int damage = MapPropCombatUtility.CalculateWeaponDamage(
+                    attackerStats,
+                    attackMultiplierK,
+                    specialDamageMultiplier,
+                    weaponDamageContext,
+                    useWeaponDamageContext);
+                mapProp.TakeDamage(damage, transform.position, knockbackForce);
+            }
+            else
+            {
+                mapProp.TakeDamage(1, transform.position, knockbackForce);
+            }
+
+            hitMapProps.Add(mapProp);
+            remainingPenetrations--;
+
+            if (remainingPenetrations <= 0)
+                Release();
+
             return;
         }
 
@@ -114,7 +153,10 @@ public class Projectile : MonoBehaviour, IPoolable
         DamageResult result = DamageCalculator.CalculateAgainstEnemy(
             attackerStats,
             enemyStats,
-            attackMultiplierK);
+            attackMultiplierK,
+            specialDamageMultiplier,
+            useWeaponDamageContext,
+            weaponDamageContext);
 
         if (result.FinalDamage > 0)
             enemy.TakeDamage(result.FinalDamage, transform.position, knockbackForce, result.IsCritical);

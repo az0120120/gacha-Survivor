@@ -10,8 +10,8 @@ public class WaveSpawner : MonoBehaviour
     [SerializeField] int baseEnemiesPerWave = 6;
     [SerializeField] int enemiesIncreasePerWave = 3;
     [SerializeField] float spawnInterval = 0.6f;
-    [SerializeField] float spawnMinRadius = 8f;
-    [SerializeField] float spawnMaxRadius = 12f;
+    [SerializeField] float spawnMinRadius = 11f;
+    [SerializeField] float spawnMaxRadius = 16f;
     [SerializeField] EnemyArchetype[] spawnArchetypes =
     {
         EnemyArchetype.MeleeRush,

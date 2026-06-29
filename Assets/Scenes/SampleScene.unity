@@ -377,8 +377,8 @@ MonoBehaviour:
   baseEnemiesPerWave: 6
   enemiesIncreasePerWave: 9
   spawnInterval: 0.5
-  spawnMinRadius: 8
-  spawnMaxRadius: 12
+  spawnMinRadius: 11
+  spawnMaxRadius: 16
   spawnArchetypes: 000000000100000002000000
 --- !u!4 &416152050
 Transform:
@@ -910,6 +910,7 @@ GameObject:
   - component: {fileID: 1055431323}
   - component: {fileID: 1055431324}
   - component: {fileID: 1055431325}
+  - component: {fileID: 1055431326}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -1037,6 +1038,7 @@ MonoBehaviour:
   spawnInterval: 90
   spawnMinRadius: 6
   spawnMaxRadius: 14
+  visualSettings: {fileID: 11400000, guid: a2b3c4d5e6f7890123456789abcdef01, type: 2}
 --- !u!114 &1055431320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1090,7 +1092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveSpawner: {fileID: 416152049}
   bossSpawner: {fileID: 416152052}
-  settlementImage: {fileID: 21300000, guid: b2cbf8b6f41a13f4cb584545d7ffaa12, type: 3}
+  settlementImage: {fileID: 21300000, guid: 82b94cd189da3d542b8448df6a80ea62, type: 3}
 --- !u!114 &1055431323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1136,19 +1138,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5f6a7b8c9d0488990abcdef1234567c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapChunkGenerator: {fileID: 1055431326}
+  chunkSize: {x: 10, y: 10}
+  autoChunkSizeFromCamera: 1
+  cameraChunkPadding: 0
+  chunkCheckInterval: 0.2
+  preloadAdjacentChunks: 1
+  adjacentChunkRadius: 1
   gridStep: 15
   cellSpawnChance: 0.35
   randomizePositionInCell: 1
-  useCameraViewArea: 1
-  cameraAreaPadding: 1
-  areaSize: {x: 8, y: 8}
-  areaCenterOffset: {x: 0, y: 0}
   playerSpawnClearRadius: 1.2
-  spawnCenter: {fileID: 0}
-  destructibleSprite: {fileID: 21300000, guid: 5d4753d4e3d2b8746a2d7a2d4de58fff, type: 3}
+  destructibleSprite: {fileID: 21300000, guid: d31c70c2753ff62418a291e99887923d, type: 3}
+  destructibleSpriteScale: 0.64
   destructibleColliderRadius: 0.08
   destructibleSortingOrder: 2
-  breakClip: {fileID: 8300000, guid: ddbfb31ae73a9d944a175308783dce89, type: 3}
+  destructibleMaxHealth: 20
+  destructibleWanderEnabled: 1
+  destructibleWanderRadius: 1.35
+  destructibleWanderSpeed: 1.79
+  destructibleWanderRetargetInterval: 2
+  breakClip: {fileID: 8300000, guid: 099502a8d82756f4fb4189ef1de5d384, type: 3}
   breakVolume: 0.7
   breakSoundMinInterval: 0.03
   pickupColliderRadius: 0.12
@@ -1170,6 +1180,29 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 6ad545a8526f3f44c87ff2301c996ac6, type: 3}
     spriteScale: 0.3
     weight: 10
+--- !u!114 &1055431326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1055431311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c3d4e5f6789012345678abcdef0123, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chunkSize: {x: 20, y: 20}
+  autoChunkSizeFromCamera: 1
+  cameraChunkPadding: 0
+  chunkCheckInterval: 0.2
+  preloadAdjacentChunks: 1
+  adjacentChunkRadius: 1
+  mapTheme: {fileID: 11400000, guid: e5f6789012345678abcdef0123456789, type: 2}
+  chunkSprite: {fileID: 0}
+  chunkColor: {r: 1, g: 1, b: 1, a: 1}
+  sortingOrder: -10
+  spriteScale: 1
 --- !u!1 &1269217973
 GameObject:
   m_ObjectHideFlags: 0
@@ -1679,6 +1712,7 @@ MonoBehaviour:
   zoneRadius: 2
   zoneDuration: 5
   zoneTickInterval: 0.5
+  multiThrowScatterRadius: 1.2
 --- !u!114 &2143937457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1702,6 +1736,7 @@ MonoBehaviour:
   attackInterval: 1
   attackRange: 2.8
   fanHalfAngle: 55
+  multiSwingAngleStep: 18
   attackClip: {fileID: 8300000, guid: 190c9a10618cbbe4f8e67527988886ce, type: 3}
   attackVolume: 0.85
 --- !u!114 &2143937458
@@ -1719,8 +1754,8 @@ MonoBehaviour:
   damageMultiplier: 1
   knockbackForce: 4
   weaponSprite: {fileID: 21300000, guid: d0b4e47f0d385624ca11268d16952dc4, type: 3}
-  flashSprite: {fileID: 0}
-  flashColor: {r: 1, g: 0.95, b: 0.2, a: 0.85}
+  flashSprite: {fileID: 21300000, guid: d3e9c440df30f4342b39e282a6a7454d, type: 3}
+  flashColor: {r: 1, g: 1, b: 1, a: 0.85}
   flashDuration: 0.12
   flashScale: 1.2
   attackInterval: 1
@@ -1750,6 +1785,14 @@ MonoBehaviour:
   pierceCount: 2
   attackClip: {fileID: 8300000, guid: 5a0e80b55e39a3647b79de286d1eda11, type: 3}
   attackVolume: 0.85
+  muzzleFlashSprite: {fileID: 21300000, guid: 8ecd23862bc881a4aaa4597c462bc089, type: 3}
+  muzzleFlashColor: {r: 1, g: 1, b: 1, a: 0.9}
+  muzzleFlashDuration: 0.08
+  muzzleFlashScale: 0.89
+  muzzleFlashOffset: 1.4
+  muzzleFlashFacingOffset: 0
+  muzzleFlashSortingOrder: 13
+  multiProjectileSpreadAngle: 12
 --- !u!114 &2143937460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1773,6 +1816,14 @@ MonoBehaviour:
   pierceCount: 2
   attackClip: {fileID: 8300000, guid: 6075f6ee5bc8d4a47aec3d5f78bfce1e, type: 3}
   attackVolume: 0.85
+  muzzleFlashSprite: {fileID: 21300000, guid: 8ecd23862bc881a4aaa4597c462bc089, type: 3}
+  muzzleFlashColor: {r: 1, g: 1, b: 1, a: 0.9}
+  muzzleFlashDuration: 0.29
+  muzzleFlashScale: 0.92
+  muzzleFlashOffset: 1.38
+  muzzleFlashFacingOffset: 0
+  muzzleFlashSortingOrder: 13
+  multiProjectileSpreadAngle: 12
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

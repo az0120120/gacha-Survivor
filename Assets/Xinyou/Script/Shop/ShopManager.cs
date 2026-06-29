@@ -23,6 +23,7 @@ public class ShopManager : MonoBehaviour
     CharacterStats characterStats;
     PlayerHealth playerHealth;
     bool isShopOpen;
+    int largeShopVisitCount;
     float shopPriceMultiplier = 1f;
     float refreshPriceMultiplier = 1f;
 
@@ -103,6 +104,9 @@ public class ShopManager : MonoBehaviour
         isShopOpen = true;
         GameSpeedController.Instance?.RefreshTimeScale();
         RollOffers(shopSize);
+
+        if (shopSize == ShopSizeType.Large)
+            largeShopVisitCount++;
 
         int shopTier = GetCurrentShopTier();
         shopUI.ShowWorldShop(shopSize, shopTier, currentOffers, GetCurrentRefreshCost());
@@ -249,10 +253,17 @@ public class ShopManager : MonoBehaviour
                 break;
             case ShopSizeType.Large:
                 if (item.Category != ShopItemCategory.Weapon &&
-                    item.Category != ShopItemCategory.WeaponMajorUpgrade)
+                    item.Category != ShopItemCategory.WeaponMajorUpgrade &&
+                    !ShopItemRules.IsDualShopWeaponUpgrade(item.EffectType))
                     return false;
                 break;
         }
+
+        if (shopSize == ShopSizeType.Large &&
+            item.EffectType == ItemEffectType.EquipWeapon &&
+            item.WeaponType == ShopWeaponType.Ak &&
+            largeShopVisitCount < 1)
+            return false;
 
         if (item.EffectType == ItemEffectType.EquipWeapon &&
             weaponManager != null &&

@@ -28,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
         EnsureFacingVisual();
         EnsureFacingSprites();
+        EnsureBounceVisual();
     }
 
     void Update()
@@ -123,6 +124,18 @@ public class PlayerMovement : MonoBehaviour
 
         if (rightFacingSprite != null && spriteRenderer.sprite == null)
             spriteRenderer.sprite = rightFacingSprite;
+    }
+
+    void EnsureBounceVisual()
+    {
+        if (facingVisual == null)
+            return;
+
+        var bounceVisual = GetComponent<SpriteBounceVisual>();
+        if (bounceVisual == null)
+            bounceVisual = gameObject.AddComponent<SpriteBounceVisual>();
+
+        bounceVisual.BindVisual(facingVisual);
     }
 
     Transform CreateVisualChildFromSprite(SpriteRenderer sourceRenderer)

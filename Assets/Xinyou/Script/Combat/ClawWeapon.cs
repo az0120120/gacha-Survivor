@@ -16,6 +16,7 @@ public class ClawWeapon : WeaponBase
     [SerializeField] float attackInterval = 1f;
     [SerializeField] float attackRange = 2.8f;
     [SerializeField] float fanHalfAngle = 55f;
+    [SerializeField] float multiSwingAngleStep = 18f;
 
     [Header("Audio")]
     [SerializeField] AudioClip attackClip;
@@ -39,24 +40,47 @@ public class ClawWeapon : WeaponBase
         if (attackTimer > 0f)
             return;
 
-        float effectiveInterval = attackInterval;
-        if (weaponManager != null)
-            effectiveInterval *= weaponManager.GetWeaponCooldownMultiplier(ShopWeaponType.Claw);
+        float effectiveInterval = ApplyWeaponCooldown(attackInterval, ShopWeaponType.Claw);
+        attackTimer = effectiveInterval;
 
-        attackTimer = stats.GetEffectiveCooldown(effectiveInterval);
-
-        float effectiveRange = attackRange;
-        if (weaponManager != null)
-            effectiveRange *= weaponManager.GetRangeMultiplier(ShopWeaponType.Claw);
+        float effectiveRange = ApplyWeaponRange(attackRange, ShopWeaponType.Claw);
 
         Vector2 origin = transform.position;
-        Vector2 facing = GetAttackDirectionTowardTarget(effectiveRange);
-        SpawnSwingHitbox(origin, facing, effectiveRange);
+        Vector2 baseFacing = GetAttackDirectionTowardTarget(effectiveRange);
+        int swingCount = GetProjectileCount(ShopWeaponType.Claw);
+
+        for (int i = 0; i < swingCount; i++)
+        {
+            float angleOffset = swingCount <= 1
+                ? 0f
+                : (i - (swingCount - 1) * 0.5f) * multiSwingAngleStep;
+            Vector2 facing = RotateFacing(baseFacing, angleOffset);
+            SpawnSwingHitbox(origin, facing, effectiveRange, i == 0);
+        }
+    }
+
+    static Vector2 RotateFacing(Vector2 facing, float angleDegrees)
+    {
+        if (facing.sqrMagnitude < 0.0001f)
+            facing = Vector2.right;
+
+        facing = facing.normalized;
+        float radians = angleDegrees * Mathf.Deg2Rad;
+        float cos = Mathf.Cos(radians);
+        float sin = Mathf.Sin(radians);
+        return new Vector2(
+            facing.x * cos - facing.y * sin,
+            facing.x * sin + facing.y * cos);
     }
 
     internal void HandleSwingHit(EnemyHealth enemy, Vector2 knockbackSource)
     {
-        HitEnemy(enemy, knockbackSource);
+        HitEnemy(enemy, knockbackSource, ShopWeaponType.Claw);
+    }
+
+    internal void HandleSwingMapPropHit(MapDestructibleProp mapProp, Vector2 knockbackSource)
+    {
+        HitMapProp(mapProp, knockbackSource, ShopWeaponType.Claw);
     }
 
     internal void HandleSwingShopHit(Collider2D collider)
@@ -64,13 +88,14 @@ public class ClawWeapon : WeaponBase
         TryHitShop(collider);
     }
 
-    void SpawnSwingHitbox(Vector2 origin, Vector2 facing, float range)
+    void SpawnSwingHitbox(Vector2 origin, Vector2 facing, float range, bool playFeedback = true)
     {
         Sprite effectSprite = swingSprite != null ? swingSprite : weaponSprite;
         if (effectSprite == null)
             return;
 
-        PlayAttackSound(attackClip, attackVolume);
+        if (playFeedback)
+            PlayAttackSound(attackClip, attackVolume);
 
         var swingObject = new GameObject("ClawSwingHitbox");
         var renderer = swingObject.AddComponent<SpriteRenderer>();
@@ -150,6 +175,7 @@ public class ClawSwingMotion : MonoBehaviour
     Rigidbody2D rb;
     readonly HashSet<EnemyHealth> hitEnemies = new HashSet<EnemyHealth>();
     readonly HashSet<ShopWorldEntity> hitShops = new HashSet<ShopWorldEntity>();
+    readonly HashSet<MapDestructibleProp> hitMapProps = new HashSet<MapDestructibleProp>();
     readonly HashSet<EnemyProjectile> blockedProjectiles = new HashSet<EnemyProjectile>();
 
     public static float CalculateScaleForRange(Sprite sprite, float attackRange, float scaleMultiplier = 1f)
@@ -189,6 +215,7 @@ public class ClawSwingMotion : MonoBehaviour
         elapsed = 0f;
         hitEnemies.Clear();
         hitShops.Clear();
+        hitMapProps.Clear();
         blockedProjectiles.Clear();
 
         if (facing.sqrMagnitude < 0.0001f)
@@ -280,9 +307,13 @@ public class ClawSwingMotion : MonoBehaviour
         }
 
         var mapProp = other.GetComponent<MapDestructibleProp>();
-        if (mapProp != null && mapProp.IsActive)
+        if (mapProp != null && mapProp.IsAlive)
         {
-            mapProp.TakeDamage(1f);
+            if (hitMapProps.Contains(mapProp))
+                return;
+
+            hitMapProps.Add(mapProp);
+            owner.HandleSwingMapPropHit(mapProp, origin);
             return;
         }
 

@@ -65,8 +65,8 @@ public class EnemyStats : MonoBehaviour
 
         maxHealth = StatMath.FloorToInt(
             EnemyStatScaler.GetMaxHealth(EnemyArchetype.MeleeRush, gameMinutes) * bossDefinition.healthMultiplier);
-        attack = usesRangedAttack && definition != null
-            ? definition.baseAttack + definition.attackBonusPerMinute * gameMinutes
+        attack = usesRangedAttack
+            ? GetRangedSmallEnemyAttack(catalog, gameMinutes)
             : EnemyStatScaler.GetAttack(gameMinutes);
         defense = EnemyStatScaler.GetDefense(gameMinutes);
 
@@ -74,30 +74,69 @@ public class EnemyStats : MonoBehaviour
         goldDrop = normalGold * Mathf.Max(1, bossDefinition.goldDropMultiplier);
         expDrop = EnemyStatScaler.GetExpDropFromGold(goldDrop);
 
-        var spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer == null)
-            return;
+        ApplyEntityScale(bossDefinition.localScale);
+        ApplySpriteToVisual(
+            bossDefinition.sprite != null ? bossDefinition.sprite : definition?.sprite,
+            bossDefinition.tintColor);
+    }
 
-        if (bossDefinition.sprite != null)
-            spriteRenderer.sprite = bossDefinition.sprite;
-        else if (definition != null && definition.sprite != null)
-            spriteRenderer.sprite = definition.sprite;
+    static int GetRangedSmallEnemyAttack(EnemyCatalog catalog, int gameMinutes)
+    {
+        var rangedDefinition = catalog != null ? catalog.GetDefinition(EnemyArchetype.RangedShooter) : null;
+        if (rangedDefinition == null)
+            return EnemyStatScaler.GetAttack(gameMinutes);
 
-        spriteRenderer.color = bossDefinition.tintColor;
-        transform.localScale = bossDefinition.localScale;
+        return rangedDefinition.baseAttack + rangedDefinition.attackBonusPerMinute * gameMinutes;
     }
 
     public void ApplyArchetypeVisual()
     {
-        var spriteRenderer = GetComponent<SpriteRenderer>();
+        ApplyEntityScale(definition != null ? definition.localScale : Vector3.one);
+        ApplySpriteToVisual(
+            definition != null ? definition.sprite : null,
+            definition != null ? definition.tintColor : GetFallbackTint());
+    }
+
+    void ApplyEntityScale(Vector3 scale)
+    {
+        var bounceVisual = GetComponent<SpriteBounceVisual>();
+        if (bounceVisual == null)
+            bounceVisual = gameObject.AddComponent<SpriteBounceVisual>();
+
+        bounceVisual.SetBaseScale(scale);
+    }
+
+    void ApplySpriteToVisual(Sprite sprite, Color tintColor)
+    {
+        var spriteRenderer = ResolveSpriteRenderer();
         if (spriteRenderer == null)
             return;
 
-        if (definition != null && definition.sprite != null)
-            spriteRenderer.sprite = definition.sprite;
+        if (sprite != null)
+            spriteRenderer.sprite = sprite;
 
-        spriteRenderer.color = definition != null ? definition.tintColor : GetFallbackTint();
-        transform.localScale = definition != null ? definition.localScale : Vector3.one;
+        spriteRenderer.color = tintColor;
+    }
+
+    SpriteRenderer ResolveSpriteRenderer()
+    {
+        var bounceVisual = GetComponent<SpriteBounceVisual>();
+        if (bounceVisual != null)
+        {
+            var renderer = bounceVisual.GetSpriteRenderer();
+            if (renderer != null)
+                return renderer;
+        }
+
+        var bounceChild = transform.Find(SpriteBounceVisual.VisualChildName);
+        if (bounceChild != null)
+        {
+            var renderer = bounceChild.GetComponent<SpriteRenderer>();
+            if (renderer != null)
+                return renderer;
+        }
+
+        return GetComponent<SpriteRenderer>();
     }
 
     Color GetFallbackTint()
