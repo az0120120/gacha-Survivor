@@ -12,7 +12,7 @@ public class WaveSpawner : MonoBehaviour
     [Tooltip("每多少秒触发一批刷怪")]
     [SerializeField] float waveCycleInterval = 5f;
 
-    [Tooltip("刷怪数量 = 基础 + 每分钟线性增长 + sin(分钟×2)×振幅")]
+    [Tooltip("刷怪数量 = 基础 + 每分钟线性增长 + |sin(分钟×2)|×振幅")]
     [SerializeField] int spawnCountBase = 6;
     [SerializeField] int spawnCountPerMinute = 3;
     [SerializeField] float spawnCountSinAmplitude = 30f;
@@ -29,8 +29,7 @@ public class WaveSpawner : MonoBehaviour
     };
 
     int currentWave;
-    int enemiesToSpawn;
-    int enemiesSpawned;
+    int pendingSpawnCount;
     float spawnTimer;
     float waveCycleTimer;
     bool waveActive;
@@ -68,17 +67,18 @@ public class WaveSpawner : MonoBehaviour
         if (!waveActive || enemyPool == null || player == null)
             return;
 
-        if (enemiesSpawned < enemiesToSpawn)
+        if (pendingSpawnCount > 0)
         {
             spawnTimer -= Time.deltaTime;
             if (spawnTimer <= 0f)
             {
                 spawnTimer = spawnInterval;
-                SpawnEnemy();
-                enemiesSpawned++;
-
-                if (enemiesSpawned >= enemiesToSpawn)
-                    OnWaveCompleted?.Invoke(currentWave);
+                if (SpawnEnemy())
+                {
+                    pendingSpawnCount--;
+                    if (pendingSpawnCount <= 0)
+                        OnWaveCompleted?.Invoke(currentWave);
+                }
             }
         }
 
@@ -106,8 +106,8 @@ public class WaveSpawner : MonoBehaviour
     {
         float count = spawnBase
             + perMinute * gameMinutes
-            + Mathf.Sin(gameMinutes * 2f) * sinAmplitude;
-        return Mathf.Max(0, Mathf.RoundToInt(count));
+            + Mathf.Abs(Mathf.Sin(gameMinutes * 2f)) * sinAmplitude;
+        return Mathf.Max(1, Mathf.RoundToInt(count));
     }
 
     int GetGameMinutes()
@@ -118,17 +118,16 @@ public class WaveSpawner : MonoBehaviour
     void BeginSpawnBatch()
     {
         currentWave++;
-        enemiesToSpawn = CalculateSpawnCount(
+        pendingSpawnCount += CalculateSpawnCount(
             GetGameMinutes(),
             spawnCountBase,
             spawnCountPerMinute,
             spawnCountSinAmplitude);
-        enemiesSpawned = 0;
         spawnTimer = 0f;
         OnWaveStarted?.Invoke(currentWave);
     }
 
-    void SpawnEnemy()
+    bool SpawnEnemy()
     {
         float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2f);
         float distance = UnityEngine.Random.Range(spawnMinRadius, spawnMaxRadius);
@@ -137,7 +136,7 @@ public class WaveSpawner : MonoBehaviour
 
         GameObject enemyObject = enemyPool.Get(spawnPosition, Quaternion.identity);
         if (enemyObject == null)
-            return;
+            return false;
 
         var enemyStats = enemyObject.GetComponent<EnemyStats>();
         var enemyAI = enemyObject.GetComponent<EnemyAI>();
@@ -148,6 +147,8 @@ public class WaveSpawner : MonoBehaviour
             enemyStats.SetArchetype(archetype, enemyCatalog);
             enemyAI?.ApplyArchetypeConfig(enemyStats.Definition);
         }
+
+        return true;
     }
 
     EnemyArchetype PickSpawnArchetype()
