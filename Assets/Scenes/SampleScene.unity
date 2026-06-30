@@ -1073,12 +1073,16 @@ MonoBehaviour:
   healthBarLowColor: {r: 0.95, g: 0.3, b: 0.3, a: 1}
   shopArrowRoot: {fileID: 0}
   shopArrowImage: {fileID: 0}
+  bossArrowRoot: {fileID: 0}
+  bossArrowImage: {fileID: 0}
   player: {fileID: 0}
   shopArrowScreenOffset: 120
+  bossArrowScreenOffset: 120
   screenEdgeMargin: 48
   bossBarFullColor: {r: 0.95, g: 0.35, b: 0.25, a: 1}
   bossBarLowColor: {r: 0.75, g: 0.1, b: 0.1, a: 1}
   bossNameColor: {r: 1, g: 0.88, b: 0.55, a: 1}
+  bossArrowColor: {r: 0.95, g: 0.35, b: 0.25, a: 0.95}
 --- !u!114 &1055431322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1903,8 +1907,8 @@ MonoBehaviour:
   fireInterval: 0.5
   targetRange: 8
   pierceCount: 2
-  attackClip: {fileID: 8300000, guid: 5a0e80b55e39a3647b79de286d1eda11, type: 3}
-  attackVolume: 0.85
+  attackClip: {fileID: 8300000, guid: 84161df840ef212418683ccc7822c985, type: 3}
+  attackVolume: 1
   muzzleFlashSprite: {fileID: 21300000, guid: 8ecd23862bc881a4aaa4597c462bc089, type: 3}
   muzzleFlashColor: {r: 1, g: 1, b: 1, a: 0.9}
   muzzleFlashDuration: 0.08

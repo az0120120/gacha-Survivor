@@ -18,7 +18,7 @@ MonoBehaviour:
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.55, y: 0.55, z: 0.55}
     behaviorType: 0
-    healthMultiplier: 15
+    healthMultiplier: 50
     goldDropMultiplier: 10
     shootInterval: 0
     dodgeChance: 0
@@ -29,7 +29,7 @@ MonoBehaviour:
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.55, y: 0.55, z: 0.55}
     behaviorType: 1
-    healthMultiplier: 15
+    healthMultiplier: 60
     goldDropMultiplier: 10
     shootInterval: 3
     dodgeChance: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.5, y: 0.5, z: 0.5}
     behaviorType: 2
-    healthMultiplier: 10
+    healthMultiplier: 50
     goldDropMultiplier: 10
     shootInterval: 0
     dodgeChance: 0.7
@@ -51,7 +51,7 @@ MonoBehaviour:
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.6, y: 0.6, z: 0.6}
     behaviorType: 3
-    healthMultiplier: 25
+    healthMultiplier: 75
     goldDropMultiplier: 10
     shootInterval: 2
     dodgeChance: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
     tintColor: {r: 1, g: 1, b: 1, a: 1}
     localScale: {x: 0.7, y: 0.7, z: 0.7}
     behaviorType: 4
-    healthMultiplier: 40
+    healthMultiplier: 120
     goldDropMultiplier: 10
     shootInterval: 0.5
     dodgeChance: 0
