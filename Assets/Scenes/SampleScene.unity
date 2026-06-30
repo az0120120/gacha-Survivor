@@ -408,7 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 5438118296876588223, guid: 393b0d98ef9e9a54783503f74eaba846, type: 3}
-  prewarmCount: 20
+  prewarmCount: 50
   poolRoot: {fileID: 0}
 --- !u!114 &416152052
 MonoBehaviour:
@@ -949,8 +949,8 @@ MonoBehaviour:
   shopUI: {fileID: 0}
   iconDatabase: {fileID: 0}
   baseRefreshCost: 35
-  priceIncreasePerPurchase: 1.5
-  refreshCostIncreasePerRefresh: 1.5
+  priceIncreasePerPurchase: 1.2
+  refreshCostIncreasePerRefresh: 1.2
 --- !u!114 &1055431314
 MonoBehaviour:
   m_ObjectHideFlags: 0
